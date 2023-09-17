@@ -10,7 +10,8 @@ from django.contrib.auth.decorators import login_required
 def brand(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
-    brand_data=Brand.objects.all().order_by(id)
+    
+    brand_data=Brand.objects.all().order_by('id')
     return render(request,'admin/adminbrand.html',{'brand':brand_data})
 
 
@@ -21,10 +22,10 @@ def createbrand(request):
     
     if request.method=='POST':
         bname=request.POST.get('name')
-
-
+        
         # validation
         if bname.strip()=='':
+
             messages.error(request,'name cannot be blank')
             return redirect('brand')
         
@@ -38,7 +39,7 @@ def createbrand(request):
     return redirect('brand')
 
 
-# edit category
+# edit brand
 
 def editbrand(request,editbrand_id):
     if not request.user.is_superuser:
@@ -74,7 +75,7 @@ def deletebrand(request,deletebrand_id):
         return redirect('adminsignin')
     
     brands=Brand.objects.get(id=deletebrand_id)
-    brands.save()
+    brands.delete()
     return redirect('brand')
 
 
@@ -86,10 +87,20 @@ def searchbrand(request):
     if 'keyword' in request.GET:
         keyword=request.GET.get('keyword')
         if keyword:
-            bran=Brand.objects.filter(brand)
-
-
-    
+            bran=Brand.objects.filter(name__icontains=keyword).order_by('id')
+            if bran.exists():
+                context={
+                    'brand':bran
+                }
+                return render(request,'admin/adminbrand.html',context)
+            else:
+                messages='Brand not found'
+                return render(request,'admin/adminbrand.html',{'messages':messages})
+        else:
+            messages='Enter valid keyword'
+            return render(request,'admin/adminbrand.html',{'messages':messages})
+    else:
+        return render(request,'404.html')
     
     
     
