@@ -221,9 +221,86 @@ def get_color_name(color_code):
         return color_name
     except ValueError:
         return "Unknown"
-
-
-
-
     
 
+def imagelist(request,variant_id):
+    image=VariantImage.objects.filter(variant=variant_id,is_available=True)
+    add_image=variant_id
+    return render(request,'variant/imagemanagement.html',{'image':image,'add_image':add_image})
+
+# this is image add functions
+def imageview(request,img_id):
+    if request.method=='POST':
+        form=ImageForm(request.POST,request.FILES)
+        var = Variant.objects.get(id=img_id)
+
+        if form.is_valid():
+            image_instance=form.save(commit=False)
+            image_instance.variant=var
+            image_instance.save()
+            price_range('images saved sucessfully')
+            return JsonResponse({'message':'works','img_id':img_id})
+        else:
+            print('Form is not valid:',form.errors)
+    else:
+        form=ImageForm()
+
+    context={'form':form,'img_id':img_id}
+    return render(request,'variant/imageadd.html',context)
+
+def imagedelete(request,image_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
+    try:
+        delete_image=VariantImage.objects.get(id=image_id)
+        var_id=delete_image.variant.id
+        delete_image.is_available=False
+        delete_image.save()
+        messages.success(request,'Image deleted succesfully')
+        image=VariantImage.objects.filter(variant=var_id)
+        add_image=var_id
+        return render(request,'variant/imagemanagement.html',{'image':image},{'add_image':add_image})
+    except:
+        return redirect('productvariant')
+    
+
+def productvariantview(request,product_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
+    
+    variant=Variant.objects.filter(Variant_product=product_id,is_avialable=True)
+    size_range=Size.objects.filter(is_available=True).order_by('id')
+    color_name=Color.objects.filter(is_avialabe=True).order_by('id')
+    product=Product.objects.filter(is_available=True).order_by('id')
+    variant_list={
+        'variant':variant,
+        'size_range':size_range,
+        'color_name':color_name,
+        'product':product
+    }
+    # variant id 
+    return render(request,'views/variant.html',{'variant_list':variant_list})
+
+
+def variantsearch(request):
+    search=request.POST.get('search')
+    if search is None or search.strip()=='':
+        messages.error(request,'Field cannot be empty')
+        return redirect('productvariant')
+    variant=Variant.objects.filter(Q(product__product_name__icontains=search) | Q(color__color_name__icontains=search) |Q(size__size_range__icontains=search) | Q(quantity__icontains=search), is_available=True)
+    size_range=Size.objects.filter(is_avialble=True).order_by('id')
+    color_name=Color.objects.filter(is_avialable=True).order_by('id')
+    product=Product.objects.filter(is_available=True).order_by('id')
+    variant_list={
+        'variant':variant,
+        'size_range':size_range,
+        'color_name':color_name,
+        'product':product,
+    }
+    if variant:
+        pass 
+        return render(request,'variant/variant.html',{'variant_list':variant_list})
+    else:
+        variant:False
+        messages.error(request,'search not found')
+        return redirect('productvariant')
