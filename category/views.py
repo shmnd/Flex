@@ -19,7 +19,6 @@ def createcategory(request):
     if request.method=='POST':
         name=request.POST.get('categories')
         description=request.POST.get('categories_description')
-        # print(discription,'hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
         
         # validation
         if name.strip()=='':

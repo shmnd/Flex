@@ -1,9 +1,9 @@
 {% extends 'admin/dashboardbase.html' %}
-{% block title %}Category{% endblock  %}
+{% block title %}brand{% endblock  %}
 {% block body %}
 <!-- Button trigger modal -->
 <a type="button" class="btn btn-secondary w-60" style="margin-top: 80px;margin-left: 10px;" data-bs-toggle="modal" data-bs-target="#addCategory">
-  <i title="Add Category" class="fa fa-plus">Add Category</i>
+  <i title="Add Category" class="fa fa-plus">Add brand</i>
 </a>
 {% if messages %}
 
@@ -15,7 +15,7 @@
 {% endfor %}
 {% endif %}
 
-<!--Add category  Modal -->
+<!--Add brand  Modal -->
 <div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog">
   <div class="modal-content">
@@ -25,17 +25,13 @@
       </div>
       <div class="modal-body">
 
-      <form action="{% url 'createcategory'%}"  enctype="multipart/form-data" method="POST">
+      <form action="{% url 'createbrand'%}"  enctype="multipart/form-data" method="POST">
         {% csrf_token %}
         
         <div class="form-outline mb-4">
-          <input name='categories' type="text" id="form3Example3cg" class="form-control form-control-lg" />
-          <label class="form-label" for="form3Example3cg">Category name</label>
+          <input name='name' type="text" id="form3Example3cg" class="form-control form-control-lg" />
+          <label class="form-label" for="form3Example3cg">brand name</label>
         </div>
-      <div class="form-outline mb-4">
-        <input name='categories_description'   type="text" id="form3Example3cg" class="form-control form-control-lg" />
-        <label class="form-label" for="form3Example3cg">Discription</label>
-      </div>
        <div class="d-flex justify-content-center">
           <button type="submit"
             class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light" type="submit">Save Changes</button>
