@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'dashboard',
     'category',
     'brand',
+    'variant',
     'product',
     # 'user',
 ]
