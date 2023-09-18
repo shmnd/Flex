@@ -15,11 +15,11 @@ class price_range(models.Model):
 
 # variation
 class Size(models.Model):
-    size_range=models.CharField(max_length=30)
+    size_chart=models.CharField(max_length=30)
     is_available = models.BooleanField(default=True)
     
     def __str__(self):
-        return self.size_range
+        return self.size_chart
     
 
 
@@ -41,7 +41,7 @@ class Product(models.Model):
     slug=models.SlugField(max_length=250,unique=True)
     is_available=models.BooleanField(default=True)
     # quantity(stock)
-    stock=models.PositiveIntegerField()
+    # stock=models.PositiveIntegerField(default=0)
     
     def __str__(self):
         return self.product_name

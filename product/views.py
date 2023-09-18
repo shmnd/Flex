@@ -15,14 +15,14 @@ def product(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
     
+
     products=Product.objects.filter(is_available=True).order_by('id')
 
     product_list={
         'products':products,
         'categories':category.objects.filter(is_available=True).order_by('id'),
-
+        'brand':Brand.objects.order_by('id'),
     }
-    print('brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
     return render(request,'admin/adminproduct.html',product_list)
 
 @login_required(login_url='adminsignin')
@@ -60,6 +60,7 @@ def createproduct(request):
         product=Product(
             product_name=name,
             category=category_obj,
+            brand=brand_obj,
             product_price=price,
             slug=name,
             product_description=product_description,

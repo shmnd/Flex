@@ -61,13 +61,13 @@
                     </form>
                 </div>
 
-                <div class="col-lg-2 col-6 col-md-3">
+                <!-- <div class="col-lg-2 col-6 col-md-3">
                     <select class="form-select">
                         <option>sort</option>
                         <option>Show 30</option>
                         <option>Show 40</option>
                     </select>
-                </div>
+                </div> -->
             </div>
         </header>
         <!-- card-header end// -->
@@ -92,16 +92,12 @@
                     <tbody>
                         {% for user in product %}
 
-
                         <tr class="text-uppercase">
                             <td style="text-align: center;"><b>{{user.id}}</td>
                             <td><b>{{ user.product_name }}</td>
                             <td><b>{{ user.category.categories}}</td>
                             <td ><b>${{ user.product_price }}</td>
-                            <td ><b>${{ user.brand.name }}</td>
-
-                                
-
+                            <td ><b>{{ user.brand.name }}</td>
 
                             <!-- <td><a href=" url 'product_variant_view' user.id"><span class="badge rounded-pill alert-View btn btn ">View</span> </a></td> -->
                             <!-- <td><b>{{user.variant.count}}</td> -->
@@ -286,16 +282,16 @@
                             {% endfor %}
                         </select>
                     </div>
+                    <!-- brand -->
                     <div class="form-outline mb-4">
-                        <label class="form-label" for="form3Example3cg">Offer</label>
-                        <select class="form-select" name="offer">
-                            <option value="">No offer</option>
-                            
-                            {% for c in offer %}
-                            <option value="{{c.id}}">{{c.offer_name}}</option>
+                        <label class="form-label" for="form3Example3cg">Brand</label>
+                        <select class="form-select" name="brand">
+                            {% for b in brand %}
+                            <option value="{{b.id}}">{{b.name}}</option>
                             {% endfor %}
                         </select>
                     </div>
+    
 
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example3cg">Description</label>
