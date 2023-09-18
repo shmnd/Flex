@@ -15,13 +15,14 @@ def product(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
     
-    product=Product.objects.filter(is_available=True).order_by('id')
+    products=Product.objects.filter(is_available=True).order_by('id')
 
     product_list={
-        'product':product,
+        'products':products,
         'categories':category.objects.filter(is_available=True).order_by('id'),
 
     }
+    print('brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
     return render(request,'admin/adminproduct.html',product_list)
 
 @login_required(login_url='adminsignin')
@@ -155,4 +156,4 @@ def searchproduct(request):
     else:
         product:False
         messages.error(request,'search not found')
-        return redirect('product')
+        return redirect('pr')

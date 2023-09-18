@@ -1,6 +1,4 @@
 from django.db import models
-from django.urls import reverse
-from django.utils.text import slugify
 from product.models import Product,price_range,Size,Color
 
 # Create your models here.
