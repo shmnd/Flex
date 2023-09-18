@@ -12,4 +12,6 @@ class category(models.Model):
     slug=models.SlugField(max_length=225,unique=True)
     is_available =  models.BooleanField(default=True)
 
-        
+    def __str__(self) :
+        return self.categories
+    

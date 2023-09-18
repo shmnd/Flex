@@ -33,9 +33,10 @@ def createproduct(request):
     if request.method=='POST':
         name=request.POST.get('product_name')
         price=request.POST.get('product_price')
-        category_id=request.POST.get('category')
-        brand_id=request.POST.get('brand')
-        product_description=request.POST.get('description')
+        category_id=request.POST.get('category_name')
+        brand_id=request.POST.get('brand_name')
+        product_description=request.POST.get('product_description')
+        print(name,price,category_id,brand_id,product_description,'kanapiiiiiiiiiiiiiiii')
 
         # validation
         if Product.objects.filter(product_name=name).exists():

@@ -276,7 +276,7 @@
                     </div>
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example3cg">Category</label>
-                        <select class="form-select" name="category">
+                        <select class="form-select" name="category_name">
                             {% for c in categories %}
                             <option value="{{c.id}}">{{c.categories}}</option>
                             {% endfor %}
@@ -285,13 +285,12 @@
                     <!-- brand -->
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example3cg">Brand</label>
-                        <select class="form-select" name="brand">
+                        <select class="form-select" name="brand_name">
                             {% for b in brand %}
                             <option value="{{b.id}}">{{b.name}}</option>
                             {% endfor %}
                         </select>
                     </div>
-    
 
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example3cg">Description</label>
