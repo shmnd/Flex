@@ -155,7 +155,7 @@ def addsize(request):
     
     return render(request,'sizemanagement/sizemanagement.html')
 
-def sizedelete(request,size_range_id):
+def deletesize(request,size_range_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
     
@@ -181,7 +181,7 @@ def addcolor(request):
         color=request.POST.get('color')
         color1=color
 
-        color=get_color_name(color)
+        color=getcolorname(color)
         if  color=='Unknown':
             color=color1
 
@@ -205,7 +205,7 @@ def addcolor(request):
 
     return render(request,'colormanagement/colormanagement.html')
 
-def colordelete(request,color_name_id):
+def deletecolor(request,color_name_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
     
@@ -215,7 +215,7 @@ def colordelete(request,color_name_id):
     messages.success(request,'color deleted succesfully')
     return redirect('productcolor')
 
-def get_color_name(color_code):
+def getcolorname(color_code):
     try:
         color_name = webcolors.rgb_to_name(webcolors.hex_to_rgb(color_code))
         return color_name
@@ -282,7 +282,7 @@ def productvariantview(request,product_id):
     return render(request,'views/variant.html',{'variant_list':variant_list})
 
 
-def variantsearch(request):
+def searchvariant(request):
     search=request.POST.get('search')
     if search is None or search.strip()=='':
         messages.error(request,'Field cannot be empty')

@@ -18,7 +18,6 @@ class Size(models.Model):
     size_range=models.CharField(max_length=30)
     is_available = models.BooleanField(default=True)
     
-    
     def __str__(self):
         return self.size_range
     
