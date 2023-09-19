@@ -18,7 +18,7 @@ def productvariant(request):
         return redirect('adminsignin')
     variant= Variant.objects.filter(is_available=True).order_by('id')
     size_range=Size.objects.filter(is_available=True).order_by('id')
-    color_name=Color.objects.filter(is_avialable=True).order_by('id')
+    color_name=Color.objects.filter(is_available=True).order_by('id')
     product=Product.objects.filter(is_available=True).order_by('id')
 
     variant_list={
@@ -130,8 +130,8 @@ def productsize(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
     
-    product_size=Size.objects.filter(is_avialable=True).order_by('id')
-    return render(request,'admin/sizemanagement.html')
+    product_size=Size.objects.filter(is_available=True).order_by('id')
+    return render(request,'admin/sizemanagement.html',{"product_size":product_size})
 
 def addsize(request):
     if not request.user.is_superuser:
@@ -143,12 +143,12 @@ def addsize(request):
             messages.error(request,'Field cannot be empty')
             return redirect('productsize')
         
-        if Size.objects.filter(size_range=size).exists():
+        if Size.objects.filter(size_chart=size).exists():
             messages.error(request,'Size already exists')
             return redirect('productsize')
         
 
-        size_object=Size(size_range=size)
+        size_object=Size(size_chart=size)
         size_object.save()
         messages.success(request,'Size added succesfully')
         return redirect('productsize')

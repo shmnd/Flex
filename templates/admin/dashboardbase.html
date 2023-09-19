@@ -162,35 +162,39 @@
             </li>
 
             <li class="sidebar-item">
-              <a class="sidebar-link" href="{% url 'variant' %}" aria-expanded="false"> 
+              <a class="sidebar-link" href="{% url 'productvariant' %}" aria-expanded="false"> 
                <span>
                  <i class="ti ti-file-description"></i>
                </span>
                <span class="hide-menu">Variants</span>
              </a>
            </li>
+<!-- qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq -->
+           <li class="sidebar-item">
+            <a class="sidebar-link" href="{% url 'productsize' %}" aria-expanded="false"> 
+             <span>
+               <i class="ti ti-typography"></i>
+             </span>
+             <span class="hide-menu">Size</span>
+           </a>
+         </li>
+
+         <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'productcolor' %}" aria-expanded="false"> 
+           <span>
+             <i class="ti ti-color-filter"></i>
+           </span>
+           <span class="hide-menu">Color</span>
+         </a>
+       </li>
 
 
             {% comment %} not using  now {% endcomment %}
 
 
 
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-forms.html" aria-expanded="false">
-                <span>
-                  <i class=""></i>
-                </span>
-                <span class="hide-menu">Forms</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-typography.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-typography"></i>
-                </span>
-                <span class="hide-menu">Typography</span>
-              </a>
-            </li>
+            
+            
             <li class="nav-small-cap">
               <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
               <span class="hide-menu">AUTH</span>
