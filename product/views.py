@@ -36,7 +36,6 @@ def createproduct(request):
         category_id=request.POST.get('category_name')
         brand_id=request.POST.get('brand_name')
         product_description=request.POST.get('product_description')
-        print(name,price,category_id,brand_id,product_description,'kanapiiiiiiiiiiiiiiii')
 
         # validation
         if Product.objects.filter(product_name=name).exists():
@@ -60,12 +59,14 @@ def createproduct(request):
         # save
         product=Product(
             product_name=name,
+            product_price=price,
             category=category_obj,
             brand=brand_obj,
-            product_price=price,
             slug=name,
             product_description=product_description,
+            
         )
+
         product.save()
         messages.success(request,'Product added successfully')
         return redirect('product')
@@ -136,26 +137,35 @@ def productview(request,product_id):
         'color_name':color_name,
         'product':product,
     }
-    return render(request,'view/productview.html',{'variant_list':variant_list})
+    return render(request,'admin/adminproduct.html',{'variant_list':variant_list})
     
+
 
 @login_required(login_url='adminsignin')
 def searchproduct(request):
-    search=request.POST.get('search')
-    if search is None or search.strip()=='':
-        messages.error(request,'Field cannot be empty')
+    search = request.POST.get('search')
+    if search is None or search.strip() == '':
+        messages.error(request, 'Field cannot be empty')
         return redirect('product')
-    
-    product=Product.objects.filter(Q(product_name__icontains=search) | Q(product_price__icontains=search) | Q(category_categories__icontains=search) |Q(brand_name__icontains=search),is_available=True)
-    product_list={
-        'product':product,
-        'categories':category.objects.filter(is_available=True).order_by('id'),
-        'name':Brand.objects.filter(is_available=True).order_by('id'),
+
+    product=Product.objects.filter(
+        Q(product_name__icontains=search) |
+        Q(product_price__icontains=search) |
+        Q(category__categories__icontains=search) |
+        Q(brand__name__icontains=search),
+        is_available=True
+    )
+    product_list = {
+        'product': product,
+        'categories': category.objects.filter(is_available=True).order_by('id'),
+        'name': Brand.objects.filter(is_available=True).order_by('id'),
     }
     if product:
-        pass
-        return render(request,'product/product.html',product_list)
+        return render(request, 'admin/adminproduct.html', product_list)
     else:
-        product:False
-        messages.error(request,'search not found')
-        return redirect('pr')
+        product_list['product'] = False
+        messages.error(request, 'Search not found')
+        return redirect('product')
+    
+
+

@@ -67,7 +67,7 @@
                         <option>Show 30</option>
                         <option>Show 40</option>
                     </select>
-                </div> -->
+                </div>  -->
             </div>
         </header>
         <!-- card-header end// -->
@@ -80,9 +80,9 @@
                             <th scope="col">Name</th>
                             <th scope="col">Category</th>
                             <th scope="col">Price</th>
-                            <!-- <th scope="col">Offer</th> -->
+                            <!-- # <th scope="col">Offer</th> -->
                             <th scope="col">Brand</th>
-                            <!-- <th scope="col">Product View</th> -->
+                            <!-- #  <th scope="col">Product View</th> -->
                             <th scope="col">Variants</th>
                             <th scope="col"></th>
                             <th scope="col">Action</th>
@@ -96,7 +96,7 @@
                             <td style="text-align: center;"><b>{{user.id}}</td>
                             <td><b>{{ user.product_name }}</td>
                             <td><b>{{ user.category.categories}}</td>
-                            <td ><b>${{ user.product_price }}</td>
+                            <td ><b>{{ user.product_price }}</td>
                             <td ><b>{{ user.brand.name }}</td>
 
                             <!-- <td><a href=" url 'product_variant_view' user.id"><span class="badge rounded-pill alert-View btn btn ">View</span> </a></td> -->
@@ -154,7 +154,7 @@
                                                             {% endfor %}
                                                         </select>
                                                     </div>
-                                                    <div class="form-outline mb-4">
+                                                    <!-- <div class="form-outline mb-4">
                                                         <label class="form-label" for="form3Example3cg">offer</label>
                                                         <select class="form-select" name="offer">
                                                             {% if user.offer %}
@@ -173,7 +173,7 @@
                                                             {% endfor %}
                                                             {% endif %}
                                                         </select>
-                                                    </div>
+                                                    </div> -->
 
                                                     
 
@@ -215,7 +215,7 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                delete product {{user.product_name }}
+                                                delete product {{user.product_name}}
                                             </div>
                                             <div class="modal-footer">
                                                 <!-- one here -->
@@ -287,7 +287,7 @@
                         <label class="form-label" for="form3Example3cg">Brand</label>
                         <select class="form-select" name="brand_name">
                             {% for b in brand %}
-                            <option value="{{b.id}}">{{b.name}}</option>
+                            <option value="{{b.id}}">{{b.names}}</option>
                             {% endfor %}
                         </select>
                     </div>
