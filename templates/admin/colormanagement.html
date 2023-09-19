@@ -1,0 +1,176 @@
+{% extends 'admin/dashboardbase.html' %}
+{% block title %} color management{% endblock %}
+{% load static %}
+{% block body %}
+<style>
+    .product-nav {
+        display: flex;
+        justify-content: first baseline;
+
+    }
+
+    .product-nav-dots {
+        display: flex;
+        align-items: center;
+    }
+
+    .product-nav-dots a {
+        display: block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin: 0 5px;
+        text-decoration: none;
+    }
+
+    .product-nav-dots a:hover {
+        opacity: 0.8;
+    }
+
+    .product-nav-dots a span {
+        display: none;
+    }
+
+    .product-nav-dots a.active {
+        border: 2px solid #cc3333;
+    }
+
+    .product-nav-dots a.active span {
+        display: inline-block;
+        text-indent: -9999px;
+    }
+</style>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            {% comment %} <h2 class="content-title card-title">User List</h2> {% endcomment %}
+            {% comment %} <p>All Users of Refined Radiance.</p> {% endcomment %}
+        </div>
+
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3" style="margin-top: 105px;>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#addCategory">
+                        <button type="submit" class="btn btn-primary"><i class="ti ti-plus"></i> Add Color</button>
+
+                    </a>
+                </div>
+
+            </div>
+        </header>
+        <!-- card-header end// -->
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="text-uppercase">
+                            <th scope="col">id</th>
+                            <th scope="col"style="padding-left: 20px;">color</th>
+                            <th scope="col">colorName</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in products_color %}
+                        <tr class="text-uppercase">
+                            <td>{{ c.id }}</td>
+                            <td>
+                                <div class="product-nav product-nav-dots">
+                                    <a href="#" id="colorLink{{ forloop.counter }}"><span class="sr-only"></span></a>
+                
+                                    <script>
+                                        var colorCode = "{{ c.color_code }}";
+                                        var colorLink = document.getElementById("colorLink{{ forloop.counter }}");
+                                        colorLink.style.background = colorCode;
+                                    </script>
+                                </div><!-- End .product-nav -->
+                            </td>
+                            <td>{{ c.color_name }}</td>
+                            <td>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn c"
+                                    style="background-color: rgb(239, 7, 54); color:rgb(255, 255, 255)"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal{{ forloop.counter }}">
+                                    <i class="ti ti-trash"></i>
+                                    Delete
+                                </button>
+                
+                                <!-- Modal for delete the Category -->
+                                <div class="modal fade" id="exampleModal{{ forloop.counter }}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Delete Color {{ c.color_name }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <!-- one here -->
+                                                <form action="{% url 'deletecolor' c.id %}">
+                                                    <button type="submit" class="btn btn"
+                                                        style="background-color: rgb(239, 7, 54); color:rgb(255, 255, 255)">Confirm</button>
+                                                </form>
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+
+            </div>
+            <!-- table-responsive //end -->
+        </div>
+        <!-- card-body end// -->
+    </div>
+    <!-- card end// -->
+
+</section>
+                                       <!--  add color  -->
+<div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Color</h1>
+                <br>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form action="{% url 'addcolor' %}" enctype="multipart/form-data" method="POST">
+                    {% csrf_token %}
+                    <div style="width: 100px;" class="">
+                    </div>
+                    <div class="form-outline mb-4">
+                        <label for="color">Select a color:</label>
+                        <input type="color" id="color" name="color" value="#000000" />
+
+                    </div>
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example3cg">Color Name</label>
+                        <input name='color1' type="text" id="form3Example3cg" class="form-control form-control-lg" />
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-lg gradient-custom-4 w-50 text-light"
+                            type="submit">Save </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

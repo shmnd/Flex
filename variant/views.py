@@ -131,7 +131,7 @@ def productsize(request):
         return redirect('adminsignin')
     
     product_size=Size.objects.filter(is_avialable=True).order_by('id')
-    return render(request,'sizemanagement/sizemanagement.html')
+    return render(request,'admin/sizemanagement.html')
 
 def addsize(request):
     if not request.user.is_superuser:
@@ -153,7 +153,7 @@ def addsize(request):
         messages.success(request,'Size added succesfully')
         return redirect('productsize')
     
-    return render(request,'sizemanagement/sizemanagement.html')
+    return render(request,'admin/sizemanagement.html')
 
 def deletesize(request,size_range_id):
     if not request.user.is_superuser:
@@ -169,8 +169,9 @@ def deletesize(request,size_range_id):
 def productcolor(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
+    
     products_color=Color.objects.filter(is_available=True).order_by('id')
-    return render(request,'colormanagement/colormanagement.html',{'product_color':products_color})
+    return render(request,'admin/colormanagement.html',{'product_color':products_color})
 
 def addcolor(request):
     if not request.user.is_superuser:
@@ -180,6 +181,7 @@ def addcolor(request):
         colorname=request.POST.get('color1')
         color=request.POST.get('color')
         color1=color
+        print(color1,color,colorname,'hiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
 
         color=getcolorname(color)
         if  color=='Unknown':
@@ -203,7 +205,7 @@ def addcolor(request):
         messages.success(request,'color added sucessfully')
         return redirect('productcolor')
 
-    return render(request,'colormanagement/colormanagement.html')
+    return render(request,'admin/colormanagement.html')
 
 def deletecolor(request,color_name_id):
     if not request.user.is_superuser:
@@ -279,7 +281,7 @@ def productvariantview(request,product_id):
         'product':product
     }
     # variant id 
-    return render(request,'views/variant.html',{'variant_list':variant_list})
+    return render(request,'view/variantview.html',{'variant_list':variant_list})
 
 
 def searchvariant(request):

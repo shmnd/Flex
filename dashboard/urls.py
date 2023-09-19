@@ -14,4 +14,7 @@ urlpatterns = [
     path('deletebrands/<slug:deletebrands_id>', views.deletebrands, name='deletebrands'),
     path('blockuser/<int:user_id>', views.blockuser, name="blockuser"),
     path('adminlogout/',views.adminlogout,name='adminlogout'),
+    path('adminlogout/',views.adminlogout,name='adminlogout'),
+
+
 ]

@@ -1,7 +1,7 @@
-{% extends 'adminside/dashboardbase.html' %}
-{% block title %}Variant{% endblock %}
+{% extends 'admin/dashboardbase.html' %}
+{% block title %} color management{% endblock %}
 {% load static %}
-{% block dashbody %}
+{% block body %}
 
 <section class="content-main">
     <div class="content-header">
@@ -13,7 +13,7 @@
     </div>
     <div class="card mb-4">
         <header class="card-header">
-            <div class="row gx-3">
+            <div class="row gx-3" style="margin-top: 85px; ">
                 <div class="col-lg-2 col-6 col-md-3">
                     <a href="#" data-bs-toggle="modal" data-bs-target="#addCategory">
                         <button type="submit" class="btn btn-primary"><i class="ti ti-plus"></i> Add variant</button>
@@ -92,7 +92,7 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="{% url 'edit_prodectvariant' c.id %}"
+                                                <form action="{% url 'editproductvariant' c.id %}"
                                                     enctype="multipart/form-data" method="POST">
                                                     {% csrf_token %}
                                                     <div style="width: 100px;" class="">
@@ -179,7 +179,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <!-- one here -->
-                                                <form action="{% url 'prodectvariant_delete' c.id %}">
+                                                <form action="{% url 'productvariantdelete' c.id %}">
 
                                                     <button type="submit" class="btn btn"
                                                         style="background-color: rgb(239, 7, 54); color:rgb(255, 255, 255)">Confirm</button>
@@ -193,7 +193,7 @@
                                 </div>
 
                             </td>
-                            <td> <a href="{% url 'image_list' c.id %}"><button type="button" class="btn btn c"
+                            <td> <a href="{% url 'imagelist' c.id %}"><button type="button" class="btn btn c"
                                         style="background-color: rgb(86, 168, 255); color:rgb(255, 255, 255)"
                                         data-bs-toggle="modal">
                                         <i class="ti ti-photo"></i>
@@ -225,7 +225,7 @@
             </div>
             <div class="modal-body">
 
-                <form action="{% url 'add_Product_Variant' %}" enctype="multipart/form-data" method="POST">
+                <form action="{% url 'addproductvariant' %}" enctype="multipart/form-data" method="POST">
                     {% csrf_token %}
                     <div style="width: 100px;" class="">
                     </div>

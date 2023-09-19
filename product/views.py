@@ -128,24 +128,6 @@ def editproduct(request,product_id):
         messages.success(request,'edited successfully')
         return redirect('product')
 
-@login_required(login_url='adminsignin')
-def productview(request,product_id):
-    if not request.user.is_superuser:  
-        return redirect('adminsignin')
-    
-    variant=Variant.objects.filter(product=product_id,is_availble=True)
-    Size_range=Size.objects.filter(is_available=True).order_by('id')
-    color_name=Color.objects.filter(is_available=True).order_by('id')
-    product=Product.objects.filter(is_available=True).order_by('id')
-    variant_list={
-        'variant':variant,
-        'size_range':Size_range,
-        'color_name':color_name,
-        'product':product,
-    }
-    return render(request,'admin/adminproduct.html',{'variant_list':variant_list})
-    
-
 
 @login_required(login_url='adminsignin')
 def searchproduct(request):
@@ -175,3 +157,24 @@ def searchproduct(request):
     
 
 
+# /////////////////////////////////            PRODUCT VIEW                     // //////////////////////////////
+
+
+@login_required(login_url='adminsignin')
+def productview(request,product_id):
+
+    if not request.user.is_superuser:  
+        return redirect('adminsignin')
+    
+    variant=Variant.objects.filter(product=product_id,is_available=True)
+    Size_range=Size.objects.filter(is_available=True).order_by('id')
+    color_name=Color.objects.filter(is_available=True).order_by('id')
+    product=Product.objects.filter(is_available=True).order_by('id')
+    variant_list={
+        'variant':variant,
+        'size_range':Size_range,
+        'color_name':color_name,
+        'product':product,
+    }
+    return render(request,'admin/adminproductview.html',{'variant_list':variant_list})
+    
