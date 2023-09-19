@@ -19,7 +19,7 @@ def product(request):
     products=Product.objects.filter(is_available=True).order_by('id')
 
     product_list={
-        'products':products,
+        'product':products,
         'categories':category.objects.filter(is_available=True).order_by('id'),
         'brand':Brand.objects.order_by('id'),
     }
@@ -73,16 +73,19 @@ def createproduct(request):
     return render(request,'admin/adminproduct.html')
 
 @login_required(login_url='adminsignin')
-def deleteproduct(request,product_id):
+def deleteproduct(request, product_id):  
     if not request.user.is_superuser:
         return redirect('adminsignin')
-    delete_product=Product.objects.get(id=product_id)
-    variants=Variant.objects.filter(product=delete_product)
+    delete_product = Product.objects.get(id=product_id) 
+    variants = Variant.objects.filter(product=delete_product)
     for variant in variants:
-        variant.is_available=False
-        delete_product.save()
-        messages.success(request,'product deleted successfully')
-        return redirect('product')
+        variant.is_available = False
+        variant.quantity = 0
+        variant.save()
+    delete_product.is_available =False
+    delete_product.save()
+    messages.success(request,'product deleted successfully!')
+    return redirect('product')
 
 @login_required(login_url='adminsignin')
 def editproduct(request,product_id):
@@ -92,6 +95,9 @@ def editproduct(request,product_id):
         name=request.POST.get('product_name')
         price=request.POST.get('product_price')
         category_id=request.POST.get('category')
+
+        # print(category_id,'pppppppppppppppppppp')
+
         brand_id=request.POST.get('brand')
         product_description=request.POST.get('product_description')
 
@@ -152,13 +158,13 @@ def searchproduct(request):
         Q(product_name__icontains=search) |
         Q(product_price__icontains=search) |
         Q(category__categories__icontains=search) |
-        Q(brand__name__icontains=search),
+        Q(brand__names__icontains=search),
         is_available=True
     )
     product_list = {
         'product': product,
         'categories': category.objects.filter(is_available=True).order_by('id'),
-        'name': Brand.objects.filter(is_available=True).order_by('id'),
+        'brand': Brand.objects.filter(is_available=True).order_by('id'),
     }
     if product:
         return render(request, 'admin/adminproduct.html', product_list)

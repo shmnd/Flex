@@ -97,7 +97,7 @@
                             <td><b>{{ user.product_name }}</td>
                             <td><b>{{ user.category.categories}}</td>
                             <td ><b>{{ user.product_price }}</td>
-                            <td ><b>{{ user.brand.name }}</td>
+                            <td ><b>{{ user.brand.names }}</td>
 
                             <!-- <td><a href=" url 'product_variant_view' user.id"><span class="badge rounded-pill alert-View btn btn ">View</span> </a></td> -->
                             <!-- <td><b>{{user.variant.count}}</td> -->
@@ -152,6 +152,20 @@
                                                                     <option value="{{ c.id }}">{{ c.categories }}</option>
                                                                 {% endif %}
                                                             {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <!-- brand -->
+                                                    <div class="form-outline mb-4">
+                                                        <label class="form-label" for="form3Example3cg">Brand</label>
+                                                        <select class="form-select" name="brand">
+                                                            {% for b in brand %}
+                                                                {% if b.names == user.brand.names %}
+                                                                    <option value="{{ b.id }}" selected>{{ b.names }}</option>
+                                                                {% else %}
+                                                                    <option value="{{ b.id }}">{{ b.names }}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                          
                                                         </select>
                                                     </div>
                                                     <!-- <div class="form-outline mb-4">

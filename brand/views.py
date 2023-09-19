@@ -29,12 +29,12 @@ def createbrand(request):
             messages.error(request,'name cannot be blank')
             return redirect('brand')
         
-        if Brand.objects.filter(name=bname).exists():
+        if Brand.objects.filter(names=bname).exists():
             messages.error(request,'Name already exists')
             return redirect('brand')
         
 
-    brandsave=Brand(name=bname)
+    brandsave=Brand(names=bname)
     brandsave.save()
     return redirect('brand')
 
