@@ -25,6 +25,7 @@ class Size(models.Model):
 
 class Color(models.Model):
     color_name=models.CharField(max_length=50)
+    color_code = models.CharField(max_length=15)
     is_available =models.BooleanField(default=True)
 
     def __str__(self):

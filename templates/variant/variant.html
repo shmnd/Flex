@@ -63,7 +63,7 @@
                             <td><b>{{ c.id }}</b></td>
                             <td><b>{{ c.product.product_name }}</b></td>
                             <td><b>{{ c.color.color_name }}</b></td>
-                            <td><b>{{ c.size.size_range }}</b></td>
+                            <td><b>{{ c.size.size_chart }}</b></td>
                             <td><b>{{ c.quantity }}</b></td>
                             <!-- <td><b>View</b></td> -->
                             <td><b>{{ Action }}</b></td>
@@ -75,10 +75,6 @@
                                         class="ti ti-edit"></i>
                                     Edit
                                 </button>
-
-
-
-
 
                                 <!--Edit Modal -->
                                 <div class="modal fade" id="confirmEdit{{forloop.counter}}" tabindex="-1"
@@ -199,7 +195,6 @@
                                         <i class="ti ti-photo"></i>
                                         Images
                                     </button></a></td>
-
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -241,7 +236,7 @@
                         <label class="form-label" for="form3Example3cg">Size</label>
                         <select class="form-select" name="variant_size">
                             {% for c in variant_list.size_range %}
-                            <option value="{{ c.id }}">{{ c.size_range }}</option>
+                            <option value="{{ c.id }}">{{ c.size_chart }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -262,8 +257,7 @@
 
 
                     <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light"
-                            type="submit">Save </button>
+                        <button type="submit" class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light"type="submit">Save </button>
                     </div>
                 </form>
             </div>

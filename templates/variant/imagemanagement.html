@@ -1,0 +1,98 @@
+{% extends 'admin/dashboardbase.html' %}
+{% block title %}image_management{% endblock %}
+{% load static %}
+{% block body %}
+<section class="content-main">
+  <div class="content-header">
+
+
+  </div>
+  <div class="card mb-4">
+    <header class="card-header">
+  
+      <div class="col-lg-2 col-6 col-md-3">
+        <a href="{% url 'imageview' add_image %}">
+          <button type="button" class="btn btn c"
+            style="background-color: rgb(75, 171, 215); color:rgb(255, 255, 255)"><i class=" ti ti-plus"></i>
+            Add
+          </button></a>
+      </div>
+     
+    </header>
+    <!-- card-header end// -->
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr class="text-uppercase">
+              <th scope="col">id</th>
+              <th scope="col">image</th>
+              <th scope="col">variant</th>
+              <th scope="col">color</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in image %}
+            <tr class="text-uppercase">
+              <td> {{c.id}} </td>
+              <td>
+                <div style="width: 50px;" class="overflow-hidden">
+                  <img class="w-100" src=" {{c.image.url}} " alt="">
+                </div>
+              </td>
+              <td> {{c.variant.product.product_name}} </td>
+              <td> {{c.variant.color.color_name}} </td>
+
+
+
+              <td>
+                <button type="button" class="btn btn c"
+                  style="background-color: rgb(239, 7, 54); color:rgb(255, 255, 255)" data-bs-toggle="modal"
+                  data-bs-target="#exampleModal{{forloop.counter}}"><i class="ti ti-trash"></i>
+                  Delete
+                </button>
+              </td>
+              <!-- Modal  for delete the Category -->
+              <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      delete image
+                    </div>
+                    <div class="modal-footer">
+                      <!-- one here -->
+                      <form action="{% url 'image_delete' c.id %}">
+
+                        <button type="submit" class="btn btn"
+                          style="background-color: rgb(239, 7, 54); color:rgb(255, 255, 255)">Confirm</button>
+                      </form>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              </td>
+            </tr>
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+      <!-- table-responsive //end -->
+    </div>
+    <!-- card-body end// -->
+  </div>
+  <!-- card end// -->
+
+</section>
+
+
+{% endblock %}

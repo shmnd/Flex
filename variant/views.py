@@ -16,6 +16,7 @@ import webcolors
 def productvariant(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
+    
     variant= Variant.objects.filter(is_available=True).order_by('id')
     size_range=Size.objects.filter(is_available=True).order_by('id')
     color_name=Color.objects.filter(is_available=True).order_by('id')
@@ -40,6 +41,8 @@ def addproductvariant(request):
         variant_color=request.POST.get('variant_color')
         variant_quantity=request.POST.get('variant_quantity')
 
+        # print(variant_color,'oooooooooooooooooooooooooooooooooooo')
+
     # validation
         if variant_quantity.strip()=='':
             messages.error(request,'Quantity field cannot be empty')
@@ -49,6 +52,8 @@ def addproductvariant(request):
             product_obj=Product.objects.get(id=variant_name)
             size_obj=Product.objects.get(id=variant_size)
             color_obj=Color.objects.get(id=variant_color)
+
+            print(product_obj,size_obj,color_obj,'uuuuuuuuuuuuuuuuuuuuuuuuuuu')
 
             # check variant is already exists
 
@@ -170,8 +175,8 @@ def productcolor(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
     
-    products_color=Color.objects.filter(is_available=True).order_by('id')
-    return render(request,'admin/colormanagement.html',{'product_color':products_color})
+    product_color=Color.objects.filter(is_available=True).order_by('id')
+    return render(request,'admin/colormanagement.html',{'product_color':product_color})
 
 def addcolor(request):
     if not request.user.is_superuser:
@@ -181,11 +186,13 @@ def addcolor(request):
         colorname=request.POST.get('color1')
         color=request.POST.get('color')
         color1=color
-        print(color1,color,colorname,'hiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
+        # print(color1,color,colorname,'hiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
 
         color=getcolorname(color)
         if  color=='Unknown':
             color=color1
+        # print(color,colorname,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+
 
         if colorname.strip()=='':
             messages.error(request,'Field cannot be empty')
@@ -193,7 +200,7 @@ def addcolor(request):
         
         if Color.objects.filter(color_name=colorname).exists():
             color_add=Color.objects.get(color_name=colorname)
-            if color_add.is_avilable==False:
+            if color_add.is_available==False:
                 pass
             else:
                 messages.error(request,'color already exists')
@@ -212,10 +219,11 @@ def deletecolor(request,color_name_id):
         return redirect('adminsignin')
     
     delete_color=Color.objects.get(id=color_name_id)
-    delete_color.is_avilable=False
+    delete_color.is_available=False
     delete_color.save()
     messages.success(request,'color deleted succesfully')
     return redirect('productcolor')
+#colorpicker////////////////////////////////////////////////////////////////////
 
 def getcolorname(color_code):
     try:

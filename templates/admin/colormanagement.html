@@ -50,14 +50,12 @@
     </div>
     <div class="card mb-4">
         <header class="card-header">
-            <div class="row gx-3" style="margin-top: 105px;>
-                <div class="col-lg-2 col-6 col-md-3">
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#addCategory">
+            <div class="row gx-3" style="margin-top: 105px;">
+                <div class='col-lg-2 col-6 col-md-3'>
+                    <a href='#' data-bs-toggle='modal' data-bs-target='#addCategory'>
                         <button type="submit" class="btn btn-primary"><i class="ti ti-plus"></i> Add Color</button>
-
                     </a>
                 </div>
-
             </div>
         </header>
         <!-- card-header end// -->
@@ -73,7 +71,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for c in products_color %}
+                        {% for c in product_color %}
                         <tr class="text-uppercase">
                             <td>{{ c.id }}</td>
                             <td>
@@ -104,8 +102,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
                                                 Delete Color {{ c.color_name }}
@@ -116,8 +113,7 @@
                                                     <button type="submit" class="btn btn"
                                                         style="background-color: rgb(239, 7, 54); color:rgb(255, 255, 255)">Confirm</button>
                                                 </form>
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                             </div>
                                         </div>
                                     </div>
@@ -152,12 +148,14 @@
                 <form action="{% url 'addcolor' %}" enctype="multipart/form-data" method="POST">
                     {% csrf_token %}
                     <div style="width: 100px;" class="">
+
                     </div>
+
                     <div class="form-outline mb-4">
                         <label for="color">Select a color:</label>
                         <input type="color" id="color" name="color" value="#000000" />
-
                     </div>
+
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example3cg">Color Name</label>
                         <input name='color1' type="text" id="form3Example3cg" class="form-control form-control-lg" />
@@ -165,12 +163,12 @@
 
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary btn-lg gradient-custom-4 w-50 text-light"
-                            type="submit">Save </button>
+                            type="submit">Save 
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-{% endblock %}
+{%endblock%}
