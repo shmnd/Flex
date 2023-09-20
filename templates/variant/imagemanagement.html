@@ -10,7 +10,7 @@
   <div class="card mb-4">
     <header class="card-header">
   
-      <div class="col-lg-2 col-6 col-md-3">
+      <div class="col-lg-2 col-6 col-md-3" style="margin-top: 85px;">
         <a href="{% url 'imageview' add_image %}">
           <button type="button" class="btn btn c"
             style="background-color: rgb(75, 171, 215); color:rgb(255, 255, 255)"><i class=" ti ti-plus"></i>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="modal-footer">
                       <!-- one here -->
-                      <form action="{% url 'image_delete' c.id %}">
+                      <form action="{% url 'imagedelete' c.id %}">
 
                         <button type="submit" class="btn btn"
                           style="background-color: rgb(239, 7, 54); color:rgb(255, 255, 255)">Confirm</button>

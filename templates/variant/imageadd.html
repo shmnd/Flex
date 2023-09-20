@@ -32,7 +32,7 @@
     <div class="container mt-3">
       <div id="alert-box"></div>
       <div id="image-box" class="mb-3"></div>
-      <form action="{% url 'image_view' img_id %}"  method="post" id="image-form">
+      <form action="{% url 'imageview' img_id %}"  method="post" id="image-form">
         <input type="hidden" id="img_id" value="{{img_id}}">
           {% csrf_token %}
           {{form.as_p}}

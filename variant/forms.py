@@ -4,5 +4,5 @@ from .models import VariantImage
 
 class ImageForm(forms.ModelForm):
     class Meta:
-        Model=VariantImage
+        model=VariantImage
         fields=('image',)

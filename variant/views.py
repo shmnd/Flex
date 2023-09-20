@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from .forms import ImageForm
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Product,Size,Color,price_range,Variant,VariantImage
+from .models import Product,Size,Color,Variant,VariantImage
 import webcolors
 
 
@@ -41,7 +41,7 @@ def addproductvariant(request):
         variant_color=request.POST.get('variant_color')
         variant_quantity=request.POST.get('variant_quantity')
 
-        # print(variant_color,'oooooooooooooooooooooooooooooooooooo')
+        print(variant_color,variant_name,variant_size,variant_quantity,'oooooooooooooooooooooooooooooooooooo')
 
     # validation
         if variant_quantity.strip()=='':
@@ -50,7 +50,7 @@ def addproductvariant(request):
         
         try:
             product_obj=Product.objects.get(id=variant_name)
-            size_obj=Product.objects.get(id=variant_size)
+            size_obj=Size.objects.get(id=variant_size)
             color_obj=Color.objects.get(id=variant_color)
 
             print(product_obj,size_obj,color_obj,'uuuuuuuuuuuuuuuuuuuuuuuuuuu')
@@ -70,9 +70,9 @@ def addproductvariant(request):
                 quantity=variant_quantity,
             )
             add_variant.save()
-
+            product_id = product_obj.id
             messages.success(request,'Variant added successfully')
-            return redirect('productvariant')
+            return redirect('productview',product_id)
 
         except ObjectDoesNotExist:
             messages.error(request,'Invalid product ,size,or color selected')
@@ -240,23 +240,21 @@ def imagelist(request,variant_id):
 
 # this is image add functions
 def imageview(request,img_id):
-    if request.method=='POST':
-        form=ImageForm(request.POST,request.FILES)
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
         var = Variant.objects.get(id=img_id)
-
         if form.is_valid():
-            image_instance=form.save(commit=False)
-            image_instance.variant=var
-            image_instance.save()
-            price_range('images saved sucessfully')
-            return JsonResponse({'message':'works','img_id':img_id})
+            image_instance = form.save(commit=False)  
+            image_instance.variant = var  
+            image_instance.save()  
+            print("Image saved successfully!") 
+            return JsonResponse({'message': 'works','img_id':img_id})
         else:
-            print('Form is not valid:',form.errors)
+            print("Form is not valid:", form.errors)
     else:
-        form=ImageForm()
-
-    context={'form':form,'img_id':img_id}
-    return render(request,'variant/imageadd.html',context)
+        form = ImageForm()
+    context = {'form': form,'img_id':img_id}
+    return render(request, 'variant/imageadd.html', context)
 
 def imagedelete(request,image_id):
     if not request.user.is_superuser:
@@ -271,16 +269,17 @@ def imagedelete(request,image_id):
         add_image=var_id
         return render(request,'variant/imagemanagement.html',{'image':image},{'add_image':add_image})
     except:
-        return redirect('productvariant')
+        return redirect('imagelist',var_id)
     
 
 def productvariantview(request,product_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
+    print(product_id,'ppppppppppppppppppppppppp')
+    variant=Variant.objects.filter(product=product_id,is_available=True)
     
-    variant=Variant.objects.filter(Variant_product=product_id,is_avialable=True)
     size_range=Size.objects.filter(is_available=True).order_by('id')
-    color_name=Color.objects.filter(is_avialabe=True).order_by('id')
+    color_name=Color.objects.filter(is_available=True).order_by('id')
     product=Product.objects.filter(is_available=True).order_by('id')
     variant_list={
         'variant':variant,

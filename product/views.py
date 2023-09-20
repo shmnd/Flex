@@ -176,5 +176,10 @@ def productview(request,product_id):
         'color_name':color_name,
         'product':product,
     }
+    for i in variant:
+        print(i.id,i.product,'gggggggggggggggggggggggg')
     return render(request,'admin/adminproductview.html',{'variant_list':variant_list})
+
+
+
     

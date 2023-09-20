@@ -53,7 +53,7 @@ input.addEventListener('change', ()=>{
                     alertBox.innerHTML = `<div class="alert alert-success" role="alert">
                                             Successfully saved and cropped the selected image
                                         </div>`
-                                        window.location.href = `/variant/image_list/${imgId}`;
+                                        window.location.href = `/variantimagelist/${imgId}`;
                                            
                 },
                 
@@ -87,8 +87,10 @@ input.addEventListener('change', ()=>{
                         console.log('success', response);
                         alertBox.innerHTML = `<div class="alert alert-success" role="alert">
                                                 Successfully saved and cropped the selected image
-                                            </div>`;
-                        window.location.href = `/variant/image_list/${imgId}`;
+                                            </div>`
+                                            // window.location.href = `/variantimagelist/${imgId}`;
+                                             window.location.href = `/product/product`;
+                        
                     },
                     error: function(error) {
                         console.log('error', error);

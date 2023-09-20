@@ -12,7 +12,7 @@ class Variant(models.Model):
 
 
     def __str__(self):
-        return f"{self.product.product_name} - {self.color.color_name} - {self.size.size_range} "
+        return f"{self.product.product_name} - {self.color.color_name} - {self.size.size_chart} "
 
 class VariantImage(models.Model):
     variant=models.ForeignKey(Variant,on_delete=models.CASCADE)
