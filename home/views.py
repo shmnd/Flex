@@ -15,8 +15,8 @@ from category.models import category
 
 
 def home(request):
-    if  request.user.is_superuser:
-        return redirect('dashboard')
+    # if  request.user.is_superuser:
+    #     return redirect('dashboard')
     
     categories=category.objects.all()
     products=Product.objects.all()
@@ -28,12 +28,12 @@ def home(request):
     #     cart_count=False
     #     whishlist_count=False
 
-    variant_image=(VariantImage.objects.filter(variant__product__is_available=True).order_by('variant__product').distinct('variant__product'))
+    variant_images=(VariantImage.objects.filter(variant__product__is_available=True).order_by('variant__product').distinct('variant__product'))
     
     context={
         'categories':categories,
         'products':products,
-        'variant_images':variant_image,
+        'variant_images':variant_images,
         # 'wishlist_count':wishlist_count,
         # 'cart_count':cart_count,
     }
