@@ -93,11 +93,12 @@
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-5col">
 
                                     {%for prod in variant_images %}
+
                                     <div class="product product-3 text-center">
                                         <figure class="product-media">
                                             <span class="product-label label-primary">Sale</span>
                                             <span class="product-label label-sale">30% off</span>
-                                            <a href="product.html">
+                                            <a href="{% url "" %}">
                                                 <img src="{{c.image.url }} " alt="Product image" class="product-image">
                                             </a>
 
@@ -138,6 +139,7 @@
                                             </div><!-- End .product-action -->
                                         </div><!-- End .product-footer -->
                                     </div><!-- End .product -->
+
                                     {% endfor %}
 
                                 </div><!-- End .col-6 col-md-4 col-lg-3 -->
