@@ -80,28 +80,26 @@
 
             <div class="container">
                 <div class="heading heading-center mb-3">
-                    <h2 class="title-lg mb-2"> Products</h2><!-- End .title-lg text-center -->
-
-                    
+                    <h2 class="title-lg mb-2"> PRODUCTS</h2><!-- End .title-lg text-center -->
                 </div><!-- End .heading -->
 
+
+                
                 <div class="tab-content">
                     <div class="tab-pane p-0 fade show active" id="top-all-tab" role="tabpanel" aria-labelledby="top-all-link">
                         <div class="products just-action-icons-sm">
                             <div class="row">
+                            
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-5col">
+
+                                    {%for prod in variant_images %}
                                     <div class="product product-3 text-center">
                                         <figure class="product-media">
                                             <span class="product-label label-primary">Sale</span>
                                             <span class="product-label label-sale">30% off</span>
                                             <a href="product.html">
-                                                <img src="{% static 'template/assets/images/demos/demo-10/products/product-5.jpg' %}" alt="Product image" class="product-image">
+                                                <img src="{{c.image.url }} " alt="Product image" class="product-image">
                                             </a>
-
-                                            {% comment %} <div class="product-countdown-container">
-                                                <span class="product-contdown-title">offer ends in:</span>
-                                                <div class="product-countdown countdown-compact" data-until="2019, 11, 3" data-compact="true"></div><!-- End .product-countdown -->
-                                            </div><!-- End .product-countdown-container --> {% endcomment %}
 
                                             <div class="product-action-vertical">
                                                 <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
@@ -140,6 +138,8 @@
                                             </div><!-- End .product-action -->
                                         </div><!-- End .product-footer -->
                                     </div><!-- End .product -->
+                                    {% endfor %}
+
                                 </div><!-- End .col-6 col-md-4 col-lg-3 -->
 
                                 <div class="col-6 col-md-4 col-lg-3 col-xl-5col">
