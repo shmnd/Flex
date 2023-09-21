@@ -41,7 +41,7 @@ def home(request):
     return render(request,'user/home/index.html',context)
 
 
-
+@login_required(login_url='signin')
 def productshow(request,prod_id,img_id):
     print('hiiiiiiiiiiiiiiiiiiiiiiiiiii')
     variant=VariantImage.objects.filter(variant=img_id,is_available=True)
