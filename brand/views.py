@@ -87,7 +87,7 @@ def searchbrand(request):
     if 'keyword' in request.GET:
         keyword=request.GET.get('keyword')
         if keyword:
-            bran=Brand.objects.filter(name__icontains=keyword).order_by('id')
+            bran=Brand.objects.filter(names__icontains=keyword).order_by('id')
             if bran.exists():
                 context={
                     'brand':bran

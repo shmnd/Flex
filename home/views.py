@@ -43,9 +43,10 @@ def home(request):
 
 
 def productshow(request,prod_id,img_id):
+    print('hiiiiiiiiiiiiiiiiiiiiiiiiiii')
     variant=VariantImage.objects.filter(variant=img_id,is_available=True)
     variant_images=(VariantImage.objects.filter(variant__product__id=prod_id,is_available=True).distinct('varianat_product'))
-    size=Size.objects.all(),
+    size=Size.objects.all()
     color=VariantImage.objects.filter(variant__product__id=prod_id,is_available=True).distinct('variant__color')
 
     context={
@@ -53,8 +54,6 @@ def productshow(request,prod_id,img_id):
         'size':size,
         'color':color,
         'variant_images':variant_images,
-
-
     }
     return render(request,'user/product/productshow.html',context)
 

@@ -28,6 +28,7 @@ urlpatterns = [
     path('brand/',include('brand.urls')),
     path('variant',include('variant.urls')),
     path('product/',include('product.urls')),
+    path('whishlist/',include('wishlist.urls'),)
     
 
     # path('user/',include('user.url')),

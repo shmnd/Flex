@@ -5,6 +5,36 @@
 {% load static %}
 
 
+
+<style>
+ 
+
+    @media (max-width: 800px) {
+        .container-fluid.hy {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+    
+        .container-fluid.hy > div {
+            flex: 0 0 calc(33.333% - 20px);
+            margin: 10px;
+        }
+    
+        .container-fluid.hy img {
+            max-width: 85%;
+            height: auto;
+        }
+    
+        .container-fluid.hy h5.banner-title {
+            font-size: 85%;
+        }
+    }
+
+   
+</style>
+
+
         <main class="main">
             <div class="container">
                 <div class="intro-slider-container slider-container-ratio mb-2">
@@ -98,12 +128,15 @@
                                             {% comment %} <span class="product-label label-primary">Sale</span>
                                             <span class="product-label label-sale">30% off</span> {% endcomment %}
                                              <a href="{% url 'productshow' c.variant.product.id c.variant.id %}">
-
                                                 <img src="{{c.image.url }}" alt="Product image" class="product-image">
                                             </a>
 
                                             <div class="product-action-vertical">
+                                                
+                                                <a href="" class="btn-product-icon btn-cart btn-expandable"  data-product_id="{{c.variant.id}}"><span>add to cart</span></a>
+
                                                 <a href="" class="btn-product-icon btn-wishlist btn-expandable"  data-product_id="{{c.variant.id}}"><span>add to wishlist</span></a>
+
                                             </div><!-- End .product-action-vertical -->
                                         </figure><!-- End .product-media -->
 
@@ -112,7 +145,7 @@
                                                 <a href="#">Men’s</a>,
                                                 <a href="#">Sneakers</a>
                                             </div><!-- End .product-cat -->
-                                            <h3 class="product-title"><a href="#">{{c.variant.product.product_name}}</a></h3><!-- End .product-title -->
+                                            <h3 class="product-title"><a href="{% url 'productshow' c.variant.product.id c.variant.id %}">{{c.variant.product.product_name}}</a></h3><!-- End .product-title -->
                                             <div class="product-price">
 
                                                 <span class="new-price">${{c.variant.product.product_price}}</span>
