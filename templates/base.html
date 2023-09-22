@@ -148,7 +148,10 @@
                                 <a href="#">Links</a>
                                 <ul>
                                     <li><a href="tel:#"><i class="icon-phone"></i>Call: +91 755 994 5671</a></li>
-                                    <li><a href="wishlist.html"><i class="icon-heart-o"></i>My Wishlist <span>(3)</span></a></li>
+                                    
+                                    <li><a href="{% url "wishlist" %}"><i class="icon-heart-o"></i>My Wishlist</a></li>
+
+                                    
                                     <li><a href="about.html">About Us</a></li>
                                     <li><a href="contact.html">Contact Us</a></li>
                                     {% if user.is_authenticated %}
@@ -606,9 +609,23 @@
       });
     });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
+    
+
+  
+{% for message in messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                text: "{{ message }}",
+                timer: 5000, // Adjust the timer to control how long each alert stays visible (in milliseconds)
+            });
+        });
+    </script>
+{% endfor %}
     
 </body>
 
 
-<!-- molla/index-10.html  22 Nov 2019 09:58:22 GMT -->
 </html>

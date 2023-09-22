@@ -28,9 +28,9 @@ urlpatterns = [
     path('brand/',include('brand.urls')),
     path('variant',include('variant.urls')),
     path('product/',include('product.urls')),
-    path('whishlist/',include('wishlist.urls'),)
+    path('wishlist/',include('wishlist.urls')),
+    path('wishlist/',include('cart.urls')),
     
-
     # path('user/',include('user.url')),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

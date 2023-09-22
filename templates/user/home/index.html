@@ -135,7 +135,7 @@
                                                 
                                                 <a href="" class="btn-product-icon btn-cart btn-expandable"  data-product_id="{{c.variant.id}}"><span>add to cart</span></a>
 
-                                                <a href="" class="btn-product-icon btn-wishlist btn-expandable"  data-product_id="{{c.variant.id}}"><span>add to wishlist</span></a>
+                                                <a href="" class="btn-product-icon btn-wishlist btn-expandable wish-list"  data-product_id="{{c.variant.id}}"><span>add to wishlist</span></a>
 
                                             </div><!-- End .product-action-vertical -->
                                         </figure><!-- End .product-media -->
@@ -320,11 +320,51 @@
         </main><!-- End .main -->
 
         {% endblock  %}
-
-
-<script>
-    $(document).ready(function() {
-        $('.owl-carousel').owlCarousel();
-    });
-</script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+        <script src="path-to-owl-carousel/owl.carousel.min.js"></script>
+        <script>
+            $('.wish-list').click(function (e) {
+                e.preventDefault();
         
+                var product_id = $(this).data('product_id');
+                var add_size = $('select[name="size"]').val();
+        
+                console.log(product_id,add_size, 'yyyyyyyyyyyyyyyyyyyyyyy1')
+                $.ajax({
+                    method: "POST",
+                    url: "{% url 'add_wishlist' %}",
+                    data: {
+        
+                        'variant_id': product_id,
+                        'add_size':add_size,
+                     
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+        
+                        console.log(response);
+        
+                        if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in Wishlist' ) {
+                            swal.fire("Error!", response.status, "error");
+                            $('.cartdata').load(location.href + " .cartdata");
+                        } else if (response.status === 'Product added successfully in Wishlist') { 
+                            swal.fire("", response.status, "success");
+                            $('.cartdata').load(location.href + " .cartdata");
+                        } else if (response.status === 'you are not login please Login to continue') {
+                            swal.fire("", response.status, "warning");
+                            $('.cartdata').load(location.href + " .cartdata");
+                        } 
+                        else if (response.status === 'Sorry! this variant not available') {
+                            swal.fire("", response.status, "warning");
+                            $('.cartdata').load(location.href + " .cartdata");
+                        } 
+                        else {
+                            swal("Error!", response.status, "error");
+                            $('.cartdata').load(location.href + " .cartdata");
+                        }
+                    }
+                });
+            });
+        </script> 
+        <!-- Add this before the closing </body> tag of your HTML -->
+        <script src="https://unpkg.com/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>

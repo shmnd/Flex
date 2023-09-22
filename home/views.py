@@ -43,7 +43,6 @@ def home(request):
 
 @login_required(login_url='signin')
 def productshow(request,prod_id,img_id):
-    print('hiiiiiiiiiiiiiiiiiiiiiiiiiii')
     variant=VariantImage.objects.filter(variant=img_id,is_available=True)
     variant_images=(VariantImage.objects.filter(variant__product__id=prod_id,is_available=True).distinct('varianat_product'))
     size=Size.objects.all()
