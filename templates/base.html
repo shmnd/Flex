@@ -243,8 +243,12 @@
                         </div><!-- End .header-search -->
 
                         <div class="dropdown cart-dropdown">
-                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                            <a href="{% url 'cart' %}" class="dropdown-toggle" role="button">
                                 <i class="icon-shopping-cart"></i>
+                                {% if cart_count %}
+                                <span class="cart-count">{{cart_count}}</span>
+                                {% else %}
+                                {% endif %}
                             </a>
                                        
                         </div><!-- End .cart-dropdown -->

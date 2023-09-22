@@ -2,10 +2,10 @@ from django.shortcuts import render,redirect
 from variant.models import Variant,VariantImage
 from django.http import JsonResponse
 from .models import Wishlist
-# cart_count =Cart.objects.filter(user =request.user).count()
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from product.models import Size
+from cart.models import Cart
 
 # Create your views here.
 @login_required(login_url='signin')
@@ -14,6 +14,8 @@ def wishlist(request):
         wishlist=Wishlist.objects.filter(user=request.user).order_by('id')
         variants=wishlist.values_list('variant',flat=True)
         img = VariantImage.objects.filter(variant__in=variants).distinct('variant')
+        cart_count =Cart.objects.filter(user=request.user).count()
+        
         
         size=Size.objects.all()
         

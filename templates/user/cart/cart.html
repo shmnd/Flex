@@ -22,7 +22,7 @@
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'Shop' %}">Shop</a></li>
+                {% comment %} <li class="breadcrumb-item"><a href="{% url 'Shop' %}">Shop</a></li> {% endcomment %}
                 <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
             </ol>
         </div><!-- End .container -->
@@ -55,7 +55,7 @@
                                     <td class="product-col">
                                         <div class="product">
                                             <figure class="product-media">
-                                                <a href="{% url 'product_show' i.variant.product.id i.variant.id %}">
+                                                <a href="{% url 'productshow' i.variant.product.id i.variant.id %}">
 
                                                     {% for j in img %}
                                                     {% if j.variant.id == i.variant.id %}
@@ -67,18 +67,14 @@
                                             </figure>
 
                                             <h3 class="product-title">
-                                                <a href="{% url 'product_show' i.variant.product.id i.variant.id %}">{{i.variant.product.product_name}}</a>
+                                                <a href="{% url 'productshow' i.variant.product.id i.variant.id %}">{{i.variant.product.product_name}}</a>
                                             </h3><!-- End .product-title -->
                                         </div><!-- End .product -->
                                     </td>
                                     <td class="price-col">{{i.variant.color.color_name}}</td>
                                     <td class="price-col">{{i.variant.size.size_range}}</td>
-                                    {% if i.variant.product.offer %}
-                                    <td class="price-col"><del style="color: brown;" >${{i.variant.product.product_price}}</del> <span>${{i.variant.product.product_price|sub:i.variant.product.offer.discount_amount}}</span></td>
-
-                                    {% else %}
+                                    
                                     <td class="price-col">${{i.variant.product.product_price}}</td>
-                                    {% endif %}
                                     <td class="quantity-col product_data">
                                         <div class="input-group quantity mx-auto " style="width: 100px;">
                                             <div class="input-group-btn changeQuantity " data-variantid="{{i.id}}">

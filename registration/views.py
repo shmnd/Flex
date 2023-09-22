@@ -198,7 +198,7 @@ def signup(request):
                         'pre_password2':password2,
                     }
                     messages.error(request,'Email already exist')
-                    return render(request,'registration/signup.html',context)
+                    return render(request,'user/registrations/signup.html',context)
             else:
                 context ={
                         'pre_firstname' :firstname,
