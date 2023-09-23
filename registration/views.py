@@ -164,8 +164,8 @@ def signup(request):
                         'pre_password1':password1,
                         'pre_password2':password2,
                     }
-                messages.info(request,'Enter Strong Password')
-                return render(request,'registration/signup.html',context)
+                messages.info(request, "Enter a Strong Password using special characters ($&+,:;=?@|'<>.^*()%!-)")
+                return render(request,'user/registrations/signup.html',context)
             else:
                 pass
             if password1 == password2:

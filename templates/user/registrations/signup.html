@@ -26,6 +26,11 @@
       margin-top: 10px;
       font-size: 14px;
     }
+
+    .inputGroup13 button {
+        height: 20px;
+        width: 50px;
+      }
     
 </style>
 
@@ -43,24 +48,38 @@
                     <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
                         <!-- partial:index.partial.html -->
                         {% if otp %}
-                        <form class="row contact_form" action="{%url 'signup'%}" method="post" >
-                            {% csrf_token %}
-                            {% if messages %}
-                            {% for message in messages %}
-                            <div class="text-center text-danger">
-                            <strong>{{message}}</strong>
+
+
+                        <form class="row contact_form" action="{% url 'signup' %}" method="post">
+                        {% csrf_token %}
+                        {% if messages %}
+                            <div class="col-12 text-center">
+                                {% for message in messages %}
+                                    <div class="text-danger">
+                                        <strong>{{ message }}</strong>
+                                    </div>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
-                            {% endif %}
-                            <div class="inputGroup inputGroup2">
-                            <input type="text" id="loginUsername" name="otp" placeholder="otp" required/>
+                        {% endif %}
+                        <div class="col-12 text-center">
+                            <div class="inputGroup inputGroup2 ">
+                                <input type="text" id="loginUsername" name="otp" placeholder="OTP" required/>
                             </div>
-                            <input  type="hidden" name="email" value="{{usr.email}}">
-                            <div class="inputGroup inputGroup3">
-                            <button type="submit" id="login">Verify</button>
+                        </div>
+                        <div class="col-12" text-center>
+                            <input type="hidden" name="email" value="{{ usr.email }}">
+                        </div>
+                        <div class="col-12 text-center"> <!-- Center-align the label and button -->
+                            <div class="inputGroup inputGroup13">
+                                <button type="submit" id="login">Verify</button>
                             </div>
-                            <a href="{% url 'signup'%}" style="float: right; margin-top: 26px;text-decoration: none;">Return signup</a>
+                        </div>
+                        <div class="col-12" style="text-align: right; margin-top: 26px;">
+                            <a href="{% url 'signup' %}" style="text-decoration: none;">Return to signup</a>
+                        </div>
                         </form>
+
+                        
                         {% else %}     
 
                         <form action="{%url 'signup'%}" method="post"  onsubmit="return validateForm()">
@@ -100,13 +119,13 @@
 
                             <div class="form-group">
                                 <label for="register-password-2">Password *</label>
-                                <input type="password" class="form-control" id="register-password-2" name="password1"  value="" required>
+                                <input type="password" class="form-control" id="register-password-2" name="password1"  value="" placeholder="use special characters ($&+,:;=?@|'<>.^*()%!-)" required>
                             </div><!-- End .form-group -->
 
 
                             <div class="form-group">
                                 <label for="register-password-2"> Confirm Password *</label>
-                                <input type="password" class="form-control" id="register-password-2" name="password2"  value="" required>
+                                <input type="password" class="form-control" id="register-password-2" name="password2"  value="" placeholder="Confirm your password" required>
                             </div><!-- End .form-group -->
 
                             <div class="form-footer">
@@ -152,10 +171,12 @@
             alert("Please fill in all required fields.");
             return false;
         }
+       
     }
 </script>
 
 
+<script src="https://unpkg.com/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>
 
 
 {% endblock %}
