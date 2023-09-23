@@ -9,6 +9,23 @@
 
 <style>
  
+    .icon-box {
+        display: flex;
+        align-items: center; /* Center vertically */
+        justify-content: center; /* Center horizontally */
+    }
+    
+    .icon-box-icon {
+        flex-shrink: 0;
+        margin-right: 20px; /* Add some spacing between icon and text */
+    }
+    
+    .icon-box-content {
+        flex: 1; /* Allow the content to expand and take up remaining space */
+        text-align: center; /* Center the text horizontally */
+    }
+
+
 
     @media (max-width: 800px) {
         .container-fluid.hy {
@@ -31,6 +48,13 @@
             font-size: 85%;
         }
     }
+
+    .icon-boxes-container .icon-box .icon-box-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
 
    
 </style>
@@ -107,6 +131,107 @@
                 </div><!-- End .intro-slider-container -->
             </div><!-- End .container -->
 
+
+
+            <div class="banner-group">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="banner banner-overlay">
+                                        <a href="#">
+                                            <img src="{% static 'template/assets/images/demos/demo-10/banners/banner-1.jpg' %}" alt="Banner">
+                                        </a>
+
+                                        <div class="banner-content banner-content-right">
+                                            <h4 class="banner-subtitle"><a href="#">New Arrivals</a></h4><!-- End .banner-subtitle -->
+                                            <h3 class="banner-title text-white"><a href="#">Sneakers & <br>Athletic Shoes</a></h3><!-- End .banner-title -->
+                                            <a href="#" class="btn btn-outline-white banner-link btn-round">Discover Now</a>
+                                        </div><!-- End .banner-content -->
+                                    </div><!-- End .banner -->
+                                </div><!-- End .col-sm-6 -->
+
+                                <div class="col-sm-6">
+                                    <div class="banner banner-overlay banner-overlay-light">
+                                        <a href="#">
+                                            <img src="{% static 'template/assets/images/shoes/post-3.jpg' %}" alt="Banner">
+                                        </a>
+
+                                        <div class="banner-content">
+                                            <h4 class="banner-subtitle bright-black"><a href="#">Clearance</a></h4><!-- End .banner-subtitle -->
+                                            <h3 class="banner-title"><a href="#">Sandals</a></h3><!-- End .banner-title -->
+                                            <div class="banner-text"><a href="#">up to 70% off</a></div><!-- End .banner-text -->
+                                            <a href="#" class="btn btn-outline-gray banner-link btn-round">Shop Now</a>
+                                        </div><!-- End .banner-content -->
+                                    </div><!-- End .banner -->
+                                </div><!-- End .col-sm-6 -->
+                            </div><!-- End .row -->
+
+                            <div class="banner banner-large banner-overlay d-none d-sm-block">
+                                <a href="#">
+                                    <img src="{% static 'template/assets/images/demos/demo-10/banners/banner-3.jpg' %}" alt="Banner">
+                                </a>
+
+                                <div class="banner-content">
+                                    <h4 class="banner-subtitle text-white"><a href="#">On Sale</a></h4><!-- End .banner-subtitle -->
+                                    <h3 class="banner-title text-white"><a href="#">Slip-On Loafers</a></h3><!-- End .banner-title -->
+                                    <div class="banner-text text-white"><a href="#">up to 30% off</a></div><!-- End .banner-text -->
+                                    <a href="#" class="btn btn-outline-white banner-link btn-round">Shop Now</a>
+                                </div><!-- End .banner-content -->
+                            </div><!-- End .banner -->
+                        </div><!-- End .col-lg-8 -->
+
+                        <div class="col-lg-4 d-sm-none d-lg-block">
+                            <div class="banner banner-middle banner-overlay">
+                                <a href="#">
+                                    <img src="{% static 'template/assets/images/demos/demo-10/banners/banner-4.jpg' %}" alt="Banner">
+                                </a>
+
+                                <div class="banner-content banner-content-bottom">
+                                    <h4 class="banner-subtitle text-white"><a href="#">On Sale</a></h4><!-- End .banner-subtitle -->
+                                    <h3 class="banner-title text-white"><a href="#">Amazing <br>Lace Up Boots</a></h3><!-- End .banner-title -->
+                                    <div class="banner-text text-white"><a href="#">from $39.00</a></div><!-- End .banner-text -->
+                                    <a href="#" class="btn btn-outline-white banner-link btn-round">Discover Now</a>
+                                </div><!-- End .banner-content -->
+                            </div><!-- End .banner -->
+                        </div><!-- End .col-lg-4 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container --> 
+            </div><!-- End .banner-group -->
+
+            <div class="icon-boxes-container icon-boxes-separator bg-transparent containerfluid">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="icon-box icon-box-side">
+                                <span class="icon-box-icon text-primary">
+                                    <i class="icon-rocket"></i>
+                                </span>
+
+                                <div class="icon-box-content">
+                                    <h3 class="icon-box-title">Free Shipping</h3><!-- End .icon-box-title -->
+                                    <p>Orders $50 or more</p>
+                                </div><!-- End .icon-box-content -->
+                            </div><!-- End .icon-box -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
+                        
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="icon-box icon-box-side">
+                                <span class="icon-box-icon text-primary">
+                                    <i class="icon-rotate-left"></i>
+                                </span>
+
+                                <div class="icon-box-content", .te >
+                                    <h3 class="icon-box-title">Free Returns</h3><!-- End .icon-box-title -->
+                                    <p>Within 30 days</p>
+                                </div><!-- End .icon-box-content -->
+                            </div><!-- End .icon-box -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
+                    </div>
+                </div>
+                
+                        
             <div class="mb-4"></div><!-- End .mb-4 -->
 
             <div class="container">
