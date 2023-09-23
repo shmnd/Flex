@@ -15,8 +15,8 @@ from category.models import category
 
 
 def home(request):
-    # if  request.user.is_superuser:
-    #     return redirect('dashboard')
+    if  request.user.is_superuser:
+        return redirect('dashboard')
     
     categories=category.objects.all()
     products=Product.objects.all()
@@ -41,7 +41,7 @@ def home(request):
     return render(request,'user/home/index.html',context)
 
 
-@login_required(login_url='signin')
+# @login_required(login_url='signin')
 def productshow(request,prod_id,img_id):
     variant=VariantImage.objects.filter(variant=img_id,is_available=True)
     variant_images=(VariantImage.objects.filter(variant__product__id=prod_id,is_available=True).distinct('varianat_product'))
