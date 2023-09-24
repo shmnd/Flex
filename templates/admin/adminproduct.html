@@ -61,14 +61,25 @@
                     </form>
                 </div>
 
-                <!-- <div class="col-lg-2 col-6 col-md-3">
-                    <select class="form-select">
-                        <option>sort</option>
-                        <option>Show 30</option>
-                        <option>Show 40</option>
-                    </select>
-                </div>  -->
-            </div>
+                <div class="col-lg-2 col-6 col-md-4">
+                    <form action="{% url 'product' %}" method="GET">
+                        {% csrf_token %}
+                        <div class="toolbox-right">
+                            <div class="toolbox-sort">
+                                <label for="sortby">Sort by:</label>
+                                <div class="select-custom">
+                                    <select name="sortby" id="sortby" onchange="this.form.submit();" class="form-control">
+                                        <option value="atoz" {% if request.GET.sortby == 'atoz' %}selected="selected"{% endif %}>A to Z</option>
+                                        <option value="ztoa" {% if request.GET.sortby == 'ztoa' %}selected="selected"{% endif %}>Z to A</option>
+                                        <option value="ltoh" {% if request.GET.sortby == 'ltoh' %}selected="selected"{% endif %}>Low To High</option>
+                                        <option value="htol" {% if request.GET.sortby == 'htol' %}selected="selected"{% endif %}>High To Low</option>
+                                    </select>
+                                </div>
+                            </div><!-- End .toolbox-sort -->
+                        </div><!-- End .toolbox-right -->
+                        {% comment %} <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sort</button> {% endcomment %}
+                    </form>
+                </div>
         </header>
         <!-- card-header end// -->
         <div class="card-body">

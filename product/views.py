@@ -10,20 +10,55 @@ from variant.models import Variant
 # from variant.models import Varaint
 
 # Create your views here.
+# @login_required(login_url='adminsignin')
+# def product(request):
+#     if not request.user.is_superuser:
+#         return redirect('adminsignin')
+    
+
+#     products=Product.objects.filter(is_available=True).order_by('id')
+
+        
+        
+#     product_list={
+#         'product':products,
+#         'categories':category.objects.filter(is_available=True).order_by('id'),
+#         'brand':Brand.objects.order_by('id'),
+#     }
+#     return render(request,'admin/adminproduct.html',product_list)
+
+# //////////////////////////////////////////////////////////////
+
+
 @login_required(login_url='adminsignin')
 def product(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
-    
 
-    products=Product.objects.filter(is_available=True).order_by('id')
+    sorts = request.GET.get('sortby', 'atoz')
 
-    product_list={
-        'product':products,
-        'categories':category.objects.filter(is_available=True).order_by('id'),
-        'brand':Brand.objects.order_by('id'),
+    if sorts == 'atoz':
+        products = Product.objects.filter(is_available=True).order_by('product_name')
+    elif sorts == 'ztoa':
+        products = Product.objects.filter(is_available=True).order_by('-product_name')
+    elif sorts == 'ltoh':
+        products = Product.objects.filter(is_available=True).order_by('product_price')
+    elif sorts == 'htol':
+        products = Product.objects.filter(is_available=True).order_by('-product_price')
+    else:
+        products = Product.objects.filter(is_available=True).order_by('id')
+
+    product_list = {
+        'product': products,
+        'categories': category.objects.filter(is_available=True).order_by('id'),
+        'brand': Brand.objects.order_by('id'),
     }
-    return render(request,'admin/adminproduct.html',product_list)
+
+    return render(request, 'admin/adminproduct.html', product_list)
+
+
+
+# //////////////////////////////////////////////////////////////
 
 @login_required(login_url='adminsignin')
 def createproduct(request):
@@ -36,6 +71,7 @@ def createproduct(request):
         category_id=request.POST.get('category_name')
         brand_id=request.POST.get('brand_name')
         product_description=request.POST.get('product_description')
+        # sort=request.POST.get('sortby')
 
         # validation
         if Product.objects.filter(product_name=name).exists():
@@ -70,6 +106,7 @@ def createproduct(request):
         product.save()
         messages.success(request,'Product added successfully')
         return redirect('product')
+    
     return render(request,'admin/adminproduct.html')
 
 @login_required(login_url='adminsignin')

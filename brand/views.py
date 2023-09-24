@@ -45,27 +45,29 @@ def editbrand(request,editbrand_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
     
-
     if request.method=='POST':
-
-        bname=request.POST.get('name')
-
+        newbrand=request.POST.get('name')
+        
+        print(newbrand,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
+        
     # validation
-
-    try:
+        try:
+            brandsave=Brand.objects.get(id=editbrand_id)
+            print(brandsave,'ddddddddddddddddddddddddd')
+        except Brand.DoesNotExist:
+            messages.error(request,'brand is already exists')
+            return redirect('brand')
+            
+        if newbrand.strip()=='':
+            messages.error(request,'Brand name cannodt be empty')
+            return redirect('brand')
+    
         brandsave=Brand.objects.get(id=editbrand_id)
-    except Brand.DoesNotExist:
-        messages.error(request,'brand is already exists')
-    
-
-    if bname.strip()=='':
-        messages.error(request,'Brand name cannodt be empty')
+        print(brandsave,'555555555555555555555555')
+        
+        brandsave.names=newbrand
+        brandsave.save()
         return redirect('brand')
-    
-    brands=Brand.objects.get(id=editbrand_id)
-    brands.name=bname
-    brands.save()
-    return redirect('brand')
 
 
 # delete brand
