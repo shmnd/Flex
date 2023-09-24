@@ -138,14 +138,20 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body">
-                                delete Category {{c.categories }}
+                                deleting category {{c.categories }} causes to associated products
                               </div>
                               <div class="modal-footer">
-                                <form action="{% url 'deletecategory' c.id %}" >
-                                    
+
+                                <form action="{% url 'deletecategory' c.id %}" >                                    
                                   <button type="submit" class="btn btn-danger">Confirm</button>
                                 </form>
+
+                                <form action="{% url 'deletecategory' c.id %}" >                                    
+                                  <button type="submit" class="btn btn-warning">Re-assign into another properties</button>
+                                </form>
+
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                
                               </div>
                             </div>
                           </div>

@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from .models import category
 from django.contrib import messages 
 from django.contrib.auth.decorators import login_required
+from product .models import Product
 
 # Create your views here.
 
@@ -102,4 +103,22 @@ def searchcategory(request):
     else:
         return render(request,'404.html')
             
-                    
+
+def reassigncategory(request,reassigncategory_id,deletecategory_id):
+        if not request.user.is_superuser:
+              return redirect('adminsignin')
+        
+        
+        try:
+            categr=category.objects.get(id=deletecategory_id) 
+            assign=category.objects.get(id=reassigncategory_id)
+        except category.DoesNotExist:
+            messages.error(request,"category doesn't found")
+            return redirect('categories')
+        
+        Product.objects.filter(categorys=categr).update(categorys=assign)
+        messages.success(request,'product re-assigned successfully ')
+        
+        return redirect('categories')
+                 
+        

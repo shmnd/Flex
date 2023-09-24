@@ -107,11 +107,11 @@
                                                     <div class="form-outline mb-4">
                                                         <label class="form-label" for="form3Example3cg">Size</label>
                                                         <select class="form-select" name="variant_size">
-                                                            <option value="{{ c.size.id }}">{{ c.size.size_range }}
+                                                            <option value="{{ c.size.id }}">{{ c.size.size_chart }}
                                                             </option>
                                                             {% for size in variant_list.size_range %}
                                                             {% if size.id != c.size.id %}
-                                                            <option value="{{ size.id }}">{{ size.size_range }}</option>
+                                                            <option value="{{ size.id }}">{{ size.size_chart }}</option>
                                                             {% endif %}
                                                             {% endfor %}
                                                         </select>
