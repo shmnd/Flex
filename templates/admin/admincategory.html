@@ -142,16 +142,30 @@
                               </div>
                               <div class="modal-footer">
 
-                                <form action="{% url 'deletecategory' c.id %}" >                                    
+                                <form action="{% url 'deletecategory' c.id %}" method="POST"> <!-- Add 'method="POST"' for form submission -->
+                                  {% csrf_token %}
+                                  <div class="toolbox-right">
+                                      <div class="toolbox-sort">
+                                        <label for="sortby"style="margin-up: 10px;">Choose a category to move products:</label>
+                                        <div class="select-custom">
+                                            <select name="dropcate" id="sortby" onchange="this.form.submit();" class="form-control">
+                                              
+                                              <option value="None" {% if request.GET.sortby == 'None' %}selected="selected"{% endif %}>None</option>
+
+                                                {% for c in category %}
+                                                  <option value="{{ c.id }}">{{ c.categories }}</option> <!-- Set value to category ID -->
+                                                {% endfor %} 
+                                            </select>
+                                        </div>
+                                      </div><!-- End .toolbox-sort -->
+                                  </div>
                                   <button type="submit" class="btn btn-danger">Confirm</button>
                                 </form>
 
-                                <form action="{% url 'deletecategory' c.id %}" >                                    
-                                  <button type="submit" class="btn btn-warning">Re-assign into another properties</button>
-                                </form>
+                                
 
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                
+
                               </div>
                             </div>
                           </div>

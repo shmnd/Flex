@@ -1,8 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import category
 from django.contrib import messages 
 from django.contrib.auth.decorators import login_required
 from product .models import Product
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -66,14 +67,71 @@ def editcategory(request,editcategory_id):
         
         
 # delete category 
- 
-def deletecategory(request,deletecategory_id):
+
+def deletecategory(request, deletecategory_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
-    
-    categr=category.objects.get(id=deletecategory_id)
+
+    # Get the category to be deleted
+    categr = get_object_or_404(category, id=deletecategory_id)
+
+    if request.method == 'POST':
+        # Get the selected category to move products to
+        deleting_cate_id = request.POST.get('dropcate')
+
+        if deleting_cate_id == 'None':
+            # If 'None' is selected, delete the category and its products
+            categr.delete()
+        else:
+            try:
+                # Check if the destination category exists
+                cate_move = get_object_or_404(category, id=deleting_cate_id)
+                # Get all products in the deleting category
+                prod_move = Product.objects.filter(category_id=deletecategory_id)
+                
+                # Move each product to the selected category
+                for p in prod_move:
+                    p.category = cate_move
+                    p.save()
+            except category.DoesNotExist:
+                # Handle the case where the destination category doesn't exist
+                messages.error(request, 'Destination category does not exist')
+        
+    # Always delete the deleting category after moving or deleting its products
     categr.delete()
+
     return redirect('categories')
+ 
+# def deletecategory(request,deletecategory_id):
+#     if not request.user.is_superuser:
+#         return redirect('adminsignin')
+    
+    
+#     categr=category.objects.get(id=deletecategory_id)
+    
+    
+#     if request.method=='POST':
+#         deleting_cate_id=request.POST.get('dropcate')
+        
+#         if deleting_cate_id==None:
+#             categr.delete()
+#             return redirect('categories')
+        
+#         else:
+            
+#             # Check if the destination category exists
+#             cate_move=category.objects.get(id=deleting_cate_id)
+#             # Get all products in the deleting category
+#             prod_move=Product.objects.filter(id=deletecategory_id)
+            
+#             for p in prod_move:
+#                 p.category=cate_move
+#                 p.save()
+                
+#         categr=category.objects.get(id=deletecategory_id)
+        
+#         categr.delete()
+#         return redirect('categories')
 
 
 # search category
@@ -104,21 +162,28 @@ def searchcategory(request):
         return render(request,'404.html')
             
 
-def reassigncategory(request,reassigncategory_id,deletecategory_id):
-        if not request.user.is_superuser:
-              return redirect('adminsignin')
+
+
+# def reassigncategory(request, reassigncategory_id, deletecategory_id):
+#     if not request.user.is_superuser:
+#         return redirect('adminsignin')
+
+#     try:
+#         deletecategory = category.objects.get(id=deletecategory_id)
+#         reassigncategory = category.objects.get(id=reassigncategory_id)
+#     except category.DoesNotExist:
+#         messages.error(request, "One or both categories do not exist")
+#         return redirect('categories')
         
-        
-        try:
-            categr=category.objects.get(id=deletecategory_id) 
-            assign=category.objects.get(id=reassigncategory_id)
-        except category.DoesNotExist:
-            messages.error(request,"category doesn't found")
-            return redirect('categories')
-        
-        Product.objects.filter(categorys=categr).update(categorys=assign)
-        messages.success(request,'product re-assigned successfully ')
-        
-        return redirect('categories')
+#     Productmove = Product.objects.filter(id=deletecategory_id)
+    
+#     for product in Productmove:
+#         product.category = reassigncategory
+#         product.save()
+    
+#     deletecategory.delete()
+    
+#     return redirect('categories')
+
                  
         
