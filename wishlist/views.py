@@ -93,7 +93,7 @@ def add_wishlist1(request):
             messages.error(request, 'you are not login please Login to continue') 
             
             return redirect('productshow',porduct_id,variant_id)
-    else :
+    else:
          redirect('productshow',porduct_id,variant_id)
             
             

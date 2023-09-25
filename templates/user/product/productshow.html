@@ -157,15 +157,13 @@ justify-content: center;
 
                                 <form method="POST" action="{% url 'addcart' %}">
                                     {% csrf_token %}
-                                    
-                               
+
+
                                     <input type="hidden"  value="{{ variant.0.variant.id }}" id="variant_id" name="variant_id", required>
                                     <input type="hidden"  value="{{ variant.0.variant.id }}" id="variant_id" name="variant_id", required>
                                     {% comment %} <input type="hidden"  value="{{ variant.0.variant.product.qty }}" id="product_id" name="add_qty", required> {% endcomment %}
                                     <input type="hidden" value="{{ variant.0.variant.product.qty }}" id="add_qty" name="add_qty" required>
                                     <input type="hidden" value="{{ variant.0.variant.size.id }}" id="add_qty" name="add_size" required>
-
-
                                     <input type="hidden"  value="{{ variant.0.variant.product.id }}" id="product_id" name="porduct_id" required>
                                     <input class="add-to-cart-btn btn-product btn-cart " type="submit"
                                value='Add to cart'>

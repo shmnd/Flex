@@ -65,16 +65,19 @@
 											</a>
 										</figure>
 
-										<h3 class="product-title">
-											{% comment %} <a href="{% url "productshow" i.variants.product.id i.variant.id %}">{{ i.variant.product.product_name }}</a> {% endcomment %}
-										</h3><!-- End .product-title -->
-
-                                        <h3 class="product-title">
-											<a href="#">{{ i.variant.product.product_name }}</a>
-										</h3><!-- End .product-size -->
+								
 
 									</div><!-- End .product -->
 								</td>
+
+
+                                <td class="price-col">{{  i.variant.product.product_name }}</td>
+                                
+
+                                <td class="price-col">{{  i.variant.size.size_chart }}</td>
+                                
+
+
 								<td class="price-col">{{ i.variant.product.product_price }}</td>
                                 {% if i.variant.quantity == 0 %}
 								<td class="stock-col"><span class="out of stock">In stock</span></td>
@@ -82,6 +85,8 @@
 								<td class="stock-col"><span class="in-stock">In stock</span></td>
 
                                 {% endif %}
+
+
 								<td class="action-col">
                                     <input readonly class="mtext-104 cl3 txt-center num-product" type="hidden"
 									name="num-product" value="1" id="qty-input">
@@ -90,6 +95,8 @@
                                         <i class="icon-list-alt"></i>Add to cart
                                     </button>
 								</td>
+
+                                
 								<td class="remove-col"><a href={% url "removewishlist" i.id %}><button class="btn-remove"><i class="icon-close"></i></button></a></td>
 							</tr>
                             {% endfor %}
