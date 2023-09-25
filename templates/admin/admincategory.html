@@ -149,8 +149,8 @@
                                         <label for="sortby"style="margin-up: 10px;">Choose a category to move products:</label>
                                         <div class="select-custom">
                                             <select name="dropcate" id="sortby" onchange="this.form.submit();" class="form-control">
-                                              
-                                              <option value="None" {% if request.GET.sortby == 'None' %}selected="selected"{% endif %}>None</option>
+
+                                              {% comment %} <option value="None" {% if request.GET.sortby == 'None' %}selected="selected"{% endif %}>None</option> {% endcomment %}
 
                                                 {% for c in category %}
                                                   <option value="{{ c.id }}">{{ c.categories }}</option> <!-- Set value to category ID -->
