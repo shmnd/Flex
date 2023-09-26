@@ -72,10 +72,49 @@
                                         </div><!-- End .product -->
                                     </td>
                                     <td class="price-col">{{i.variant.color.color_name}}</td>
-                                    <td class="price-col">{{i.variant.size.size_range}}</td>
+                                    
+                                    <td class="price-col">{{i.variant.size.size_chart}}</td>
                                     
                                     <td class="price-col">${{i.variant.product.product_price}}</td>
-                                    <td class="quantity-col product_data">
+
+
+                                        {% comment %} template  code {% endcomment %}
+
+
+                                    <td class="quantity-col">
+                                        <div class="cart-product-quantity" data-variantid="{{i.id}}">
+                                                 <input type="number" class="form-control" value="1" min="1" max="5"  value="{{i.product_qty}}" id="pro_qty{{i.id}}">
+                                            </div><!-- End .cart-product-quantity -->
+                                    </td>
+                                    
+                                    {% comment %}  
+                                    
+                                    
+                                    chat gpt codee
+                                    
+                                    
+                                     <td class="quantity-col product_data">
+                                        <div class="input-group quantity mx-auto" style="width: 100px;">
+                                            <div class="input-group-btn changeQuantity" data-variantid="{{i.id}}">
+                                                <div class="product-details-quantity">
+                                                    <input readonly class="mtext-104 cl3 txt-center num-product" type="number" min="1" max="5" name="product_qty" value="{{i.product_qty}}" id="pro_qty{{i.id}}">
+                                                </div><!-- End .product-details-quantity -->
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-primary btn-inc" type="button">+</button>
+                                                    <button class="btn btn-outline-primary btn-dec" type="button">-</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td> {% endcomment %}
+
+                                    {% comment %} I've added two buttons (+ and -) inside the input-group-append div to allow users to increment and decrement the quantity. Make sure to add appropriate event handlers in your JavaScript code to handle the increment and decrement actions. {% endcomment %}
+                                    
+                                    
+                                    
+                                    {% comment %} ashiq code below {% endcomment %}
+                                    
+                                    
+                                    {% comment %} <td class="quantity-col product_data">
                                         <div class="input-group quantity mx-auto " style="width: 100px;">
                                             <div class="input-group-btn changeQuantity " data-variantid="{{i.id}}">
                                                 <div class="product-details-quantity">
@@ -87,8 +126,9 @@
                                                 </div><!-- End .product-details-quantity -->
 
                                             </div>
+                                            
                                         </div>
-                                    </td>
+                                    </td> {% endcomment %}
 
                                    
                                     <!-- Assuming the previous code is here and we focus on the "total-col" element -->

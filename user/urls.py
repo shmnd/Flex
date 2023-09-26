@@ -10,5 +10,5 @@ urlpatterns=[
     path('deleteaddress/<int:delete_id>',views.deleteaddress,name='deleteaddress'),
     path('editprofile',views.editprofile,name='editprofile'),
     path('changepassword/',views.changepassword,name='changepassword'),
-    path('orderviewuser/<int:view_id>',views.orderviewuser,name='orderviewuser'),  
+    # path('orderviewuser/<int:view_ id>',views.orderviewuser,name='orderviewuser'),  
 ]
