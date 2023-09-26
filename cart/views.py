@@ -68,15 +68,15 @@ def removecart(request,cart_id):
         
 # ///////////////////////////////////////
 
-@login_required(login_url='signin')    
-def addcart(request):
-    if request.user.is_authenticated:
-        variant_id = request.POST.get('variant_id')
-        add_qty = request.POST.get('add_qty')
-        add_size = request.POST.get('add_size')
+# @login_required(login_url='signin')    
+# def addcart(request):
+#     if request.user.is_authenticated:
+#         variant_id = request.POST.get('variant_id')
+#         add_qty = request.POST.get('add_qty')
+#         add_size = request.POST.get('add_size')
 
-    if add_qty is not None and add_qty.isdigit():
-        add_qty = int(add_qty)  # Convert add_qty to an integer
+#     if add_qty is not None and add_qty.isdigit():
+#         add_qty = int(add_qty)  # Convert add_qty to an integer
 
 
 
@@ -139,56 +139,43 @@ def addcart(request):
     
     if request.method =='POST':
         if request.user.is_authenticated:
-            
-            
-            print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
-            
-            variant_id = request.POST.get('variant_id')
-            add_qty =request.POST.get('add_qty')
-            add_size =request.POST.get('add_size')
-            
-            print(add_qty,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
-            try:
-                variant_check =Variant.objects.get(id=variant_id )
-                if variant_check.size==add_size:
-                    pass
-                else:
-                    product=variant_check.product
-                    color= variant_check.color
-                    try:
-                        check_variant=Variant.objects.get(product=product, color=color, size=add_size)
-                        variant_id= check_variant.id
-                    except Variant.DoesNotExist:
-                        return JsonResponse({'status': 'Sorry! this variant not available'})  
-                        
-            except Variant.DoesNotExist:
-                return JsonResponse({'status': 'No such prodcut found'})
-              
-            if Cart.objects.filter(user=request.user, variant_id=variant_id).exists():
-                
-                return JsonResponse({'status': 'Product already in cart'})
-            
         
-            # else:
-                # variant_qty = int(add_qty)
+            print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
+              
+            variant_id = request.POST.get('variant_id')
+            product_id = request.POST.get('product_id')
+            
+            product_qty =request.POST.get('product_qty')
+            print(product_qty,'uuuuuuuuuuuuuuuuuuuuu')
+            
+            # add_size =request.POST.get('add_size')
+            # product_id=request.POST.get('product_id')
+            # color_name=request.POST.get('color_name')
+            # product_price=request.POST.get('product_price')
+            
+            
                 
-                # if variant_check.quantity >= variant_qty:
-                #     if variant_check.product.offer:
-                #         product_offer =variant_qty*variant_check.product.offer.discount_amount
-                #         total = variant_qty*variant_check.product.product_price
-                #         total = total -product_offer
-                #     else:   
-                #         total = variant_qty*variant_check.product.product_price
-                #     Cart.objects.create(user=request.user, variant_id=variant_id, product_qty=variant_qty,single_total=total)
-    
-                #     return JsonResponse({'status': 'Product added successfully'})
-                # else:
-                #     return JsonResponse({'status': "Only few quantity available"})
+            if Cart.objects.filter(user=request.user, variant_id=variant_id).exists():
+            
+                messages.warning(request, 'Product already in cart') 
+            
+                return  redirect('productshow',product_id,variant_id)
+            else:
+                Cart.objects.create(user=request.user,variant_id=variant_id,product_qty=product_qty )
+                messages.success(request, 'Product added successfully in cart') 
+                return  redirect('productshow',product_id,variant_id)              
         else:
-            return JsonResponse({'status': 'you are not login please Login to continue'})
+            messages.error(request, 'you are not login please Login to continue') 
+            return redirect('productshow',product_id,variant_id)
+    else:
+        redirect('productshow',product_id,variant_id)
+    return redirect('home')    
+    
+        
             
+    
             
-    return redirect('home')   
+
 #////////////////////////////////////////////////////////////////////////////////////////////
         
 @login_required(login_url='signin')

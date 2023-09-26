@@ -27,6 +27,7 @@ def productvariant(request):
         'size_range': size_range,
         'color_name':color_name,
         'product':product,
+        
     }
     return render(request,'variant/variant.html',{'variant_list':variant_list})
 

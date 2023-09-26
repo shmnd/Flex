@@ -10,24 +10,6 @@ from variant.models import Variant
 # from variant.models import Varaint
 
 # Create your views here.
-# @login_required(login_url='adminsignin')
-# def product(request):
-#     if not request.user.is_superuser:
-#         return redirect('adminsignin')
-    
-
-#     products=Product.objects.filter(is_available=True).order_by('id')
-
-        
-        
-#     product_list={
-#         'product':products,
-#         'categories':category.objects.filter(is_available=True).order_by('id'),
-#         'brand':Brand.objects.order_by('id'),
-#     }
-#     return render(request,'admin/adminproduct.html',product_list)
-
-# //////////////////////////////////////////////////////////////
 
 
 @login_required(login_url='adminsignin')

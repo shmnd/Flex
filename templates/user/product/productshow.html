@@ -138,14 +138,28 @@ justify-content: center;
                                     </select>
                                 </div><!-- End .select-custom -->
                             </div>
-                            <br>
-
-                            <div class="product-price">
-                                $ {{ variant.0.variant.product.product_price }}
-                            </div><!-- End .product-price -->
-                            <br>
                             
+
+                            {% comment %} <div class="product-details-action">                                 {% endcomment %}
                             <div class="product-details-action">
+                                {% comment %} <div class="details-action-col-">
+                                    <div class="product-details-quantity">
+                                        <label>Qty:</label>
+                                        <input  type="number" name="product_qty" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                    </div><!-- End .product-details-quantity -->
+
+                                </div><!-- End .details-action-col --> {% endcomment %}
+                                {% comment %} </div><!-- End .product-details-action --> {% endcomment %}
+                                
+                                <br>
+
+
+                                <div class="product-price">
+                                    $ {{ variant.0.variant.product.product_price }}
+                                </div><!-- End .product-price -->
+                            
+                                <br>
+                            
                               
                                 {% comment %} <button class="add-to-cart-btn btn-product btn-cart "
                                 data-product_id="{{ variant.0.variant.id }}">Add to Cart</button>
@@ -160,11 +174,24 @@ justify-content: center;
 
 
                                     <input type="hidden"  value="{{ variant.0.variant.id }}" id="variant_id" name="variant_id", required>
-                                    <input type="hidden"  value="{{ variant.0.variant.id }}" id="variant_id" name="variant_id", required>
-                                    {% comment %} <input type="hidden"  value="{{ variant.0.variant.product.qty }}" id="product_id" name="add_qty", required> {% endcomment %}
-                                    <input type="hidden" value="{{ variant.0.variant.product.qty }}" id="add_qty" name="add_qty" required>
-                                    <input type="hidden" value="{{ variant.0.variant.size.id }}" id="add_qty" name="add_size" required>
-                                    <input type="hidden"  value="{{ variant.0.variant.product.id }}" id="product_id" name="porduct_id" required>
+                                    <input type="hidden"  value="{{ variant.0.variant.product.id }}" id="product_id" name="product_id", required>
+                                    <input type="hidden" value="1" id="add_qty" name="product_qty" required>
+
+                                 
+{% comment %} 
+
+                                    <input type="hidden" value="{{ variant.0.variant.product.product_name }}" id="add_qty" name="product_name" required>
+                                    <input type="hidden" value="{{ i.variant.size.id }}" id="add_qty" name="add_size2" required>
+                                    <input type="hidden" value="{{ i.variant.size.size_chart }}" id="add_qty" name="add_size" required>
+
+                                    <input type="hidden"  value="{{ i.variant.color.color_code }}" id="product_id" name="porduct_id2" required>
+                                    <input type="hidden"  value="{{ i.variant.color.color_name }}" id="product_id" name="product_id" required>
+
+                                    <input type="hidden"  value="{{ i.variant.product.product_price }}" id="product_id" name="product_price" required> 
+
+                                {% endcomment %}
+                
+
                                     <input class="add-to-cart-btn btn-product btn-cart " type="submit"
                                value='Add to cart'>
                                 </form>
@@ -173,7 +200,7 @@ justify-content: center;
                                 <form method="POST" action="{% url 'add_wishlist1' %}">
                                     {% csrf_token %}
                                     <input type="hidden"  value="{{ variant.0.variant.id }}" id="variant_id" name="variant_id" required>
-                                    <input type="hidden"  value="{{ variant.0.variant.product.id }}" id="product_id" name="porduct_id" required>
+                                    <input type="hidden"  value="{{ variant.0.variant.product.id }}" id="product_id" name="product_id" required>
                                     <input class="add-to-cart-btn btn-product btn-cart " type="submit"
                                value='Add to wishlist'>
                                 </form>

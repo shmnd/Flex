@@ -80,8 +80,9 @@
                                             <div class="input-group-btn changeQuantity " data-variantid="{{i.id}}">
                                                 <div class="product-details-quantity">
                                                     <input readonly class="mtext-104 cl3 txt-center num-product"
-                                                        type="number" min="1" max="5" name="num-product"
-                                                        value="{{i.product_qty}}" id="pro_qty{{i.id}}">
+                                                        type="number" min="1" max="5" name="product_qty"
+                                                        value="{{i.product_qty}}" id="pro_qty{{i.id}}"
+                                                    >
 
                                                 </div><!-- End .product-details-quantity -->
 
@@ -103,7 +104,7 @@
                                     </td>
 
 
-                                    <td class="remove-col"><a href="{% url 'remove_cart' i.id %}"><button
+                                    <td class="remove-col"><a href="{% url 'removecart' i.id %}"><button
                                                 class="btn-remove"><i class="icon-close"></i></button></a></td>
                                 </tr>
                                 {% endfor %}
@@ -193,12 +194,12 @@
                                 </tbody>
                             </table><!-- End .table table-summary -->
 
-                            <a href="{% url 'checkout' %}" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED
+                            {% comment %} <a href="{% url 'checkout' %}" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED {% endcomment %}
                                 TO
                                 CHECKOUT</a>
                         </div><!-- End .summary -->
 
-                        <a href="{% url 'Shop' %}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE
+                        {% comment %} <a href="{% url 'Shop' %}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE {% endcomment %}
                                 SHOPPING</span><i class="icon-refresh"></i></a>
                     </aside><!-- End .col-lg-3 -->
                 </div><!-- End .row -->
@@ -220,7 +221,7 @@
         console.log(product_qty, variant_id, '22222222222222222')
         $.ajax({
             method: "POST",
-            url: "{%url 'update_cart' %}",
+            url: "{%url 'updatecart' %}",
             data: {
                 'cart_id': variant_id,
                 'product_qty': product_qty,
