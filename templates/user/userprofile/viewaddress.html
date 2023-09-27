@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}View address{% endblock %}
+
+{% block body %}
+{% if viewaddress %}
+
+<style>.bg-image  {
+    background-image: url('{% static "template/assets/images/404.jpg" %}');
+
+    .center-table {
+        margin: 0 auto; /* This will center the table horizontally */
+    }
+    
+   
+}</style>
+
+<div class="page-wrapper">
+    <header class="header">
+        <div class="header-middle sticky-header">
+            <div class="container">
+
+            </div><!-- End .container -->
+        </div><!-- End .header-middle -->
+    </header><!-- End .header -->
+ 
+    <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17">
+
+        <div class=" container">
+        <div class="form-box">
+            <div class="form-tab">
+                <ul class="nav nav-pills nav-fill" role="tablist">
+                   
+                    <li class="nav-item">
+                        
+                       
+                        <a class="nav-link active" id="signin-tab-2" data-toggle="tab" href=""
+                            role="tab" aria-controls="signin-2">ADDRESS</a>
+                    </li>
+                </ul>
+
+                <table class=center-table>
+                    <br>
+                  
+                    <tr>
+                        <td><strong>First Name</strong></td>
+                        <td>:{{viewaddress.first_name}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Last Name</strong></td>
+                        <td>:{{viewaddress.last_name}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phone Number</strong></td>
+                        <td>:{{viewaddress.phone}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Email</strong></td>
+                        <td>:{{viewaddress.email}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Address</strong></td>
+                        <td>:{{viewaddress.address}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Country</strong></td>
+                        <td>:{{viewaddress.country}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>City</strong></td>
+                        <td>:{{viewaddress.city}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>State</strong></td>
+                        <td>:{{viewaddress.state}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pincode</strong></td>
+                        <td>:{{viewaddress.pincode}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Order note</strong></td>
+                        <td>:{{viewaddress.order_note}}</td>
+                    </tr>
+                </table>
+                <br>
+        
+                <a href="{% url 'userprofile' %}" class="btn btn-outline-primary-2"><span>BACK</span><i
+                    class="icon-long-arrow-right"></i></a>
+            </div><!-- End .card-body -->
+                <div class="tab-content">
+                    
+                    <div class="tab-pane fade show active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+
+                        
+                    <div class="form-choice">
+                    
+                    </div><!-- End .row -->
+                </div><!-- End .form-choice -->
+            </div><!-- .End .tab-pane -->
+        </div><!-- End .tab-content -->
+    </div><!-- End .form-tab -->
+ 
+</div><!-- End .form-box -->
+</div><!-- End .container -->
+</div><!-- End .login-page section-bg -->
+</div>
+</main><!-- End .main -->
+</div><!-- End .page-wrapper -->
+{% endif %}
+{% endblock %}

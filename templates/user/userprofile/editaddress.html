@@ -1,9 +1,7 @@
 
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Add address{% endblock %}
-
-
+{% block title %}edit address{% endblock %}
 
 {% block body %}
 <style>.bg-image  {
@@ -26,59 +24,66 @@
         <div class="form-box">
             <div class="form-tab">
                 <ul class="nav nav-pills nav-fill" role="tablist">
-                                
+                   
+                       
+                   
+                 
                     <li class="nav-item">
                         {% for message in messages %}
                         <div class="message text-center {% if message.tags %}{{ message.tags }}{% endif %}">
                             {{ message }}
                         </div>
                         {% endfor %} <br>
-                        {% if check %}
-                        <a class="nav-link active" id="signin-tab-2" data-toggle="tab" href=" {% url 'addaddress' check %}"
-                            role="tab" aria-controls="signin-2">Add Address</a>
+                        {% if editaddress %}
+                        <a class="nav-link active" id="signin-tab-2" data-toggle="tab" href=" {% url 'editaddress' editaddress.id %}"
+                            role="tab" aria-controls="signin-2">Edit Address</a>
                     </li>
                 </ul>
                 <div class="tab-content">
+                    
                     <div class="tab-pane fade show active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
 
-                        <form action="{% url 'addaddress' check %}"  method="POST">
+                        <form action="{% url 'editaddress' editaddress.id %}"  method="POST">
                             {% csrf_token %}
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter first name"  name="firstname" value="{{pre_first_name}}">
+                                <input type="text" class="form-control" placeholder="Enter first name"  name="firstname" value="{{editaddress.first_name}}">
                             </div><!-- End .form-group -->
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter last name"   name="lastname" value="{{pre_last_name}}">
+                                <input type="text" class="form-control" placeholder="Enter last name"   name="lastname" value="{{editaddress.last_name}}">
                             </div><!-- End .form-group -->
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter email"  name="email" value="{{pre_email}}">
+                                <input type="text" class="form-control" placeholder="Enter email"  name="email" value="{{editaddress.email}}">
                             </div><!-- End .form-group -->
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter address" name="address" value="{{pre_address}}" >
+                                <input type="text" class="form-control" placeholder="Enter address" name="address" value="{{editaddress.address}}" >
                             </div><!-- End .form-group -->
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter country"  name="country" value="{{pre_country}}">
+                                <input type="text" class="form-control" placeholder="Enter country"  name="country" value="{{editaddress.country}}">
                             </div><!-- End .form-group -->
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter city"  name="city" value="{{pre_city}}">
+                                <input type="text" class="form-control" placeholder="Enter city"  name="city" value="{{editaddress.city}}">
                             </div><!-- End .form-group -->
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter state" name="state" value="{{pre_state}}" >
+                                <input type="text" class="form-control" placeholder="Enter state" name="state" value="{{editaddress.state}}" >
                             </div><!-- End .form-group -->
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter pincode"  name="pincode" value="{{pre_pincode}}">
+                                <input type="text" class="form-control" placeholder="Enter pincode"  name="pincode" value="{{editaddress.pincode}}">
                             </div><!-- End .form-group -->
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter phone number" name="phone" value="{{pre_phone}}">
+                                <input type="text" class="form-control" placeholder="Enter first name" name="phone" value="{{editaddress.phone}}">
                             </div><!-- End .form-group -->
 
                             <textarea class="form-control" cols="30" rows="4"
-                            placeholder="Notes about your order, e.g. special notes for delivery" name="order_note"></textarea>
+                            placeholder="Notes about your order, e.g. special notes for delivery" name="order_note" value="{{editaddress.order_note}}"></textarea>
 
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-block"> Add Address </button>
-                            </div> <!-- form-group// -->
+                                <button type="submit" class="btn btn-primary btn-block"> Edit Address </button>
+                            </div> <!-- form-group// --><br>
+                            <a href="{% url 'userprofile' %}" class="btn btn-outline-primary-2"><span>BACK</span><i
+                                class="icon-long-arrow-right"></i></a>
 
                     </div><!-- End .form-footer -->
+
                     </form>
                     <div class="form-choice">
                     

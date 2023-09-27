@@ -1,0 +1,450 @@
+{% extends 'base.html' %}
+{% block title %}My Account{% endblock %}
+{% load static %}
+{% block body %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+<style>
+	.page-header {
+		background-image: url('{% static "template/assets/images/page-header-bg.jpg" %}');
+
+	}
+
+	.addressmgt {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
+	.d {
+
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+	}
+
+	/* Default styles for the table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Default styles for the table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Media query for screens below 600px */
+@media (max-width: 700px) {
+    /* Hide the "Payment Mode" and "Status" columns */
+    .table th:nth-child(3),
+    .table td:nth-child(3),
+    .table th:nth-child(5),
+    .table td:nth-child(5) {
+        display: none;
+    }
+
+    /* Adjust the "Order Date", "Total Amount", and "View Order" columns */
+    .table th:nth-child(1),
+    .table td:nth-child(1),
+    .table th:nth-child(2),
+    .table td:nth-child(2),
+    .table th:nth-child(4),
+    .table td:nth-child(4) {
+        width: 50%;
+    }
+
+    .table th:nth-child(4),
+    .table td:nth-child(4) {
+        text-align: center;
+    }
+}
+
+
+</style>
+
+<body>
+
+	<main class="main">
+		<div class="page-header text-center">
+			<div class="container">
+				<h1 class="page-title">My Account</h1>
+				<br>
+				{% for message in messages %}
+				<div class="message text-center {% if message.tags %}{{ message.tags }}{% endif %} "
+					style="background-color: transparent;">
+					{{ message }}
+				</div>
+				{% endfor %} <br>
+			</div><!-- End .container -->
+		</div><!-- End .page-header -->
+		<nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+			<div class="container">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">My Account</li>
+				</ol>
+			</div><!-- End .container -->
+		</nav><!-- End .breadcrumb-nav -->
+
+		<div class="page-content">
+			<div class="dashboard">
+				<div class="container">
+					<div class="row">
+						<aside class="col-md-4 col-lg-3">
+							<ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+								<li class="nav-item">
+									<a class="nav-link active" id="tab-dashboard-link" data-toggle="tab"
+										href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
+										aria-selected="true">DASHBOARD</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders"
+										role="tab" aria-controls="tab-orders" aria-selected="false">ORDERS</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads"
+										role="tab" aria-controls="tab-downloads" aria-selected="false">WALLET</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
+										role="tab" aria-controls="tab-address" aria-selected="false">ADDRESSES</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account"
+										role="tab" aria-controls="tab-account" aria-selected="false">MY PROFILE</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{% url 'logout' %}">SIGN OUT</a>
+								</li>
+							</ul>
+						</aside><!-- End .col-lg-3 -->
+
+						<div class="col-md-8 col-lg-9">
+							<div class="tab-content">
+
+
+								<div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+									aria-labelledby="tab-dashboard-link">
+									{% if user1 %}
+									<h5> HELLO </h5>
+									<h5 style="text-transform: uppercase;">{{ user1.first_name }}
+									</h5>
+
+									{% endif %}
+									<br>
+									<div class="container">
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="card card-dashboard">
+													<div class="card-body">
+														<h2 class="card-title" style="text-align: center;">LAST ORDERS</h2>
+														<div class="card-body">
+															<div class="table-responsive">
+																<table class="table table-hover table-responsive-sm ">
+																	<!-- Add "table-responsive-sm" class for small screens -->
+																	<thead>
+																		<tr>
+																			<th scope="col">Order Date</th>
+																			<th scope="col">Total Amount</th>
+																			<th scope="col">Payment Mode</th>
+																			<th scope="col">View Order</th>
+																			<th scope="col">Status</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		{% if last_order %}
+																		<tr>
+																			<td><b>{{ last_order.created_at }}</b></td>
+																			<td><b>$ {{ last_order.total_price }}</b></td>
+																			<td><b>{{ last_order.payment_mode }}</b></td>
+																			<td><a href="{% url 'orderviewuser' last_order.id %}"><span class="btn btn-outline-primary-2">View order details</span></a></td>
+																			<td>
+																				<b>
+																					{% if last_order.order_status.order_status == 'Pending' %}
+																					<span style="color: black;">{{ last_order.order_status.order_status }}</span>
+																					{% elif last_order.order_status.order_status == 'Processing' %}
+																					<span style="color: yellow;">{{ last_order.order_status.order_status }}</span>
+																					{% elif last_order.order_status.order_status == 'Shipped' %}
+																					<span style="color: blue;">{{ last_order.order_status.order_status }}</span>
+																					{% elif last_order.order_status.order_status == 'Delivered' %}
+																					<span style="color: green;">{{ last_order.order_status.order_status }}</span>
+																					{% elif last_order.order_status.order_status == 'Cancelled' or last_order.order_status.order_status == 'Return' %}
+																					<span style="color: red;">{{ last_order.order_status.order_status }}</span>
+																					{% endif %}
+																				</b>
+																			</td>
+																		</tr>
+																		{% endif %}
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div><!-- End .card-body -->
+												</div><!-- End .card-dashboard -->
+											</div><!-- End .col-lg-12 -->
+										</div><!-- End .row -->
+									</div><!-- End .container -->
+								</div><!-- .End .tab-pane -->
+
+								<div class="tab-pane fade " id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+									<div class="container">
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="card card-dashboard">
+													<div class="card-body">
+														<h2 class="card-title" style="text-align: center;">ORDERS</h2>
+														<div class="card-body">
+															<div class="table-responsive">
+																<table class="table table-hover table-responsive-sm ">
+																	<!-- Add "table-responsive-sm" class for small screens -->
+																	<thead>
+																		<tr>
+																			<th scope="col">Order Date</th>
+																			<th scope="col">Total Amount</th>
+																			<th scope="col">Payment Mode</th>
+																			<th scope="col">View Order</th>
+																			<th scope="col">Status</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		{% for i in order %}
+																		<tr>
+																			<td><b>{{ i.created_at }}</b></td>
+																			<td><b>$ {{ i.total_price }}</b></td>
+																			<td><b>{{ i.payment_mode }}</b></td>
+																			<td><a href="{% url 'orderviewuser' i.id %}"><span class="btn btn-outline-primary-2">View order details</span></a></td>
+																			<td>
+																				<b>
+																					{% if i.order_status.order_status == 'Pending' %}
+																					<span style="color: black;">{{ i.order_status.order_status }}</span>
+																					{% elif i.order_status.order_status == 'Processing' %}
+																					<span style="color: yellow;">{{ i.order_status.order_status }}</span>
+																					{% elif i.order_status.order_status == 'Shipped' %}
+																					<span style="color: blue;">{{ i.order_status.order_status }}</span>
+																					{% elif i.order_status.order_status == 'Delivered' %}
+																					<span style="color: green;">{{ i.order_status.order_status }}</span>
+																					{% elif i.order_status.order_status == 'Cancelled' or i.order_status.order_status == 'Return' %}
+																					<span style="color: red;">{{ i.order_status.order_status }}</span>
+																					{% endif %}
+																				</b>
+																			</td>
+																		</tr>
+																		{% endfor %}
+																	</tbody>
+																</table>
+															</div>
+														</div>
+													</div><!-- End .card-body -->
+												</div><!-- End .card-dashboard -->
+											</div><!-- End .col-lg-12 -->
+										</div><!-- End .row -->
+									</div><!-- End .container -->
+								</div><!-- End .tab-pane -->
+								
+								
+
+										<div class="tab-pane fade" id="tab-downloads" role="tabpanel"
+											aria-labelledby="tab-downloads-link">
+
+											<div class="col-lg-6">
+												<div class="card card-dashboard">
+													<div class="card-body">
+														<h2 class="card-title" style="text-align: center;">WALLET</h2>
+														<!-- End .card-title -->
+														<table>
+															<tr>
+																<td><strong>First Name</strong></td>
+																<td>:{{user1.first_name}}</td>
+															</tr>
+															<tr>
+																<td><strong>Last Name</strong></td>
+																<td>:{{user1.last_name}}</td>
+															</tr>
+															<tr>
+																<td><strong>Phone Number</strong></td>
+																<td>:{{user1.phone_number}}</td>
+															</tr>
+															<tr>
+																<td><strong>Email</strong></td>
+																<td>:{{user1.email}}</td>
+															</tr>
+															{% if wallet %}
+															<tr>
+																<td><strong>Wallet Amount</strong></td>
+																<td> <b>: $ {{ wallet.wallet }}</td>
+															</tr>
+															{% else %}
+															<tr>
+																<td><strong>Wallet Amount</strong></td>
+																<td>:$0</td>
+															</tr>
+															{% endif %}
+														</table>
+
+														
+
+													</div><!-- End .card-body -->
+												</div><!-- End .card-dashboard -->
+											</div><!-- End .col-lg-6 -->
+
+											
+										</div><!-- .End .tab-pane -->
+
+										<div class="tab-pane fade" id="tab-address" role="tabpanel"
+											aria-labelledby="tab-address-link">
+											<p>The following addresses will be used on the checkout page by default.</p>
+											<a href="{% url 'addaddress' 1 %}"
+												class="btn btn-outline-primary-2"><span>Add
+													address</span><i class="icon-long-arrow-right"></i></a>
+											{% if address %}
+											<div class="row">
+												{% for i in address %}
+												<div class="col-lg-6">
+													<div class="card card-dashboard">
+														<div class="card-body">
+															<tr class="summary-shipping-row">
+																<td>
+																	<div class="d">
+																		<div class="custom-control custom-radio">
+																			<input type="radio" id="free-shipping"
+																				name="shipping"
+																				class="custom-control-input">
+																			<label class="custom-control-label"
+																				for="free-shipping">
+																				Set Default Address
+																			</label>
+																		</div><!-- End .custom-control -->
+																		<div class="tab-pane fade"
+																			id="tab-delete{{forloop.counter}}"
+																			role="tabpanel"
+																			aria-labelledby="tab-delete-link">
+																			<p>Are you sure delete this address.</p>
+																			<a href="{% url 'deleteaddress' i.id %}"
+																				class="btn btn-outline-primary-2"><span>Confirm</span><i
+																					class="icon-long-arrow-right"></i></a>
+																		</div><!-- .End .tab-pane -->
+																	</div>
+															</tr>
+															</tr><!-- End .summary-shipping-row -->
+															<h2 class="card-title" style="text-align: center;">ADDRESS
+															</h2>
+															<!-- End .card-title -->
+															<table>
+																<tr>
+																	<td><strong>First Name</strong></td>
+																	<td>:{{i.first_name}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Last Name</strong></td>
+																	<td>:{{i.last_name}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Phone Number</strong></td>
+																	<td>:{{i.phone}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Email</strong></td>
+																	<td>:{{i.email}}</td>
+																</tr>
+																<tr>
+																	<td><strong>Address</strong></td>
+																	<td>:{{i.address}}</td>
+																</tr>
+															</table>
+															<br>
+															<div class="addressmgt">
+																<p><a href="{% url 'editaddress' i.id %}">Edit<i
+																			class="fas fa-edit"></i></a>
+
+																</p>
+																<p><a href="{% url 'viewaddress' i.id %}">View <i
+																			class="fas fa-eye"></i></a>
+																</p>
+																<p><a id="tab-delete-link" data-toggle="tab"
+																		href="#tab-delete{{forloop.counter}}">Delete <i
+																			class="fas fa-trash"></i></a>
+
+																</p>
+															</div>
+														</div><!-- End .card-body -->
+
+													</div><!-- End .card-dashboard -->
+												</div><!-- End .col-lg-6 -->
+
+
+												{% endfor %}
+												{% else %}
+												{% endif %}
+
+											</div><!-- End .row -->
+										</div><!-- .End .tab-pane -->
+
+										<div class="tab-pane fade" id="tab-account" role="tabpanel"
+											aria-labelledby="tab-account-link">
+
+											<div class="col-lg-6">
+												<div class="card card-dashboard">
+													<div class="card-body">
+														<h2 class="card-title" style="text-align: center;">PROFILE</h2>
+														<!-- End .card-title -->
+														<table>
+															<tr>
+																<td><strong>First Name</strong></td>
+																<td>:{{user1.first_name}}</td>
+															</tr>
+															<tr>
+																<td><strong>Last Name</strong></td>
+																<td>:{{user1.last_name}}</td>
+															</tr>
+															<tr>
+																<td><strong>Phone Number</strong></td>
+																<td>:{{user1.phone_number}}</td>
+															</tr>
+															<tr>
+																<td><strong>Email</strong></td>
+																<td>:{{user1.email}}</td>
+															</tr>
+															<tr>
+																<td><strong>Password</strong></td>
+																<td>:********</td>
+															</tr>
+														</table>
+
+														<p><a href="{% url 'editprofile' %}">Edit <i
+																	class="fas fa-edit"></i></a>
+														</p>
+
+													</div><!-- End .card-body -->
+												</div><!-- End .card-dashboard -->
+											</div><!-- End .col-lg-6 -->
+
+
+										</div><!-- .End .tab-pane -->
+
+									</div>
+								</div><!-- End .col-lg-9 -->
+							</div><!-- End .row -->
+						</div><!-- End .container -->
+					</div><!-- End .dashboard -->
+				</div><!-- End .page-content -->
+	</main><!-- End .main -->
+</body>
+
+{% endblock %}

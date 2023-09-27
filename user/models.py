@@ -19,7 +19,7 @@ class Address(models.Model):
     
     
     def __str__(self):
-        return f"{self.id}"
+        return f"{self.user}"
     
 class Wallet(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)

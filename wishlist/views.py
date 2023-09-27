@@ -70,32 +70,30 @@ def add_wishlist1(request):
         if request.user.is_authenticated:
             
             variant_id = request.POST.get('variant_id')
-            porduct_id = request.POST.get('porduct_id')
+            product_id = request.POST.get('product_id')
             
-            print(variant_id,porduct_id,'checkkkkkkkkkkkkkk')
-           
-              
+            print(variant_id,product_id,'checkkkkkkkkkkkkkk')
+               
             if Wishlist.objects.filter(user=request.user, variant_id=variant_id).exists():
-                
                 
                 messages.warning(request, 'Product already in Wishlist') 
                 
-                return  redirect('productshow',porduct_id,variant_id)
+                return  redirect('productshow',product_id,variant_id)
             
-        
             else:
                 Wishlist.objects.create(user=request.user, variant_id=variant_id)
                 
                 messages.success(request, 'Product added successfully in Wishlist') 
-                return  redirect('productshow',porduct_id,variant_id) 
+                
+                return  redirect('productshow',product_id,variant_id) 
         else:
             
             messages.error(request, 'you are not login please Login to continue') 
             
-            return redirect('productshow',porduct_id,variant_id)
+            return redirect('productshow',product_id,variant_id)
     else:
-         redirect('productshow',porduct_id,variant_id)
-            
+        
+         redirect('productshow',product_id,variant_id)           
             
     return redirect('home')    
         

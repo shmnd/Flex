@@ -6,7 +6,7 @@ urlpatterns=[
 
     path('addaddress/<int:add_id>',views.addaddress,name='addaddress'),
     path('editaddress/<int:edit_id>',views.editaddress,name='editaddress'),
-    path('Viewaddress/<int:view_id>',views.Viewaddress,name='Viewaddress'),
+    path('viewaddress/<int:view_id>',views.viewaddress,name='viewaddress'),
     path('deleteaddress/<int:delete_id>',views.deleteaddress,name='deleteaddress'),
     path('editprofile',views.editprofile,name='editprofile'),
     path('changepassword/',views.changepassword,name='changepassword'),
