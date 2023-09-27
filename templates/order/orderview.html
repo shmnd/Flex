@@ -1,0 +1,230 @@
+{% extends 'adminside/basedashboard.html' %}
+{% block title %}order_view{% endblock %}
+{% load static %}
+{% block dashbody %}
+<style>
+    .status {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+    }
+</style>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            {% if address %}
+            <div class="col-md-5">
+                <h5 class="card-title fw-semibold mb-4"> ORDER ADDRESS</h5>
+                <div class="card">
+
+                    <div class="card-body">
+                        <table>
+
+                            <tr>
+                                <td><strong>First Name</strong></td>
+                                <td>:{{address.first_name}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Last Name</strong></td>
+                                <td>:{{address.last_name}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phone Number</strong></td>
+                                <td>:{{address.phone}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email</strong></td>
+                                <td>:{{address.email}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Address</strong></td>
+                                <td>:{{address.address}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Country</strong></td>
+                                <td>:{{address.country}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>City</strong></td>
+                                <td>:{{address.city}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>State</strong></td>
+                                <td>:{{address.state}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pincode</strong></td>
+                                <td>:{{address.pincode}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Order note</strong></td>
+                                <td>:{{address.order_note}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if orderview %}
+            <div class="col-md-5">
+                <h5 class="card-title fw-semibold mb-4"> ORDER DETAILS </h5>
+                <div class="card">
+
+                    <div class="card-body">
+                        <table>
+
+                            <tr>
+                                <td><strong>Order id</strong></td>
+                                <td>:{{orderview.id}}</td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>User Name</strong></td>
+                                <td>{{orderview.user.first_name}}</td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Total price</strong></td>
+                                <td>:${{orderview.total_price}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Payment method</strong></td>
+                                <td>:{{orderview.payment_mode}}</td>
+                            </tr>
+                            {% if orderview.payment_mode == 'cod'  %}
+                            <tr>
+                                <td><strong>Payment id</strong></td>
+                                <td>:None</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td><strong>Payment id</strong></td>
+                                <td>:{{orderview.payment_id}}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td><strong>Tracking no</strong></td>
+                                <td>:{{orderview.tracking_no}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ordered date</strong></td>
+                                <td>:{{orderview.created_at}}</td>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <td><strong>Ordder status</strong></td>
+                                <td>:{{orderview.order_status.order_status}}</td>
+                            </tr>
+                            <br>
+                            
+                        </table>
+                        <br>
+                    </div>
+                </div>
+
+            </div>
+            {% endif %}
+            <h5 class="card-title fw-semibold mb-4" style="text-align: center;">Items</h5>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="text-uppercase">
+                                <th scope="col">image</th>
+                                <th scope="col">Product name</th>
+                                <th scope="col">category</th>
+                                <th scope="col">color</th>
+                                <th scope="col">size</th>
+                                <th scope="col">price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Edit status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in products %}
+                            <tr class="text-uppercase">
+                                {% for j in image %}
+                                {% if i.variant.id == j.variant.id %}
+                                <td>
+                                    <div style="width: 30px;" class="overflow-hidden">
+                                        <img class="w-100" src=" {{ j.image.url}} " alt="product image">
+                                    </div>
+                                </td>
+                                {% else %}
+                                {% endif %}
+                                {% endfor %}
+                                <td><b>{{ i.variant.product.product_name }}</td>
+                                <td><b>{{ i.variant.product.category.categories }}</td>
+                                <td><b>{{ i.variant.color }}</td>
+                                <td><b>{{ i.variant.size }}</td>
+                                <td><b>{{ i.variant.product.product_price}}</td>
+                                <td><b>{{ i.quantity }}</td>
+
+                        <!-- Loop through the items -->
+
+    <td>
+        {% if i.orderitem_status.item_status == 'Pending' %}
+        <span class="badge rounded-pill alert-secondary status-badge">
+            {{ i.orderitem_status.item_status }}</span>
+        {% elif i.orderitem_status.item_status == 'Processing' %}
+        <span class="badge rounded-pill alert-warning status-badge">
+            {{ i.orderitem_status.item_status }}</span>
+        {% elif i.orderitem_status.item_status == 'Shipped' %}
+        <span class="badge rounded-pill alert-primary status-badge">
+            {{ i.orderitem_status.item_status }}</span>
+        {% elif i.orderitem_status.item_status == 'Delivered' %}
+        <span class="badge rounded-pill alert-success status-badge">
+            {{ i.orderitem_status.item_status }}</span>
+        {% elif i.orderitem_status.item_status == 'Cancelled' or i.orderitem_status.item_status == 'Return' %}
+        <span class="badge rounded-pill alert-danger status-badge">
+            {{i.orderitem_status.item_status }}</span>
+        {% endif %}
+    </td>
+    <td>
+        <form class="status-form" action="{% url 'change_status' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" value="{{ i.variant.id }}" name="variant_id">
+            <input type="hidden" value="{{ i.id }}" name="orderitem_id">
+            <div class="col-lg-11 col-11 col-md-10">
+                <select class="form-select status-select" name="status">
+                    {% for item in item_status_o %}
+                    <option value="{{ item.id }}" {% if item.id == i.orderitem_status.id %}selected{% endif %}>
+                        {{ item.item_status }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </td>
+
+{% endfor %}
+
+<script>
+    // JavaScript to automatically submit the form when the select value changes for each row
+    const statusForms = document.querySelectorAll('.status-form');
+    statusForms.forEach((form) => {
+        const selectElement = form.querySelector('.status-select');
+        selectElement.addEventListener('change', () => {
+            form.submit();
+        });
+    });
+</script>
+
+
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
