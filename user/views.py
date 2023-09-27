@@ -314,59 +314,114 @@ def viewaddress(request,view_id):
 #     return render(request, 'user/userprofile/editprofile.html', {'user': user})    
     
 # /////////////////////////////////////////////////////////////////
-    
 def editprofile(request):
-    if request.method=='POST':
-        phone_number=request.POST.get('phone_number')
-        first_name=request.POST.get('first_name')
-        last_name=request.POST.get('last_name')
-        email=request.POST.get('email')
-        
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        phone_number = request.POST.get('phone_number')
         
         try:
-            user=User.objects.get(phone_number=request.user)
-        except:
-            return redirect('userprofile')
+            user = User.objects.get(email=request.user)    
+        except:  
+               return redirect('userprofile') 
 
+        # print(email,first_name,'kkkkkkkkkkkkkkk')
         
-        if phone_number == '':
-            messages.error(request, 'phone_number is empty')
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
-        if not re.search(re.compile(r'(\+91)?(-)?\s*?(91)?\s*?(\d{3})-?\s*?(\d{3})-?\s*?(\d{4})'),phone_number ): 
-            messages.error(request,'Enter valid phonenumber!')
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
-        phonenumber_checking=len(phone_number)
-        if not  phonenumber_checking==10:
-            messages.error(request,'phonenumber should be must contain 10digits!')  
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
-        if first_name.strip() == '' or last_name.strip() == '':
-            messages.error(request, 'First or Lastname is empty')
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
         if email.strip()=='':
             messages.error(request,'email cannot be empty')
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
+            return render(request,'userprofile/editprofile.html',{'user':user})
         email_check=validateemail(email)
         if email_check is False:
             messages.error(request,'email not valid!')
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
+            return render(request,'userprofile/editprofile.html',{'user':user})
+        if phone_number == '':
+            messages.error(request, 'phone_number is empty')
+            return render(request,'userprofile/edit_profile.html',{'user':user})
         
+        if first_name.strip() == '' or last_name.strip() == '':
+            messages.error(request, 'First or Lastname is empty')
+            return render(request,'userprofile/editprofile.html',{'user':user})
+        
+        if not re.search(re.compile(r'(\+91)?(-)?\s*?(91)?\s*?(\d{3})-?\s*?(\d{3})-?\s*?(\d{4})'),phone_number ): 
+            messages.error(request,'Enter valid phonenumber!')
+            return render(request,'userprofile/editprofile.html',{'user':user})
+        phonenumber_checking=len(phone_number)
+        if not  phonenumber_checking==10:
+            messages.error(request,'phonenumber should be must contain 10digits!')  
+            return render(request,'userprofile/editprofile.html',{'user':user})
+      
         try:
-            user=User.objects.get(phone_number=request.user)
+            user = User.objects.get(email=request.user)
             print(user)
-            user.phone_number=phone_number
-            user.first_name=first_name
-            user.last_name=last_name
+            user.phone_number = phone_number
+            user.first_name = first_name
+            user.last_name = last_name
             user.email=email
             user.save()
-            messages.success(request,'userprofile updated successfull')
-            return redirect('userprofile')
+            messages.success(request, 'userprofile updated successfully')
+            return redirect('userprofile') 
+            
         except:
-            messages.error(request,'User does not exist')
+            messages.error(request, 'User does not exist')
     try:
-        user=User.objects.get(phone_number=request.user)
-    except:
-        return redirect('userprofile')
-    return render(request,'user/userprofile/editprofile.html',{'user':user})
+        user = User.objects.get(email=request.user)    
+    except:  
+           return redirect('userprofile')       
+    return render(request,'userprofile/edit_profile.html',{'user':user})
+# # ///////////////////////
+# def editprofile(request):
+#     if request.method=='POST':
+#         phone_number=request.POST.get('phone_number')
+#         first_name=request.POST.get('first_name')
+#         last_name=request.POST.get('last_name')
+#         email=request.POST.get('email')
+        
+        
+#         try:
+#             user=User.objects.get(phone_number=request.user)
+#         except:
+#             return redirect('userprofile')
+
+        
+#         if phone_number == '':
+#             messages.error(request, 'phone_number is empty')
+#             return render(request,'user/userprofile/editprofile.html',{'user':user})
+#         if not re.search(re.compile(r'(\+91)?(-)?\s*?(91)?\s*?(\d{3})-?\s*?(\d{3})-?\s*?(\d{4})'),phone_number ): 
+#             messages.error(request,'Enter valid phonenumber!')
+#             return render(request,'user/userprofile/editprofile.html',{'user':user})
+#         phonenumber_checking=len(phone_number)
+#         if not  phonenumber_checking==10:
+#             messages.error(request,'phonenumber should be must contain 10digits!')  
+#             return render(request,'user/userprofile/editprofile.html',{'user':user})
+#         if first_name.strip() == '' or last_name.strip() == '':
+#             messages.error(request, 'First or Lastname is empty')
+#             return render(request,'user/userprofile/editprofile.html',{'user':user})
+#         if email.strip()=='':
+#             messages.error(request,'email cannot be empty')
+#             return render(request,'user/userprofile/editprofile.html',{'user':user})
+#         email_check=validateemail(email)
+#         if email_check is False:
+#             messages.error(request,'email not valid!')
+#             return render(request,'user/userprofile/editprofile.html',{'user':user})
+        
+#         try:
+#             user=User.objects.get(phone_number=request.user)
+#             print(user)
+#             user.phone_number=phone_number
+#             user.first_name=first_name
+#             user.last_name=last_name
+#             user.email=email
+#             user.save()
+#             messages.success(request,'userprofile updated successfull')
+#             return redirect('userprofile')
+#         except:
+#             messages.error(request,'User does not exist')
+#     try:
+#         user=User.objects.get(phone_number=request.user)
+#     except:
+#         return redirect('userprofile')
+#     return render(request,'user/userprofile/editprofile.html',{'user':user})
 
 
 
