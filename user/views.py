@@ -6,7 +6,8 @@ from datetime import timedelta
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control,never_cache
 from cart.models import Cart
-# from dashboard.views import validateEmail
+from dashboard.views import validateEmail
+from order.models import Order,Order_cancelled,Orderreturn
 from product.models import Product,Size,Color
 from variant.models import Variant,VariantImage
 from user.models import User
@@ -25,29 +26,33 @@ from .models import Address,Wallet
 # Create your views here.
 
 def userprofile(request):
-    user=User.objects.filter(email=request.user.email)
-    address=Address.objects.filter(user=request.user,is_available=True)
-    cart_count=Cart.objects.filter(user=request.user).count()
-    wishlist_count=Wishlist.objects.filter(user=request.user).count()
-    # last_order=Order.objects.filter(user=request.user).last()
-    # order =Order.objects.filter(user=request.user) 
-    
-    try:
-        wallet=wallet.objects.get(user=request.user)
-    except:
-        wallet=0
+    if request.user.is_authenticated:
+        user=User.objects.filter(email=request.user.email)
         
-    context={
-        'user1':user,
-        'address':address,
-        'wallet':wallet,
-        'cart_count':cart_count,
-        'wishlist_count':wishlist_count,
-        # 'order':order,
-        # 'last_order'=last_order,        
-    }
-    return render(request,'user/userprofile/userprofile.html',context)
-    
+        address=Address.objects.filter(user=request.user,is_available=True)
+        cart_count=Cart.objects.filter(user=request.user).count()
+        wishlist_count=Wishlist.objects.filter(user=request.user).count()
+        last_order=Order.objects.filter(user=request.user).last()
+        order =Order.objects.filter(user=request.user) 
+        
+        try:
+            wallet=wallet.objects.get(user=request.user)
+        except:
+            wallet=0
+            
+        context={
+            'user1':user,
+            'address':address,
+            'wallet':wallet,
+            'cart_count':cart_count,
+            'wishlist_count':wishlist_count,
+            'order':order,
+            'last_order':last_order,        
+        }
+        return render(request,'user/userprofile/userprofile.html',context)
+    else:
+        messages.error(request,'user did not logged in')
+        return redirect('home')
     
     
 
@@ -287,31 +292,7 @@ def viewaddress(request,view_id):
     return render(request,'user/userprofile/viewaddress.html',{'viewaddress':viewaddress})   
     
     
-#   gpt  # 
-    
-# def editprofile(request):
-#     user = request.user
 
-#     if request.method == 'POST':
-#         first_name = request.POST.get('first_name')
-#         last_name = request.POST.get('last_name')
-#         email = request.POST.get('email')
-
-#         if not first_name.strip() or not last_name.strip():
-#             messages.error(request, 'First or Lastname is empty')
-#         elif not email.strip():
-#             messages.error(request, 'Email cannot be empty')
-#         elif not validateemail(email):
-#             messages.error(request, 'Invalid email address')
-#         else:
-#             user.first_name = first_name
-#             user.last_name = last_name
-#             user.email = email
-#             user.save()
-#             messages.success(request, 'User profile updated successfully')
-#             return redirect('userprofile')
-
-#     return render(request, 'user/userprofile/editprofile.html', {'user': user})    
     
 # /////////////////////////////////////////////////////////////////
 def editprofile(request):
@@ -319,7 +300,7 @@ def editprofile(request):
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-        phone_number = request.POST.get('phone_number')
+        # phone_number = request.POST.get('phone_number')
         
         try:
             user = User.objects.get(email=request.user)    
@@ -335,26 +316,27 @@ def editprofile(request):
         if email_check is False:
             messages.error(request,'email not valid!')
             return render(request,'userprofile/editprofile.html',{'user':user})
-        if phone_number == '':
-            messages.error(request, 'phone_number is empty')
-            return render(request,'userprofile/edit_profile.html',{'user':user})
         
         if first_name.strip() == '' or last_name.strip() == '':
             messages.error(request, 'First or Lastname is empty')
             return render(request,'userprofile/editprofile.html',{'user':user})
         
-        if not re.search(re.compile(r'(\+91)?(-)?\s*?(91)?\s*?(\d{3})-?\s*?(\d{3})-?\s*?(\d{4})'),phone_number ): 
-            messages.error(request,'Enter valid phonenumber!')
-            return render(request,'userprofile/editprofile.html',{'user':user})
-        phonenumber_checking=len(phone_number)
-        if not  phonenumber_checking==10:
-            messages.error(request,'phonenumber should be must contain 10digits!')  
-            return render(request,'userprofile/editprofile.html',{'user':user})
+        # if phone_number == '':
+        #     messages.error(request, 'phone_number is empty')
+        #     return render(request,'userprofile/edit_profile.html',{'user':user})
+        
+        # if not re.search(re.compile(r'(\+91)?(-)?\s*?(91)?\s*?(\d{3})-?\s*?(\d{3})-?\s*?(\d{4})'),phone_number ): 
+        #     messages.error(request,'Enter valid phonenumber!')
+        #     return render(request,'userprofile/editprofile.html',{'user':user})
+        # phonenumber_checking=len(phone_number)
+        # if not  phonenumber_checking==10:
+        #     messages.error(request,'phonenumber should be must contain 10digits!')  
+        #     return render(request,'userprofile/editprofile.html',{'user':user})
       
         try:
             user = User.objects.get(email=request.user)
             print(user)
-            user.phone_number = phone_number
+            # user.phone_number = phone_number
             user.first_name = first_name
             user.last_name = last_name
             user.email=email
@@ -368,7 +350,7 @@ def editprofile(request):
         user = User.objects.get(email=request.user)    
     except:  
            return redirect('userprofile')       
-    return render(request,'userprofile/edit_profile.html',{'user':user})
+    return render(request,'user/userprofile/editprofile.html',{'user':user})
 # # ///////////////////////
 # def editprofile(request):
 #     if request.method=='POST':
@@ -482,39 +464,39 @@ def validatepassword(new_password):
     
 
 
-# def orderviewuser(request):
-#     try:
-#         orederview=Order.object.get(id=view_id)
-#         address=Address.objects.get(id=orederview.address.id)
-#         products=Order.item.objects.filter(order=view_id)
-#         variant_ids=[product.variant.id for product in products]
-#         image=VariantImage.objects.filter(variant__id__in=variant_ids).distinct('variant__color')
-#         item_status_o=Itemstatus.objects.all()
-#         cart_count=Cart.objects.filter(user=request.user).count()
-#         wishlist_count=Wishlist.objects.filter(user=request.user).count()
-#         date=orederview.update_at + timedelta(days=3)
+def orderviewuser(request):
+    try:
+        orederview=Order.object.get(id=view_id)
+        address=Address.objects.get(id=orederview.address.id)
+        products=Order.item.objects.filter(order=view_id)
+        variant_ids=[product.variant.id for product in products]
+        image=VariantImage.objects.filter(variant__id__in=variant_ids).distinct('variant__color')
+        item_status_o=Itemstatus.objects.all()
+        cart_count=Cart.objects.filter(user=request.user).count()
+        wishlist_count=Wishlist.objects.filter(user=request.user).count()
+        date=orederview.update_at + timedelta(days=3)
         
         
-#         if date >=timezone.now():
-#             date=True
-#         else:
-#             date=False
+        if date >=timezone.now():
+            date=True
+        else:
+            date=False
             
-#         context={
-#             'date':date,
-#             'address':address,
-#             'products':products,
-#             'image':image,
-#             'item_status_o':item_status_o,
-#             'wishlist_count':wishlist_count,
-#             'cart_count':cart_count
-#             # 'orderview':orderview,
-#         }
-#         return render(request,'user/userprofile.userprofile.html')
-#     except Order.DoesNotExist:
-#          print("Order does not exist")
-#     except Address.DoesNotExist:
-#         print("Address does not exist")
-#     return redirect('userprofile')    
+        context={
+            'date':date,
+            'address':address,
+            'products':products,
+            'image':image,
+            'item_status_o':item_status_o,
+            'wishlist_count':wishlist_count,
+            'cart_count':cart_count,
+            'orderview':orderview,
+        }
+        return render(request,'user/userprofile/userprofile.html')
+    except Order.DoesNotExist:
+         print("Order does not exist")
+    except Address.DoesNotExist:
+        print("Address does not exist")
+    return redirect('userprofile')    
         
 

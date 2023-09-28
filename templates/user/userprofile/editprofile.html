@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}edit Profile{% endblock %}
-
 {% block body %}
 <style>.bg-image  {
     background-image: url('{% static "template/assets/images/404.jpg" %}');
@@ -56,14 +55,14 @@
                                 <input type="text" class="form-control" placeholder="Enter email"  name="email" value="{{user.email}}">
                             </div><!-- End .form-group -->
                             <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Enter phone number" name="phone_number" value="{{user.phone_number}}" >
+                                {% comment %} <input type="text" class="form-control" placeholder="Enter phone number" name="phone_number" value="{{user.phone_number}}" > {% endcomment %}
                             </div><!-- End .form-group -->
                   
                             
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary btn-block"> Edit Profile </button>
                             </div> <!-- form-group// --><br>
-                            <a href="{% url 'userprofile' %}" class="btn btn-outline-primary-2"><i
+                            <a href="{% url 'editprofile' %}" class="btn btn-outline-primary-2"><i
                                 class="icon-long-arrow-left"></i><span>BACK</span></a>
 
                                 <a href="{% url 'changepassword' %}" class="btn btn-outline-primary-2"><span>Change Password </span><i

@@ -108,6 +108,10 @@ def signup(request):
             password1 = request.POST['password1']
             password2 = request.POST['password2']
             # null values checking
+            
+            
+            print(email,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
+            
             check = [name,email,password1,password2]
             for values in check:
                 if values == '':
@@ -178,8 +182,8 @@ def signup(request):
                     usr.save()
                     user_otp=random.randint(100000,999999)
                     UserOTP.objects.create(user=usr,otp=user_otp)
-                    print(user_otp,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-                    mess=f'Hello\t{usr.username},\nYour OTP to verify your account for EBUDS is {user_otp}\nThanks!'
+                    print(user_otp,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
+                    mess=f'Hello\t{usr.username},\nYour OTP to verify your account for Flex is {user_otp}\nThanks!'
                     send_mail(
                             "welcome to EBUDS Verify your Email",
                             mess,

@@ -191,7 +191,7 @@ def updatecart(request):
                 carts=Cart.objects.filter(user=request.user).order_by('id')
                 total_price=0
                 # offer_price=0
-                for item in cart:
+                for item in carts:
                     total_price = total_price + item.variant.product.product_price * item.product_qty
                     
                 return JsonResponse({'status': 'Updated successfully','sub_total':total_price,'single':single, 'product_price':cart.variant.product.product_price,'quantity':prod_qty})
