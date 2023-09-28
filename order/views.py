@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render,redirect
 from checkout.models import Order,OrderItem,Orderstatus,Itemstatus
-from order.models import Orderreturn,Order_Cancelled
+from order.models import Orderreturn,Order_cancelled
 from product.models import Product
 from user.models import Address, Wallet
 from variant.models import Variant,VariantImage
@@ -20,7 +20,7 @@ def orderlist(request):
         'order':order,
     }
     
-    return render(request,'order/order.html')
+    return render(request,'admin/order.html')
 
 
 def orderview(requset):
@@ -40,7 +40,7 @@ def orderview(requset):
             'item_status_o':item_status_o,
             
         }
-        return render(request,'order/orderview.html',context)
+        return render(request,'view/orderview.html',context)
     except Order.DoesNotExist:
         print('order does not exist')
     except Address.DoesNotExist:
@@ -174,3 +174,202 @@ def returnorder(request,return_id):
     
     change_all_item_status = Order.objects.get(id=view_id)
     item_status_instance_all=Orderstatus.objects.get(id=total_value)
+    change_all_item_status.order_status=item_status_instance_all
+    change_all_item_status.save()
+    
+    returnorder=Orederreturn.objects.create(user=request.user,order=order_id,options=options,reason=reason)
+    order= Order.objects.filter(id=view_id).first()
+    if variant.product.offer:
+        total_price=variant.product.product_price*qty
+        offer_price=variant.product.offer.discount_amount*qty
+        total_price= total_price-offer_price
+    else:
+        total_price=variant.product.product_price*qty
+    if order.return_total_price:
+        pass
+    else:
+        order.return_total_price=int(order.total_price)
+    order.return_total_price=order.return_total_price-total_price
+    if order.return_total_price<0:
+        order.return_total_price=None
+    order.save()
+    try:
+        wallet=Wallet.objects.get(user=request.user)
+        wallet.wallet += total_price
+        wallet.save()
+    except Wallet.DoesNotExist:
+        wallet=Wallet.objects.create(user=request.user,wallet=total_price)
+        
+        orderitem_id.save()
+        messages.success(request,'your order return sucessfuly')
+        return redirect('orderviewuser',view_id)
+    
+    
+def ordercancel(request,cancel_id):
+    try:
+        orderitem_id=OrderItem.objects.get(id=cancel_id)
+        orderitem=orderitem_id
+        view_id=orderitem_id.order.id
+    except:
+        return redirect('userprofile')
+    if request.method=='POST':
+        options=request.POST.get('options')
+        reason= request.POST.get('reason')
+    #  validation
+    
+        if options.strip():
+            messages.error(request,'enter your options')
+            return redirect('orderviewuser',view_id)
+        if reason.strip():
+            messages.error(request,'reason must be added')
+            return redirect('orderviewuser',view_id)
+        
+        
+        order=Order.objects.filter(id=view_id).first()
+        qty=orderitem.quantity
+        variant_id=orderitem.variant.id
+        variant=Variant.objects.filter(id=variant_id).first()
+        cancelled=Order_Cancelled.objects.createf(user=request.user,order=order)
+        
+        if order.payment_mode=='razopay' or order.payment_mode=='wallet':
+            order=Order.objects.get(id=view_id)
+            
+            
+            if variant.product.offer:
+                total_price= variant.product.product_price*qty
+                offer_price=variant.product.offer.discount_amount*qty
+                # total_price=total_price-offer_price
+            else:
+                total_price=variant.product.product_price*qty
+            if order.return_total_price:
+                pass
+            else:
+                order.return_total_price=int(order.total_price)
+            order.return_total_price=order.return_total_price-total_price
+            
+            if order.coupon:
+                if order.return_total_price<order.coupon.min_price:
+                    total_price=total_price-order.coupon.coupon_discount_amount
+                    order.coupon=None
+                else:
+                    pass
+                if order.return_total_price<0:
+                    order.return_total_price=None
+                order.save()
+                try:
+                    wallet=Wallet.objects.get(user=request.user)
+                    wallet.wallet += total_price
+                    wallet.save()
+                except Wallet.DoesNotExist:
+                    wallet=Wallet.objects.create(user=request.user,wallet=total_price)
+            # udate the product quantity
+            variant.quantity=variant.quantity+qty
+            variant.save()
+            order_item_id=Itemstatus.objects.get(id=5)
+            all_order_item=OrderItem.object.filter(order=view_id)
+            orderitem.orderitem_status=order_item_id
+            orderitem.save()
+            try:
+                # total item_status
+                all_order_item=OrderItem.objects.filter(order=view_id)
+                # import pdb
+                # pdb.set_trace()
+                total_count = all_order_item.count()
+                
+                Pending=all_order_item.filter(orderitem_status__id=1).count()
+                Processing=all_order_item.filter(orderitem_status__id=2).count()
+                Shipped=all_order_item.filter(orderitem_status__id=3).count()
+                Delivered=all_order_item.filter(orderitem_status__id=4).count()
+                Cancelled=all_order_item.filter(orderitem_status__id=5).count()
+                Return=all_order_item.filter(orderitem_status__id=6).count()
+                
+                if total_count == Pending:
+                    total_value = 1
+                elif total_count == Processing:
+                    total_value = 2  
+                elif total_count == Shipped:
+                    total_value = 3
+                elif total_count == Delivered:
+                    total_value = 4
+                elif total_count == Cancelled:
+                    total_value = 5
+                elif total_count == Return:
+                    total_value = 6
+                else:
+                    total_value = 1    
+            
+            except:
+                return redirect('order_view',view_id)
+            
+            change_all_items_status=Order.objects.get(id=view_id)
+            item_status_instance_all=Orderstatus.objects.get(id=total_value)
+            change_all_items_status.order_status=item_status_instance_all
+            change_all_items_status.save()
+            messages.success(request,'your order cancelled success')
+            return redirect('orderviewuser',view_id)
+        return redirect('userprofile')
+            
+            
+def ordersearch(requset):
+    search=requset.POST.get('search')
+    if search is None or search.strip() == '':
+        messages.error(request,'Filed cannot empty!')
+        return redirect('order_list')
+    order=Order.objects.filter(Q(user__first_name__icontains=search)| Q(created_at__icontains=search) |Q(total_price__icontains=search))
+    context={'order':order,}
+    if order:
+        pass
+    else:
+        order:False
+        messages.error(request,'search not found')
+        return redirect('orderlist')
+    return render(request,'admin/order.html',context)
+                
+                
+                
+def orderstatusshow(request):
+    name=request.POST.get('name')
+    if name=='Pending':
+        order=Order.objects.filter(order_status=1)
+        context={'order':order}
+        return render(request,'admin/order.html',context)
+    if name == 'Processing':
+        order = Order.objects.filter(order_status=2)
+        context={'order':order,}   
+        return render(request,'admin/order.html',context)
+    if name == 'Shipped':
+        order = Order.objects.filter(order_status=3)
+        context={'order':order,}   
+        return render(request,'admin/order.html',context)
+    if name == 'Delivered':
+        order = Order.objects.filter(order_status=4)
+        context={'order':order,}   
+        return render(request,'admin/order.html',context)
+    if name == 'Cancelled':
+        order = Order.objects.filter(order_status=5)
+        context={'order':order,}   
+        return render(request,'admin/order.html',context)
+    if name == 'Return':
+        order = Order.objects.filter(order_status=6)
+        context={'order':order,}   
+        return render(request,'admin/order.html',context)
+    if name == 'All':
+        order =Order.objects.all().order_by('id')
+        context={'order':order,}   
+        return render(request,'admin/order.html',context)
+    else:
+        return redirect('orderlist')
+    
+def orderpaymentsort(request):
+    name=request.POST.get('name')
+    if name=='cod':
+        order=Order.objects.filter(payment_mode='cod')
+        context={'order':order}
+        return render(request,'admin/order.html',context)
+    if name=='razorpay':
+        order=Order.object.filter(payment_mode='razorapay')
+        context={'order':order}
+        return render(request,'admin/order.html',context)
+    else:
+        return redirect('orderlist')
+                

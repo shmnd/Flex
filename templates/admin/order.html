@@ -1,0 +1,126 @@
+{% extends 'admin/dashboardbase.html' %}
+{% block title %}Order{% endblock %}
+{% load static %}
+{% block dashbody %}
+<div class="container-fluid">
+
+
+    <section class="content-main">
+
+        <div class="card mb-4">
+            <header class="card-header">
+                <div class="row gx-3">
+                    <div class="col-lg-4 col-md-6 me-auto">
+                        <form action="{% url 'order_search' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="text" placeholder="Search..." name="search" class="form-control" />
+                                <button type="submit" class="btn btn-primary"><i class="ti ti-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-2 col-6 col-md-3">
+                        <form id="user-status-formm" method="post" action="{% url 'order_payment_sort' %}">
+                          {% csrf_token %}
+                          <div class="col-lg-2 col-6 col-md-3">
+                              <select class="form-select" name="name" id="status-selectt" style="width: 100px;">
+                                  <option value="">Sort</option>
+                                  <option value="cod">cod</option>
+                                  <option value="razorpay">razorpay</option>
+                                  <option value="All">All</option>
+                              </select>
+                          </div>
+                          <input type="hidden" name="auto_submit" value="true">
+                      </form>
+                    </div>
+                 
+                    <div class="col-lg-2 col-6 col-md-3">
+                        <form id="user-status-form" method="post" action="{% url 'order_status_show' %}">
+                          {% csrf_token %}
+                          <div class="col-lg-2 col-6 col-md-3">
+                              <select class="form-select" name="name" id="status-select" style="width: 130px;">
+                                  <option value="">Status</option>
+                                  <option value="Pending">Pending</option>
+                                  <option value="Processing">Processing</option>
+                                  <option value="Shipped">Shipped</option>
+                                  <option value="Delivered">Delivered</option>
+                                  <option value="Cancelled">Cancelled</option>
+                                  <option value="Return">Return</option>
+                                  <option value="All">All</option>
+                              </select>
+                          </div>
+                          <input type="hidden" name="auto_submit" value="true">
+                      </form>
+                    </div>
+                </div>
+            </header>
+            <!-- card-header end// -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr class="text-uppercase">
+                                <th scope="col">id</th>
+                                <th scope="col">user</th>
+                                <th scope="col">Order Date</th>
+                                <th scope="col">Total Amount</th>
+                                <th scope="col">payment mode</th>
+                                <th scope="col">View Order</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in order %}
+
+                            <tr class="text-uppercase">
+                                <td><b>{{ i.id }}</td>
+                                <td><b>{{ i.user.first_name }}</td>
+                                <td><b>{{ i.created_at}}</td>
+                                <td><b>{{ i.total_price }}</td>
+                                <td><b>{{ i.payment_mode }}</td>
+                                <td><a href="{% url 'order_view' i.id %}"><span
+                                            class="badge rounded-pill alert-View btn btn ">View</span> </a>
+                                </td>
+                                <td> 
+                                    {% if i.order_status.order_status == 'Pending' %}
+                                    <span class="badge rounded-pill alert-secondary"  >{{ i.order_status.order_status }}</span>
+                                    {% elif i.order_status.order_status == 'Processing' %}
+                                    <span class="badge rounded-pill alert-warning">{{ i.order_status.order_status }}</span>
+                                    {% elif i.order_status.order_status == 'Shipped' %}
+                                    <span class="badge rounded-pill alert-primary">{{ i.order_status.order_status }}</span>
+                                    {% elif i.order_status.order_status == 'Delivered' %}
+                                    <span class="badge rounded-pill alert-success">{{ i.order_status.order_status }}</span>
+                                    {% elif i.order_status.order_status == 'Cancelled' or i.order_status.order_status == 'Return' %}
+                                    <span class="badge rounded-pill alert-danger">{{ i.order_status.order_status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const statusSelect = document.getElementById('status-select');
+                
+                statusSelect.addEventListener('change', function () {
+                    document.getElementById('user-status-form').submit();
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const statusSelect = document.getElementById('status-selectt');
+                
+                statusSelect.addEventListener('change', function () {
+                    document.getElementById('user-status-formm').submit();
+                });
+            });
+        </script>
+</div>
+
+{% endblock %}
