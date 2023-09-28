@@ -17,8 +17,8 @@ from wishlist.models import Wishlist
 
 
 def home(request):
-    if  request.user.is_superuser:
-        return redirect('dashboard')
+    # if  request.user.is_superuser:
+    #     return redirect('dashboard')
     
     categories=category.objects.all()
     products=Product.objects.all()

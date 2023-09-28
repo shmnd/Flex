@@ -175,7 +175,7 @@ def placeorder(request):
         neworder.message = request.POST.get('order_note')
         session_coupon_id=request.session.get('coupon_id')
         if session_coupon_id!=None:
-            session_coupons =Coupon.objects.get(id=session_coupon_id)
+            session_coupons =Coupon.objects.get(id=sessifon_coupon_id)
         else:
             session_coupons = None
                

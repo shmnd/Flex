@@ -406,7 +406,7 @@
                   var data = {
 
                       "payment_method": paymentMethod,
-                      "couponOrder": couponOrder,
+                      {% comment %} "couponOrder": couponOrder, {% endcomment %}
                       "order_note": order_note,
                       "address": selectedAddress,
                       "csrfmiddlewaretoken": token
@@ -427,7 +427,7 @@
                           if (response.status === 'Your wallet amount is very low') {
                               swal("Error!", response.status, "error");
                               $('.placeorder').load(location.href + " .placeorder");
-                              window.location.href = '/checkout/checkout/';
+                              window.location.href = '/user/checkout/';
                           } else if (response.status === 'Your order has been placed successfully') {
                               swal("Congratulations!", response.status, "success");
                               $('.placeorder').load(location.href + " .placeorder");
