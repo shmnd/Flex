@@ -33,6 +33,8 @@ urlpatterns = [
     path('user/',include('user.urls')),
     path('order/',include('order.urls')),
     path('checkout/',include('checkout.urls')),
+    path('shop/',include('shop.urls')),
+    
     
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
