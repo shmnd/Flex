@@ -51,15 +51,17 @@ def orderview(requset):
 def changestatus(request):
     
     if not request.user.is_superuser:
-        return redirect('adminsignin')
+        return redirect('admin_login1')
+    orderitem_id = request.POST.get('orderitem_id')
+    order_status = request.POST.get('status')
+    order_variant = request.POST.get('variant_id')
     
-    orderitem_id=request.POST.get('orderitem_id')
-    order_status=request.POST.get('status')
-    order_variant=request.POST.get('variant_id')
-    
-    order_items=OrderItem.objects.get(variant=order_variant,id=orderitem_id)
-    item_status_instance=Itemstatus.objects.get(id=order_status)
-    veiw_id=orderitems.order.id
+    orderitems = OrderItem.objects.get(variant=order_variant, id=orderitem_id)
+    item_status_instance = Itemstatus.objects.get(id=order_status)
+
+    orderitems.orderitem_status = item_status_instance
+    orderitems.save()
+    view_id= orderitems.order.id
     
     try:
     # ṭotal item status
@@ -367,7 +369,7 @@ def orderpaymentsort(request):
         context={'order':order}
         return render(request,'admin/order.html',context)
     if name=='razorpay':
-        order=Order.object.filter(payment_mode='razorapay')
+        order=Order.objects.filter(payment_mode='razorapay')
         context={'order':order}
         return render(request,'admin/order.html',context)
     else:

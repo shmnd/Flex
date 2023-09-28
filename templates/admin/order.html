@@ -1,7 +1,7 @@
 {% extends 'admin/dashboardbase.html' %}
 {% block title %}Order{% endblock %}
 {% load static %}
-{% block dashbody %}
+{% block body %}
 <div class="container-fluid">
 
 
@@ -11,7 +11,7 @@
             <header class="card-header">
                 <div class="row gx-3">
                     <div class="col-lg-4 col-md-6 me-auto">
-                        <form action="{% url 'order_search' %}" method="POST">
+                        <form action="{% url 'ordersearch' %}" method="POST">
                             {% csrf_token %}
                             <div class="input-group">
                                 <input type="text" placeholder="Search..." name="search" class="form-control" />
@@ -20,7 +20,7 @@
                         </form>
                     </div>
                     <div class="col-lg-2 col-6 col-md-3">
-                        <form id="user-status-formm" method="post" action="{% url 'order_payment_sort' %}">
+                        <form id="user-status-formm" method="post" action="{% url 'orderpaymentsort' %}">
                           {% csrf_token %}
                           <div class="col-lg-2 col-6 col-md-3">
                               <select class="form-select" name="name" id="status-selectt" style="width: 100px;">
@@ -35,7 +35,7 @@
                     </div>
                  
                     <div class="col-lg-2 col-6 col-md-3">
-                        <form id="user-status-form" method="post" action="{% url 'order_status_show' %}">
+                        <form id="user-status-form" method="post" action="{% url 'orderstatusshow' %}">
                           {% csrf_token %}
                           <div class="col-lg-2 col-6 col-md-3">
                               <select class="form-select" name="name" id="status-select" style="width: 130px;">
@@ -78,7 +78,7 @@
                                 <td><b>{{ i.created_at}}</td>
                                 <td><b>{{ i.total_price }}</td>
                                 <td><b>{{ i.payment_mode }}</td>
-                                <td><a href="{% url 'order_view' i.id %}"><span
+                                <td><a href="{% url 'orderview' i.id %}"><span
                                             class="badge rounded-pill alert-View btn btn ">View</span> </a>
                                 </td>
                                 <td> 
