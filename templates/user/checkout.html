@@ -68,7 +68,7 @@
         <div class="checkout">
             <div class="container">
                
-                <div class="spshafi lg-2" >
+                {% comment %} <div class="spshafi lg-2" >
                     <div class="cart-discount">
                         <h5>Discount Coupon</h5>
                         <form action="{% url 'checkout' %}" method="POST">
@@ -81,7 +81,8 @@
                             </div><!-- .End .input-group -->
                         </form>
                     </div>
-                </div>
+                </div> {% endcomment %}
+                
                 <br>
 
                 
@@ -154,7 +155,7 @@
                         </div><!-- End .col-lg-2 -->
 
                         <aside class="col-lg-4">
-                            <div class="summary checoupon">
+                            {% comment %} <div class="summary checoupon">
 
                                 
                                 <h3 class="summary-title">Now Available Coupon</h3><!-- End .summary-title -->
@@ -177,7 +178,7 @@
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                            </div>
+                            </div> {% endcomment %}
                             <br>
                             <br>
                                 
@@ -187,21 +188,25 @@
                               
                                
                                
-                                <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+                                <h3 class="summary-title">Your Ordered Product</h3><!-- End .summary-title -->
                                   {% if cartitems %}
                                 <table class="table table-summary">
                                     
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            {% comment %} <th>Quantity</th> {% endcomment %}
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-
                                     <tbody>{% for i in cartitems  %}
                                         <tr>
                                             <td><a href="#">{{i.variant.product.product_name}}</a></td>
+                                            
+
+                                            <td><a href="#">{{i.variant.size.size_chart}}</a></td>
+
+                                            <td><a href="#">{{i.variant.color.color_name}}</a></td>
+
+                                            <td><a href="#">{{i.product_qty}}</a></td>
+
+                                            <td><a href="#">{{i.variant.product.product_price}}</a></td>
+
+
+
                                             {% comment %} <td></td>
                                             <td><a href="#">{{i.product_qty}}</a></td> {% endcomment %}
                                             {% comment %} {% if i.variant.product.offer %}

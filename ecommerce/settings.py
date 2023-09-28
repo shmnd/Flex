@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'user',
     'order',
     'checkout',
+    'mathfilters',
 ]
 
 MIDDLEWARE = [

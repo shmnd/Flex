@@ -180,12 +180,62 @@
                                         <td>Subtotal:</td>
                                         <td>$<span id='Subtotal'>{{total_price}}</span></td>
                                     </tr><!-- End .summary-subtotal -->
-                                    <tr class="summary-shipping">
+                                    {% comment %} <tr class="summary-shipping">
                                         <td>Shipping:</td>
                                         <span>&nbsp;</span>
-                                    </tr>
+                                    </tr> {% endcomment %}
 
-                                    <tr class="summary-shipping-row">
+
+                                    {% comment %} ///////////////////////////////////////////// {% endcomment %}
+
+
+
+
+                                    <div class="container mt-4">
+                                        <h4>Shipping Options</h4>
+                                        <hr>
+                                    
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
+                                                    <label class="custom-control-label" for="free-shipping">Free Shipping</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <span class="float-md-right">$0.00</span>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input type="radio" id="standard-shipping" name="shipping" class="custom-control-input">
+                                                    <label class="custom-control-label" for="standard-shipping">Standard Shipping</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <span class="float-md-right">$10.00</span>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
+                                                    <label class="custom-control-label" for="express-shipping">Fast Shipping</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <span class="float-md-right">$20.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    
+                                    {% comment %} ///////////////////////////////////////////////////////// {% endcomment %}
+
+                                    {% comment %} <tr class="summary-shipping-row">
                                         <td>
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" id="free-shipping" name="shipping"
@@ -219,13 +269,13 @@
                                             </div><!-- End .custom-control -->
                                         </td>
                                         <td>$20.00</td>
-                                    </tr><!-- End .summary-shipping-row -->
+                                    </tr><!-- End .summary-shipping-row --> {% endcomment %}
 
-                                    <tr class="summary-shipping-estimate">
+                                    {% comment %} <tr class="summary-shipping-estimate">
                                         <td>Estimate for Your Country<br> <a href="#">Change address</a>
                                         </td>
                                         <td>&nbsp;</td>
-                                    </tr><!-- End .summary-shipping-estimate -->
+                                    </tr><!-- End .summary-shipping-estimate --> {% endcomment %}
 
                                     <tr class="summary-total">
                                         <td>Total:</td>
@@ -240,7 +290,7 @@
                         </div><!-- End .summary -->
 
                         {% comment %} <a href="{% url 'Shop' %}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE {% endcomment %}
-                                SHOPPING</span><i class="icon-refresh"></i></a>
+                                {% comment %} SHOPPING</span><i class="icon-refresh"></i></a> {% endcomment %}
                     </aside><!-- End .col-lg-3 -->
                 </div><!-- End .row -->
             </div><!-- End .container -->
