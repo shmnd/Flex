@@ -172,13 +172,15 @@ def addcart(request):
         
 @login_required(login_url='signin')
 def updatecart(request):
+    print('heloooooooooooooooooooooooooooooooooooooo')
     if request.method=='POST':
-        cart_id=request.POST.get('cart_id')
+        cart_id=request.POST.get('product_id')
         if(Cart.objects.filter(user=request.user,id=cart_id)):
             prod_qty=int(request.POST.get('product_qty'))
             
             cart=Cart.objects.get(id=cart_id,user=request.user)
             cartes=Cart.variant.quantity
+            print(cart_id,prod_qty,'innnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
             if int(cartes) >= int(prod_qty):
                 cart.product_qty = prod_qty
                 if cart.variant.product.offer:
@@ -193,10 +195,12 @@ def updatecart(request):
                 # offer_price=0
                 for item in carts:
                     total_price = total_price + item.variant.product.product_price * item.product_qty
+                print(total_price,single,prod_qty)
                     
                 return JsonResponse({'status': 'Updated successfully','sub_total':total_price,'single':single, 'product_price':cart.variant.product.product_price,'quantity':prod_qty})
             else:
                 return JsonResponse({'status': 'Not allowed this Quantity'})
     return JsonResponse('something went wrong, reload page',safe=False)
 
+ 
  

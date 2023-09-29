@@ -5,8 +5,14 @@
 {% block body %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.17.0/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css">
+
 <style>.page-header {
     background-image: url('{% static "user/assets/images/page-header-bg.jpg" %}');
    
@@ -281,7 +287,6 @@
 </main><!-- End .main -->
 
 
-
     {% comment %} <td class="quantity-col product_data">
                                         <div class="input-group quantity mx-auto " style="width: 100px;">
                                             <div class="input-group-btn changeQuantity " data-variantid="{{i.id}}">
@@ -297,7 +302,41 @@
                                             
                                         </div>
                                     </td> {% endcomment %}
+
+{% comment %} 
 <script>
+    function updatecart(cartId, productQty) {
+        $.ajax({
+            type: "POST",
+            url: "/updatecart/", // Update this URL to match your Django view URL
+            data: {
+                cart_id: cartId,
+                product_qty: productQty,
+                csrfmiddlewaretoken: '{{ csrf_token }}', // Include CSRF token
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.status === "Updated successfully") {
+                    // Update the UI with the new cart information
+                    $("#sub_total").text(response.sub_total);
+                    $("#single").text(response.single);
+                    $("#product_price").text(response.product_price);
+                    $("#quantity").text(response.quantity);
+                } else {
+                    alert(response.status); // Show an error message
+                }
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText); // Handle errors here
+            }
+        });
+    }
+    </script> {% endcomment %}
+
+    
+
+
+{% comment %} <script>
     $('.changeQuantity').click(function (e) {
         e.preventDefault();
         var variant_id = $(this).data('variantid')
@@ -333,8 +372,8 @@
                 }
                 document.getElementById('Subtotal').textContent = sub_total
 
-                {% comment %} document.getElementById('tax_field').textContent = sub_total * 0.18 {% endcomment %}
-                {% comment %} document.getElementById('grand_total').textContent = sub_total + (sub_total * 0.18)  {% endcomment %}
+                {% comment %} document.getElementById('tax_field').textContent = sub_total * 0.18
+                {% comment %} document.getElementById('grand_total').textContent = sub_total + (sub_total * 0.18)  
                 document.getElementById('grand_total').textContent = sub_total
                 document.getElementById('single').textContent = single
 
@@ -342,7 +381,8 @@
         });
     });
 
-</script>
+</script> 
+{% endcomment %}
 {% else %}
 <div class="page-header text-center">
     <div class="container">
@@ -359,5 +399,65 @@
     </div><!-- End .container -->
 </nav><!-- End .breadcrumb-nav -->
 {% endif %}
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- SweetAlert CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+
+    $('.changeQuantity').click(function(e) {
+        e.preventDefault();
+        var product_id = $(this).data('variantid')
+        
+    
+        var product_qty = $('#pro_qty' + product_id).val() 
+        console.log(product_id,product_qty,'sssssssssssssssssssssssssssssssssssssss')
+        console.log("AJAX request triggered");
+        $.ajax({                                                            
+            method: "POST",
+            url:"{% url 'updatecart' %}",
+         
+            data: {
+                'product_id': product_id,
+                'product_qty': product_qty,
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+        
+            success: function(response) {
+                console.log(response);
+                if (response.status === 'Not allowed this Quantity') {
+                    swal("Error!", response.status, "error")
+                    var checkoutLink = '<a href="#" class="primary-btn">Not allowed this quantity</a>';
+                     $("a.primary-btn").replaceWith(checkoutLink);
+                }else{
+                var checkoutLink = '<a href="#" class="primary-btn">Proceed to checkout</a>';
+                $("a.primary-btn").replaceWith(checkoutLink);
+                }
+                  //sub_total = parseInt(response.sub_total);
+                //gtotal = sub_total;
+               // document.getElementById('sub_total').textContent = sub_total.toFixed(2);
+              //  document.getElementById('grand_total').textContent = gtotal.toFixed(2);
+
+              
+             //   var product_price = parseInt(response.product_price);
+               // var quantity = parseInt(response.quantity);
+               
+               
+               // document.getElementById('single_product_total'+product_id).textContent = parseInt(response.product_price) * parseInt(response.quantity)       
+                 
+            }
+        });
+    });
+    </script>
 
 {% endblock %}

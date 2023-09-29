@@ -29,7 +29,7 @@ urlpatterns = [
     path('variant',include('variant.urls')),
     path('product/',include('product.urls')),
     path('wishlist/',include('wishlist.urls')),
-    path('wishlist/',include('cart.urls')),
+    path('cart/',include('cart.urls')),
     path('user/',include('user.urls')),
     path('order/',include('order.urls')),
     path('checkout/',include('checkout.urls')),
