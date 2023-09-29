@@ -5,15 +5,15 @@ from django.db.models import Sum,Avg
 from category.models import category
 from cart.models import Cart
 from wishlist.models import Wishlist
-q
+
 # Create your views here.
 
 
 def shop(request):
-    variant_images=(variant_images.objects.filter(variant__product__is_available=True)
+    variant_images=(VariantImage.objects.filter(variant__product__is_available=True)
                     .order_by('variant__product').distinct('variant__product'))
-    ratings=Product.objects.annotate(avg_rating=Avg('review__rating'))
-    catergory_filter=category.objects.filter(is_availabe=True)
+    # ratings=Product.objects.annotate(avg_rating=Avg('review__rating'))
+    catergory_filter=category.objects.filter(is_available=True)
     size_filter=Size.objects.filter(is_available=True)
     color_filter=Color.objects.filter(is_available=True)
     try:
@@ -25,11 +25,11 @@ def shop(request):
         wishlist_count=False
     context={
         'variant_images':variant_images,
-        'ratings':ratings,
+        # 'ratings':ratings,
         'cart_count':cart_count,
         'category_filter':catergory_filter,
         'size_filter':size_filter,
-        'color_filter':color_filter.name,
+        'color_filter':color_filter,
     }
     
     return render(request,'user/shop/shop.html')
@@ -56,8 +56,8 @@ def shopfilter(request):
                 
         elif color and categories :
                 variant_image=(VariantImage.objects.filter
-                                (variant__product__category__id=categories,)
-                                variant__color__is_available=True,
+                                (variant__product__category__id=categories,
+                                variant__color__is_available=True,)
                             .oderb_by('variant__product').distanct('variant__product'))
         elif size and categories:    
              variant_image=(VariantImage.objects.filter
