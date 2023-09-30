@@ -456,13 +456,24 @@
                             Swal.fire("Error!", response.status, "error");
                             $('.placeorder').load(location.href + " .placeorder");
                         } else if (response.status === 'Your order has been placed successfully') {
-                            Swal.fire("Congratulations!", response.status, "success");
+                            Swal.fire({
+                                title: "Congratulations!",
+                                text: response.status,
+                                icon: "success",
+                            });
                             $('.placeorder').load(location.href + " .placeorder");
+                        
+                            // Automatically close the Swal modal after 5 seconds
+                            setTimeout(function() {
+                                Swal.close();
+                                window.location.href = '/';
+                            }, 5000);
                         } else {
                             Swal.fire("Error!", response.status, "error");
                             $('.placeorder').load(location.href + " .placeorder");
+                            window.location.href = '/';
                         }
-                        window.location.href = '/';
+                        
                     }).fail(function(xhr, errmsg, err) {
                         alert('Error: ' + errmsg);
                         console.log(xhr.responseText);
@@ -477,11 +488,11 @@
                         url:"{% url 'razarypaycheck' %}",
                         success: function(response) {
                          var options = {
-                           "key": "rzp_test_mMbA6UvMUpGXUl", // Enter the Key ID generated from the Dashboard
+                           "key": "rzp_test_6M76xdgpXrFgY7", // Enter the Key ID generated from the Dashboard
                            "amount": response.total_price*100,// Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                            //"amount": 1*100,//response.total_price * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                            "currency": "INR",
-                           "name": "COOT",
+                           "name": "FLEX",
                            "description": "Thank you for buying with us",
                            "image": "https://example.com/your_logo",
                            //"order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1

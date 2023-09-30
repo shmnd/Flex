@@ -35,16 +35,16 @@ def checkout(request):
             offer_price_total=0
             all_offer =0
             for item in cartitems:
-                if item.variant.product.offer:
-                    product_price = item.variant.product.product_price
-                    total_price += product_price * item.product_qty
-    #                 offer_price = item.variant.product.offer.discount_amount
-                    # offer_price_total =offer_price*item.product_qty
-                    total_price= total_price - offer_price_total
-                    all_offer= all_offer+offer_price_total
-                else:     
-                    product_price = item.variant.product.product_price
-                    total_price += product_price * item.product_qty
+    #             if item.variant.product.offer:
+    #                 product_price = item.variant.product.product_price
+    #                 total_price += product_price * item.product_qty
+    # #                 offer_price = item.variant.product.offer.discount_amount
+    #                 # offer_price_total =offer_price*item.product_qty
+    #                 total_price= total_price - offer_price_total
+    #                 all_offer= all_offer+offer_price_total
+                # else:     
+                product_price = item.variant.product.product_price
+                total_price += product_price * item.product_qty
                     
            
             grand_total = total_price
@@ -173,13 +173,13 @@ def placeorder(request):
         neworder.user = user
         neworder.payment_mode = request.POST.get('payment_method')
         neworder.message = request.POST.get('order_note')
-        session_coupon_id=request.session.get('coupon_id')
-        if session_coupon_id!=None:
-            session_coupons =Coupon.objects.get(id=sessifon_coupon_id)
-        else:
-            session_coupons = None
+        # session_coupon_id=request.session.get('coupon_id')
+        # if session_coupon_id!=None:
+        #     session_coupons =Coupon.objects.get(id=sessifon_coupon_id)
+        # else:
+        #     session_coupons = None
                
-        neworder.coupon = session_coupons
+        # neworder.coupon = session_coupons
         
 
         # Calculate the cart total price 
@@ -188,23 +188,23 @@ def placeorder(request):
         offer_total_price = 0
         
         for item in cart_items:
-            if item.variant.product.offer:
-                product_price = item.variant.product.product_price
-                cart_total_price += product_price * item.product_qty
-                offer_total_price =item.variant.product.offer.discount_amount
-                offer_total_price = offer_total_price*item.product_qty
-                cart_total_price = cart_total_price - offer_total_price  
+            # if item.variant.product.offer:
+            #     product_price = item.variant.product.product_price
+            #     cart_total_price += product_price * item.product_qty
+            #     offer_total_price =item.variant.product.offer.discount_amount
+            #     offer_total_price = offer_total_price*item.product_qty
+            #     cart_total_price = cart_total_price - offer_total_price  
                 
-            else:    
-                product_price = item.variant.product.product_price
-                cart_total_price += product_price * item.product_qty
+            # else:    
+            product_price = item.variant.product.product_price
+            cart_total_price += product_price * item.product_qty
         # print(coupon,'asdfghjkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')    
         
     
         
         
-        session_coupon=request.session.get('coupon_session')
-        cart_total_price = cart_total_price - session_coupon
+        # session_coupon=request.session.get('coupon_session')
+        # cart_total_price = cart_total_price - session_coupon
         neworder.total_price = cart_total_price
 
         # Generate a unique tracking number
@@ -239,8 +239,8 @@ def placeorder(request):
 
         payment_mode = request.POST.get('payment_method')
         if payment_mode == 'cod' or payment_mode == 'razorpay' :
-            del request.session['coupon_session']
-            del request.session['coupon_id']
+            # del request.session['coupon_session']
+            # del request.session['coupon_id']
             
     
             return JsonResponse({'status': "Your order has been placed successfully"})
@@ -261,14 +261,14 @@ def razarypaycheck(request):
     total_price = 0
     total_offer = 0
     for item in cart:
-        if item.variant.product.offer:
-            total_price = total_price + item.variant.product.product_price * item.product_qty
-            total_offer = item.variant.product.offer.discount_amount*item.product_qty
-            total_price = total_price-total_offer
-        else:    
-            total_price = total_price + item.variant.product.product_price * item.product_qty
-    session_coupon=request.session.get('coupon_session')
-    total_price = total_price - session_coupon  
+        # if item.variant.product.offer:
+        #     total_price = total_price + item.variant.product.product_price * item.product_qty
+        #     total_offer = item.variant.product.offer.discount_amount*item.product_qty
+        #     total_price = total_price-total_offer
+        # else:    
+        total_price = total_price + item.variant.product.product_price * item.product_qty
+    # session_coupon=request.session.get('coupon_session')
+    # total_price = total_price - session_coupon  
     
       
  

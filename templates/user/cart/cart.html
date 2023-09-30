@@ -287,56 +287,8 @@
 </main><!-- End .main -->
 
 
-    {% comment %} <td class="quantity-col product_data">
-                                        <div class="input-group quantity mx-auto " style="width: 100px;">
-                                            <div class="input-group-btn changeQuantity " data-variantid="{{i.id}}">
-                                                <div class="product-details-quantity">
-                                                    <input readonly class="mtext-104 cl3 txt-center num-product"
-                                                        type="number" min="1" max="5" name="product_qty"
-                                                        value="{{i.product_qty}}" id="pro_qty{{i.id}}"
-                                                    >
 
-                                                </div><!-- End .product-details-quantity -->
-
-                                            </div>
-                                            
-                                        </div>
-                                    </td> {% endcomment %}
-
-{% comment %} 
 <script>
-    function updatecart(cartId, productQty) {
-        $.ajax({
-            type: "POST",
-            url: "/updatecart/", // Update this URL to match your Django view URL
-            data: {
-                cart_id: cartId,
-                product_qty: productQty,
-                csrfmiddlewaretoken: '{{ csrf_token }}', // Include CSRF token
-            },
-            dataType: "json",
-            success: function(response) {
-                if (response.status === "Updated successfully") {
-                    // Update the UI with the new cart information
-                    $("#sub_total").text(response.sub_total);
-                    $("#single").text(response.single);
-                    $("#product_price").text(response.product_price);
-                    $("#quantity").text(response.quantity);
-                } else {
-                    alert(response.status); // Show an error message
-                }
-            },
-            error: function(xhr, errmsg, err) {
-                console.log(xhr.status + ": " + xhr.responseText); // Handle errors here
-            }
-        });
-    }
-    </script> {% endcomment %}
-
-    
-
-
-{% comment %} <script>
     $('.changeQuantity').click(function (e) {
         e.preventDefault();
         var variant_id = $(this).data('variantid')
@@ -372,8 +324,8 @@
                 }
                 document.getElementById('Subtotal').textContent = sub_total
 
-                {% comment %} document.getElementById('tax_field').textContent = sub_total * 0.18
-                {% comment %} document.getElementById('grand_total').textContent = sub_total + (sub_total * 0.18)  
+                {% comment %} document.getElementById('tax_field').textContent = sub_total * 0.18 {% endcomment %}
+                {% comment %} document.getElementById('grand_total').textContent = sub_total + (sub_total * 0.18)  {% endcomment %}
                 document.getElementById('grand_total').textContent = sub_total
                 document.getElementById('single').textContent = single
 
@@ -381,8 +333,11 @@
         });
     });
 
-</script> 
-{% endcomment %}
+</script>
+    
+
+
+
 {% else %}
 <div class="page-header text-center">
     <div class="container">
@@ -402,62 +357,5 @@
 
 
 
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- SweetAlert CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
-
-
-
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-<script>
-
-    $('.changeQuantity').click(function(e) {
-        e.preventDefault();
-        var product_id = $(this).data('variantid')
-        
-    
-        var product_qty = $('#pro_qty' + product_id).val() 
-        console.log(product_id,product_qty,'sssssssssssssssssssssssssssssssssssssss')
-        console.log("AJAX request triggered");
-        $.ajax({                                                            
-            method: "POST",
-            url:"{% url 'updatecart' %}",
-         
-            data: {
-                'product_id': product_id,
-                'product_qty': product_qty,
-                csrfmiddlewaretoken: '{{csrf_token}}'
-            },
-        
-            success: function(response) {
-                console.log(response);
-                if (response.status === 'Not allowed this Quantity') {
-                    swal("Error!", response.status, "error")
-                    var checkoutLink = '<a href="#" class="primary-btn">Not allowed this quantity</a>';
-                     $("a.primary-btn").replaceWith(checkoutLink);
-                }else{
-                var checkoutLink = '<a href="#" class="primary-btn">Proceed to checkout</a>';
-                $("a.primary-btn").replaceWith(checkoutLink);
-                }
-                  //sub_total = parseInt(response.sub_total);
-                //gtotal = sub_total;
-               // document.getElementById('sub_total').textContent = sub_total.toFixed(2);
-              //  document.getElementById('grand_total').textContent = gtotal.toFixed(2);
-
-              
-             //   var product_price = parseInt(response.product_price);
-               // var quantity = parseInt(response.quantity);
-               
-               
-               // document.getElementById('single_product_total'+product_id).textContent = parseInt(response.product_price) * parseInt(response.quantity)       
-                 
-            }
-        });
-    });
-    </script>
 
 {% endblock %}
