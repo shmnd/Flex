@@ -70,32 +70,36 @@ def add_wishlist1(request):
         if request.user.is_authenticated:
             
             variant_id = request.POST.get('variant_id')
-            product_id = request.POST.get('product_id')
-            
-            print(variant_id,product_id,'checkkkkkkkkkkkkkk')
-               
+            add_size =request.POST.get('add_size')
+            # try:
+            #     variant_check =Variant.objects.get(id=variant_id )
+            #     if variant_check.size==add_size:
+            #         pass
+            #     else:
+            #         product=variant_check.product
+            #         color= variant_check.color
+            #         try:
+            #             check_variant=Variant.objects.get(product=product, color=color, size=add_size)
+            #             variant_id= check_variant.id
+            #         except Variant.DoesNotExist:
+            #             return JsonResponse({'status': 'Sorry! this variant not available'})  
+                        
+            # except Variant.DoesNotExist:
+            #     return JsonResponse({'status': 'No such prodcut found'})
+              
             if Wishlist.objects.filter(user=request.user, variant_id=variant_id).exists():
                 
-                messages.warning(request, 'Product already in Wishlist') 
-                
-                return  redirect('productshow',product_id,variant_id)
+                return JsonResponse({'status': 'Product already in Wishlist'})
             
+        
             else:
                 Wishlist.objects.create(user=request.user, variant_id=variant_id)
-                
-                messages.success(request, 'Product added successfully in Wishlist') 
-                
-                return  redirect('productshow',product_id,variant_id) 
+                return JsonResponse({'status': 'Product added successfully in Wishlist'})    
         else:
+            return JsonResponse({'status': 'you are not login please Login to continue'})
             
-            messages.error(request, 'you are not login please Login to continue') 
             
-            return redirect('productshow',product_id,variant_id)
-    else:
-        
-         redirect('productshow',product_id,variant_id)           
-            
-    return redirect('home')    
+    return redirect('home')      
         
     
 # //////////////////////////////////

@@ -127,42 +127,54 @@ def removecart(request,cart_id):
 #     # If you want to redirect, place it inside the else block or remove it.
 # ////////////////////////////////////////////////////////////////
 def addcart(request):
-    print('5555555555555555555555555555555')
-    
     if request.method =='POST':
         if request.user.is_authenticated:
-        
-            print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
-              
+            
             variant_id = request.POST.get('variant_id')
-            product_id = request.POST.get('product_id')
-            
-            product_qty =request.POST.get('product_qty')
-            print(product_qty,'uuuuuuuuuuuuuuuuuuuuu')
-            
-            # add_size =request.POST.get('add_size')
-            # product_id=request.POST.get('product_id')
-            # color_name=request.POST.get('color_name')
-            # product_price=request.POST.get('product_price')
-            
-            
-                
+            add_qty =int(request.POST.get('add_qty'))
+            add_size =request.POST.get('add_size')
+            print(add_qty,add_size,variant_id,'lottaaaaaaaaaaaaaaaaaaaaaaaaa')
+            try:
+                variant_check =Variant.objects.get(id=variant_id )
+                if variant_check.size==add_size:
+                    pass
+                else:
+                    product=variant_check.product
+                    color= variant_check.color
+                    try:
+                        check_variant=Variant.objects.get(product=product, color=color, size=add_size)
+                        variant_check =check_variant
+                        variant_id= variant_check.id
+                    except Variant.DoesNotExist:
+                        return JsonResponse({'status': 'Sorry! this variant not available'})  
+                        
+            except Variant.DoesNotExist:
+                return JsonResponse({'status': 'No such prodcut found'})
+              
             if Cart.objects.filter(user=request.user, variant_id=variant_id).exists():
+                
+                return JsonResponse({'status': 'Product already in cart'})
             
-                messages.warning(request, 'Product already in cart') 
-            
-                return  redirect('productshow',product_id,variant_id)
+        
             else:
-                Cart.objects.create(user=request.user,variant_id=variant_id,product_qty=product_qty )
-                messages.success(request, 'Product added successfully in cart') 
-                return  redirect('productshow',product_id,variant_id)              
+                variant_qty = add_qty
+                
+                if variant_check.quantity >= variant_qty:
+                    # if variant_check.product.offer:
+                    #     product_offer =variant_qty*variant_check.product.offer.discount_amount
+                    #     total = variant_qty*variant_check.product.product_price
+                    #     total = total -product_offer
+                    # else:   
+                    total = variant_qty*variant_check.product.product_price
+                    Cart.objects.create(user=request.user, variant_id=variant_id, product_qty=variant_qty,single_total=total)    
+                    return JsonResponse({'status': 'Product added successfully'})
+                else:
+                    return JsonResponse({'status': "Only few quantity available"})
         else:
-            messages.error(request, 'you are not login please Login to continue') 
-            return redirect('productshow',product_id,variant_id)
-    else:
-        redirect('productshow',product_id,variant_id)
+            return JsonResponse({'status': 'you are not login please Login to continue'})
+            
+            
     return redirect('home')    
-    
         
             
     
@@ -214,8 +226,11 @@ def updatecart(request):
            
             cart = Cart.objects.get(id=cart_id, user=request.user)
             cartes = cart.variant.quantity
-            if int(cartes) >= int(prod_qty):
+            # checkqty = Variant.objects.fi
+            if int(cartes) >= int(prod_qty)  :
+                
                 cart.product_qty = prod_qty
+               
                 # if cart.variant.product.offer:
                 #     offer_price =prod_qty*cart.variant.product.offer.discount_amount
                 #     single=prod_qty*cart.variant.product.product_price
@@ -224,7 +239,6 @@ def updatecart(request):
                 # else:    
                 single=cart.single_total =prod_qty*cart.variant.product.product_price
            
-                
                 cart.save()
 
                 carts = Cart.objects.filter(user = request.user).order_by('id')

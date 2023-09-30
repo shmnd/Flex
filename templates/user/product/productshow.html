@@ -140,15 +140,15 @@ justify-content: center;
                             </div>
                             
 
-                            {% comment %} <div class="product-details-action">                                 {% endcomment %}
+                           
                             <div class="product-details-action">
-                                {% comment %} <div class="details-action-col-">
+                                 <div class="details-action-col-">
                                     <div class="product-details-quantity">
                                         <label>Qty:</label>
-                                        <input  type="number" name="product_qty" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                        <input  type="number" name="product_qty" id="qty-input" class="form-control" value="1" min="1" max="5" step="1" data-decimals="0" required>
                                     </div><!-- End .product-details-quantity -->
 
-                                </div><!-- End .details-action-col --> {% endcomment %}
+                                </div><!-- End .details-action-col --> 
                                 {% comment %} </div><!-- End .product-details-action --> {% endcomment %}
                                 
                                 <br>
@@ -161,57 +161,21 @@ justify-content: center;
                                 <br>
                             
                               
-                                {% comment %} <button class="add-to-cart-btn btn-product btn-cart "
+                                 <button class="add-to-cart-btn btn-product btn-cart  addcart "
                                 data-product_id="{{ variant.0.variant.id }}">Add to Cart</button>
                                 <br>
-                                {% comment %} <button class="add-to-wishlist-button" data-variant-id="{{ variant.0.variant.id }}" data-add-size="1">Add to Wishlist</button> {% endcomment %}
-
-                                {% comment %}<div> 
-                                {% endcomment %}
-
-                                <form method="POST" action="{% url 'addcart' %}">
-                                    {% csrf_token %}
-
-
-                                    <input type="hidden"  value="{{ variant.0.variant.id }}" id="variant_id" name="variant_id", required>
-                                    <input type="hidden"  value="{{ variant.0.variant.product.id }}" id="product_id" name="product_id", required>
-                                    <input type="hidden" value="1" id="add_qty" name="product_qty" required>
-
+                               
+                                    {% comment %} <button class="wish-list btn-product btn-wishlist" data-product_id="{{ variant.0.variant.id }}">Add to Wishlist</button> {% endcomment %}
+                                    <button class=" add-to-cart-btn btn-product btn-cart btn-product btn-wishlist  wishlistshamnad" data-product_id="{{ variant.0.variant.id }}">Add to Wishlist</button>
+            
                                  
-{% comment %} 
-
-                                    <input type="hidden" value="{{ variant.0.variant.product.product_name }}" id="add_qty" name="product_name" required>
-                                    <input type="hidden" value="{{ i.variant.size.id }}" id="add_qty" name="add_size2" required>
-                                    <input type="hidden" value="{{ i.variant.size.size_chart }}" id="add_qty" name="add_size" required>
-
-                                    <input type="hidden"  value="{{ i.variant.color.color_code }}" id="product_id" name="porduct_id2" required>
-                                    <input type="hidden"  value="{{ i.variant.color.color_name }}" id="product_id" name="product_id" required>
-
-                                    <input type="hidden"  value="{{ i.variant.product.product_price }}" id="product_id" name="product_price" required> 
-
-                                {% endcomment %}
-                
-
-                                    <input class="add-to-cart-btn btn-product btn-cart " type="submit"
-                               value='Add to cart'>
-                                </form>
-                                <br>
-                                
-                                <form method="POST" action="{% url 'add_wishlist1' %}">
-                                    {% csrf_token %}
-                                    <input type="hidden"  value="{{ variant.0.variant.id }}" id="variant_id" name="variant_id" required>
-                                    <input type="hidden"  value="{{ variant.0.variant.product.id }}" id="product_id" name="product_id" required>
-                                    <input class="add-to-cart-btn btn-product btn-cart " type="submit"
-                               value='Add to wishlist'>
-                                </form>
                             </div>
                             
                             
                             
                             
                             
-                            {% comment %} <a href="" type="btn" class="btn-product btn-wishlist wish-list" data-product_id="{{ variant.0.variant.id }}" title="Wishlist"><span>Add to Wishlist</span></a> {% endcomment %}
-                                
+                          
                               
                                 
                             </div><!-- End .details-action-wrapper -->
@@ -221,7 +185,7 @@ justify-content: center;
                     </div><!-- End .col-md-6 -->
                 </div><!-- End .row -->
             </div><!-- End .product-details-top -->
-            {% comment %} endinggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg {% endcomment %}
+         
 
             <div class="product-details-tab">
                 <ul class="nav nav-pills justify-content-center" role="tablist">
@@ -404,47 +368,102 @@ justify-content: center;
     </div><!-- End .page-content -->
 </main><!-- End .main -->
 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $(".add-to-wishlist-button").click(function () {
-            var variant_id = $(this).data('variant-id');
-            var add_size = $(this).data('add-size');
-            console.log(variant_id,add_size,'ssssssssssssssssssssssssssss')
-            $.ajax({
-                url: '/add_wishlist/', 
-                type: 'POST',
-                data: {
-                    variant_id: variant_id,
-                    add_size: add_size,
-                    csrfmiddlewaretoken: '{{ csrf_token }}' 
-                },
-                success: function (response) {
-        
-                    console.log(response);
-    
-                    if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in Wishlist' ) {
-                        swal.fire("Error!", response.status, "error");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } else if (response.status === 'Product added successfully in Wishlist') { 
-                        swal.fire("", response.status, "success");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } else if (response.status === 'you are not login please Login to continue') {
-                        swal.fire("", response.status, "warning");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } 
-                    else if (response.status === 'Sorry! this variant not available') {
-                        swal.fire("", response.status, "warning");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } 
-                    else {
-                        swal("Error!", response.status, "error");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    }
+    $('.addcart').click(function (e) {
+        e.preventDefault();
+
+        var product_id = $(this).data('product_id');
+        var add_qty = $('#qty-input').val();
+        var add_size = $('select[name="size"]').val();
+
+        // var cart_qty = $('#pro_qty' + product_id).val();  
+        console.log(product_id, add_qty,add_size, 'yyyyyyyyyyyyyyyyyyyyyyy1')
+        $.ajax({
+            method: "POST",
+            url: "{% url 'addcart' %}",
+            data: {
+
+                'variant_id': product_id,
+                'add_size':add_size,
+                'add_qty': add_qty,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+
+                console.log(response);
+
+                if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in cart' ) {
+                    swal.fire("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'Product added successfully') { 
+                    swal.fire("", response.status, "success");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'you are not login please Login to continue') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } 
+                else if (response.status === 'Sorry! this variant not available') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } 
+                else {
+                    swal("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
                 }
-            });
+            }
         });
     });
 </script>
+
+
+<script>
+    $('.wishlistshamnad').click(function (e) {
+        e.preventDefault();
+
+        var product_id = $(this).data('product_id');
+        var add_size = $('select[name="size"]').val();
+
+        console.log(product_id,add_size, 'yyyyyyyyyyyyyyyyyyyyyyy1')
+        $.ajax({
+            method: "POST",
+            url: "{% url 'add_wishlist1' %}",
+            data: {
+
+                'variant_id': product_id,
+                'add_size':add_size,
+             
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+
+                console.log(response);
+
+                if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in Wishlist' ) {
+                    swal.fire("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'Product added successfully in Wishlist') { 
+                    swal.fire("", response.status, "success");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'you are not login please Login to continue') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } 
+                else if (response.status === 'Sorry! this variant not available') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } 
+                else {
+                    swal("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
+                }
+            }
+        });
+    });
+</script>
+<!-- Add this before the closing </body> tag of your HTML -->
+<script src="https://unpkg.com/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>
 
 
 {% endblock %} 
