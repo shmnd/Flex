@@ -39,6 +39,8 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.id, self.tracking_no}"
     
+    
+    
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     variant = models.ForeignKey(Variant, on_delete=models.CASCADE)

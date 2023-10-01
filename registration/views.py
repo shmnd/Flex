@@ -185,7 +185,7 @@ def signup(request):
                     print(user_otp,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
                     mess=f'Hello\t{usr.username},\nYour OTP to verify your account for Flex is {user_otp}\nThanks!'
                     send_mail(
-                            "welcome to EBUDS Verify your Email",
+                            "welcome to FLEX Verify your Email",
                             mess,
                             settings.EMAIL_HOST_USER,
                             [usr.email],
