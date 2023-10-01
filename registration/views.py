@@ -97,9 +97,9 @@ def signup(request):
                 return redirect('home')
             else:
                 messages.warning(request,f'You Entered a wrong OTP')
-                return render(request,'registration/signup.html',{'otp':True,'usr':usr})
+                return render(request,'registrations/signup.html',{'otp':True,'usr':usr})
             
-        # User registration validation
+        # User registrations validation
         else:
             firstname = request.POST['firstname']   
             lastname = request.POST['lastname']  
@@ -124,7 +124,7 @@ def signup(request):
                         'pre_password2':password2,
                     }
                     messages.info(request,'some fields are empty')
-                    return render(request,'registration/signup.html',context)
+                    return render(request,'registrations/signup.html',context)
                 else:
                     pass
             
@@ -154,7 +154,7 @@ def signup(request):
                         'pre_password2':password2,
                     }
                 messages.info(request,'Enter valid email')
-                return render(request,'registration/signup.html',context)
+                return render(request,'registrations/signup.html',context)
             else:
                 pass
             
@@ -213,7 +213,7 @@ def signup(request):
                         'pre_password2':password2,
                     }
                 messages.error(request,'password mismatch')
-                return render(request,'registration/signup.html',context)
+                return render(request,'registrations/signup.html',context)
     else:
         return render(request,'user/registrations/signup.html')               
 
@@ -228,79 +228,160 @@ def logout(request):
     
     
     
+# def forgotpassword(request):
+#     if request.method =='POST':
+#         get_otp=request.POST.get('otp')
+        
+#         if get_otp:
+#             get_email=request.POST.get('email')
+#             user=User.objects.get(email=get_email)
+#             if not re.search(re.compile(r'^\d{6}$'),get_otp):
+#                 messages.error(request,'Entered OTP only contain nemeric')
+#                 return render(request,'user/registrations/signin.html',{'otp':True,'user':user})
+            
+#             sessions_otp=request.session.get('otp')
+#             if int(get_otp) == sessions_otp:
+#                 password1= request.POST.get('password1')
+#                 password2=request.POST.get('password2')
+#                 context={
+#                     'pre_otp':get_otp,
+#                 }
+                
+#                 if password1.strip()=='' or password2.strip()=='':
+#                     messages.error(request,'field cannot be empty')
+#                     return render(request,'user/registrations/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
+                
+#                 elif password1 != password2 :
+#                     messages.error(request,'password doesnot match')
+#                     return render(request,'user/registrations/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
+                
+#                 Pass = ValidatePassword(password1)
+#                 if Pass is False:
+#                     messages.error(request,'Please enter a strong password')
+#                     return render(request,'user/registrations/forgetpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
+                
+#                 user.set_password(password1)
+#                 user.save()
+#                 del request.session['otp']
+#                 messages.success(request,'password changed successfully')
+#                 return redirect('signin')
+#             else:
+#                 messages.warning(request,'You entered a wrong OTP',{'opt':True,'user':user,'pre_otp':get_otp})
+#                 return render(request,'user/registrations/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
+#         else:
+#             get_otp=request.POST.get('otp1')
+#             email=request.POST.get('user1') 
+#             if get_otp:
+#                 user=User.objects.get(email=email)
+#                 messages.error(request,'field cannot be empty')
+#                 return render(request,'user/registrations/forgotpassword.html')
+                    
+#             else:
+#                 email=request.POST.get('email')
+                
+#                 if email.strip()=='':
+#                     messages.error(request,'field cannot be empty')
+#                     return render(request,'user/registrations/forgotpassword.html')
+                
+#                 email_check=validateEmail(email)
+#                 if email_check is False:
+#                     messages.error(request,'email is not validate')
+#                     return render(request,'user/registrations/forgotpassword.html')
+
+#                 if User.objects.filter(email=email):
+#                     user=User.objects.get(email=email)
+#                     user_otp=random.randint(100000,999999)
+#                     request.session['otp']=user_otp
+#                     message=f'Hello\t{user.first_name},\n OTP verification for your FLEX account is{user_otp}\n Thanks'
+#                     send_mail(
+#                         'welcome to FLEX verify email',
+#                               messages,
+#                               settings.EMAIL_HOST_USER,
+#                               [user.email],
+#                               fail_silently=False
+#                     )
+#                     return render(request,'user/registrations/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
+#                 else:
+#                     messages.error(request,'email doesnot exist')
+#                     return render(request,'user/registrations/forgotpassword.html')
+#     return render(request,'user/registrations/forgotpassword.html')
+
+
 def forgotpassword(request):
     if request.method=='POST':
         get_otp=request.POST.get('otp')
         
         if get_otp:
             get_email=request.POST.get('email')
-            user=request.objects.get(email=get_email)
-            if not re.search(re.compile(r'^\d{6}$'),get_otp):
-                messages.error(request,'Entered OTP only contain nemeric')
-                return render(request,'user/registration/signin.html',{'otp':True,'user':user})
-            
-            sessions_otp=request.session.get('otp')
-            if int(get_otp) == sessions_otp:
-                password1= request.POST.get('password1')
-                password2=request.POST.get('password2')
-                context={
-                    'pre_otp':get_otp,
-                }
+            user=User.objects.get(email=get_email)
+            if not re.search(re.compile(r'^\d{6}$'), get_otp): 
+                messages.error(request,'OTP should only contain numeric!')
+                return render(request,'user/registrations/forgotpassword.html',{'otp':True,'user':user}) 
+            session_otp=request.session.get('otp')
+            if int(get_otp) == session_otp:
+                password1 = request.POST.get('password1')
+                password2 = request.POST.get('password2')
+                context ={
+                                'pre_otp':get_otp,
+                            }
+                if password1.strip()==''or password2.strip()=='':
+                    messages.error(request,'field cannot empty !')
+                    return render(request,'user/registrations/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
                 
-                if password1.strip()=='' or password2.strip()=='':
-                    messages.error(request,'field cannot be empty')
-                    return render(request,'user/registration/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
-                
-                elif password1 != password2 :
-                    messages.error(request,'password doesnot match')
-                    return render(request,'user/registration/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
-                
+                elif password1 != password2:
+                    messages.error(request,'Password does not match!')
+                    return render(request,'user/registrations/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
+                    
                 Pass = ValidatePassword(password1)
                 if Pass is False:
-                    messages.error(request,'Please enter a strong password')
-                    return render(request,'user/registration/forgetpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
-                
+                    messages.error(request,'Please enter Strong password!')
+                    return render(request,'user/registrations/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
                 user.set_password(password1)
                 user.save()
                 del request.session['otp']
-                messages.success(request,'password changed successfully')
+                messages.success(request,'Your password is changed!')
                 return redirect('signin')
             else:
-                messages.warning(request,'You entered a wrong OTP',{'opt':True,'user':user,'pre_otp':get_otp})
-                return render(request,'user/registration/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
+                messages.warning(request,'You Entered a wrong OTP!')
+                return render(request,'user/registrations/forgotpassword.html',{'otp':True,'user':user})  
         else:
+            
             get_otp=request.POST.get('otp1')
-            email=request.POST.get('user1') 
+            email=request.POST.get('user1')
             if get_otp:
                 user=User.objects.get(email=email)
-                messages.error(request,'field cannot be empty')
-                return render(request,'user/registration/forgotpassword.html')
-                    
-            else:
-                email=request.POST.get['email']
+                messages.error(request,'field cannot empty!')
+                return render(request,'user/registrations/forgotpassword.html',{'otp':True,'user':user})
+                
+            else:   
+                email=request.POST['email']
                 
                 if email.strip()=='':
-                    messages.error(request,'field cannot be empty')
-                    return render(request,'user/registration/forgotpassword.html')
+                    messages.error(request,'field cannot empty!')
+                    return render(request,'user/registrations/forgotpassword.html')
                 
                 email_check=validateEmail(email)
                 if email_check is False:
-                    messages.error(request,'email is not validate')
-                    return render(request,'user/registration/forgotpassword.html')
-
+                    messages.error(request,'email not valid!')
+                    return render(request,'user/registrations/forgotpassword.html')
+            
                 if User.objects.filter(email=email):
                     user=User.objects.get(email=email)
-                    user_otp=random(100000-999999)
+                    user_otp=random.randint(100000,999999)
                     request.session['otp']=user_otp
-                    messages=f'Hello\t{user.first_name},\n OTP verification for your flex account is{user_otp}\n Thanks'
-                    send_mail('welcome to FLEX verify email',
-                              messages,
-                              settings.EMAIL_HOST_USER,
-                              [user.email],
-                              fail_silently=False
+                    message=f'Hello\t{user.first_name},\n Your OTP to verify your account for FLEX is {user_otp}\n Thanks' 
+                    send_mail(
+                        "welcome to FLEX Verify Email",
+                        message,
+                        settings.EMAIL_HOST_USER,
+                        [user.email],
+                        fail_silently=False
                     )
-                    return render(request,'user/registration/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
+                    return render (request,'user/registrations/forgotpassword.html',{'otp':True,'user':user}) 
                 else:
-                    messages.error(request,'email doesnot exist')
-                    return render(request,'user/registration/forgotpassword.html')
-    return render(request,'user/registration/forgotpassword.html')
+                    messages.error(request,'email does not exist!')
+                    return render(request,'user/registrations/forgotpassword.html')
+    return render (request,'user/registrations/forgotpassword.html')  
+
+   
+ 
