@@ -23,7 +23,7 @@ def orderlist(request):
     return render(request,'admin/order.html')
 
 
-def orderview(requset):
+def orderview(request,view_id):
     
     try:
         orderview=Order.objects.all(id=view_id)
@@ -217,12 +217,13 @@ def ordercancel(request,cancel_id):
     if request.method=='POST':
         options=request.POST.get('options')
         reason= request.POST.get('reason')
+        # print(options,'kkkkdddddddddddddddkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
     #  validation
     
-        if options.strip():
+        if options.strip()=='':
             messages.error(request,'enter your options')
             return redirect('orderviewuser',view_id)
-        if reason.strip():
+        if reason.strip()=='':
             messages.error(request,'reason must be added')
             return redirect('orderviewuser',view_id)
         
@@ -231,32 +232,32 @@ def ordercancel(request,cancel_id):
         qty=orderitem.quantity
         variant_id=orderitem.variant.id
         variant=Variant.objects.filter(id=variant_id).first()
-        cancelled=Order_cancelled.objects.createf(user=request.user,order=order)
+        cancelled=Order_cancelled.objects.create(user=request.user,order=order)
         
         if order.payment_mode=='razopay' or order.payment_mode=='wallet':
             order=Order.objects.get(id=view_id)
             
             
-            if variant.product.offer:
-                total_price= variant.product.product_price*qty
-                offer_price=variant.product.offer.discount_amount*qty
-                # total_price=total_price-offer_price
-            else:
-                total_price=variant.product.product_price*qty
+            # if variant.product.offer:
+            #     total_price= variant.product.product_price*qty
+            #     offer_price=variant.product.offer.discount_amount*qty
+            #     # total_price=total_price-offer_price
+            # else:
+            total_price=variant.product.product_price*qty
             if order.return_total_price:
                 pass
             else:
                 order.return_total_price=int(order.total_price)
             order.return_total_price=order.return_total_price-total_price
             
-            if order.coupon:
-                if order.return_total_price<order.coupon.min_price:
-                    total_price=total_price-order.coupon.coupon_discount_amount
-                    order.coupon=None
-                else:
-                    pass
-                if order.return_total_price<0:
-                    order.return_total_price=None
+            # if order.coupon:
+            #     if order.return_total_price<order.coupon.min_price:
+            #         total_price=total_price-order.coupon.coupon_discount_amount
+            #         order.coupon=None
+            #     else:
+            #         pass
+            if order.return_total_price<0:
+                order.return_total_price=None
                 order.save()
                 try:
                     wallet=Wallet.objects.get(user=request.user)
@@ -301,7 +302,7 @@ def ordercancel(request,cancel_id):
                     total_value = 1    
             
             except:
-                return redirect('order_view',view_id)
+                return redirect('orderview',view_id)
             
             change_all_items_status=Order.objects.get(id=view_id)
             item_status_instance_all=Orderstatus.objects.get(id=total_value)
@@ -312,8 +313,8 @@ def ordercancel(request,cancel_id):
         return redirect('userprofile')
             
             
-def ordersearch(requset):
-    search=requset.POST.get('search')
+def ordersearch(request):
+    search=request.POST.get('search')
     if search is None or search.strip() == '':
         messages.error(request,'Filed cannot empty!')
         return redirect('order_list')
