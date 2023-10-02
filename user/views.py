@@ -26,11 +26,10 @@ from registration.models import CustomUser
 
 
 # Create your views here.
-
+@login_required(login_url='signin')
 def userprofile(request):
     if request.user.is_authenticated:
-        user=User.objects.filter(email=request.user.email)
-        
+        user=CustomUser.objects.filter(email=request.user.email) 
         address=Address.objects.filter(user=request.user,is_available=True)
         cart_count=Cart.objects.filter(user=request.user).count()
         wishlist_count=Wishlist.objects.filter(user=request.user).count()
@@ -43,7 +42,7 @@ def userprofile(request):
             wallet=0
             
         context={
-            'user1':user,
+            'user':user,
             'address':address,
             'wallet':wallet,
             'cart_count':cart_count,
@@ -90,7 +89,6 @@ def addaddress(request,add_id):
             'wishlist_count':wishlist_count, 
             'cart_count':cart_count,
         }
-        
         
         if request.user is None:
             return
@@ -398,15 +396,15 @@ def validatepassword(new_password):
 
 def orderviewuser(request,view_id):
     try:
-        orederview=Order.object.get(id=view_id)
-        address=Address.objects.get(id=orederview.address.id)
-        products=Order.item.objects.filter(order=view_id)
+        orderview=Order.objects.get(id=view_id)
+        address=Address.objects.get(id=orderview.address.id)
+        products=OrderItem.objects.filter(order=view_id)
         variant_ids=[product.variant.id for product in products]
         image=VariantImage.objects.filter(variant__id__in=variant_ids).distinct('variant__color')
         item_status_o=Itemstatus.objects.all()
         cart_count=Cart.objects.filter(user=request.user).count()
         wishlist_count=Wishlist.objects.filter(user=request.user).count()
-        date=orederview.update_at + timedelta(days=3)
+        date=orderview.update_at + timedelta(days=3)
         
         
         if date >=timezone.now():
@@ -422,9 +420,11 @@ def orderviewuser(request,view_id):
             'item_status_o':item_status_o,
             'wishlist_count':wishlist_count,
             'cart_count':cart_count,
-            'orderview':orederview,
+            'orderview':orderview,
         }
-        return render(request,'user/userprofile/userprofile.html')
+        return render(request,'user/userprofile/orderviewuser.html',context)
+    
+    
     except Order.DoesNotExist:
          print("Order does not exist")
     except Address.DoesNotExist:

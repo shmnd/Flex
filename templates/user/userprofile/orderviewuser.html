@@ -1,0 +1,451 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}oredr view{% endblock %}
+
+{% block body %}
+
+<style>/* Default styles for the table */
+    .tableitems {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .tableitems th,
+    .tableitems td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    /* Media query for screens below 700px */
+    @media (max-width: 700px) {
+        /* Hide the "Category," "Color," "Size," "Price," and "Quantity" columns */
+        .tableitems th:nth-child(3),
+        .tableitems td:nth-child(3),
+        .tableitems th:nth-child(4),
+        .tableitems td:nth-child(4),
+        .tableitems th:nth-child(5),
+        .tableitems td:nth-child(5),
+        .tableitems th:nth-child(6),
+        .tableitems td:nth-child(6),
+        .tableitems th:nth-child(7),
+        .tableitems td:nth-child(7) {
+            display: none;
+        }
+    
+        /* Adjust the size of the "Product Image," "Product Name," "Status," and "Choose" columns */
+        .tableitems th:nth-child(1),
+        .tableitems td:nth-child(1),
+        .tableitems th:nth-child(2),
+        .tableitems td:nth-child(2),
+        .tableitems th:nth-child(8),
+        .tableitems td:nth-child(8),
+        .tableitems th:nth-child(9),
+        .tableitems td:nth-child(9) {
+            width: 25%;
+        }
+    }
+    </style>
+
+<div class="card" >
+    <div class="card-body">
+        <div class="row">
+            {% if address %}
+            <div class="col-md-6">
+                <h5 class="card-title fw-semibold mb-4"> ORDER ADDRESS</h5>
+                
+                <div class="card">
+
+                    <div class="card-body">
+                        <table>
+
+                            <tr>
+                                <td><strong>First Name</strong></td>
+                                <td>:{{address.first_name}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Last Name</strong></td>
+                                <td>:{{address.last_name}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phone Number</strong></td>
+                                <td>:{{address.phone}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email</strong></td>
+                                <td>:{{address.email}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Address</strong></td>
+                                <td>:{{address.address}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Country</strong></td>
+                                <td>:{{address.country}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>City</strong></td>
+                                <td>:{{address.city}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>State</strong></td>
+                                <td>:{{address.state}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pincode</strong></td>
+                                <td>:{{address.pincode}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Order note</strong></td>
+                                <td>:{{address.order_note}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if orderview %}
+            <div class="col-md-6">
+                <h5 class="card-title fw-semibold mb-4"> ORDER DETAILS </h5>
+                <div class="card"style="padding-bottom: 4px;">
+
+                    <div class="card-body">
+                        <table>
+
+                            <tr>
+                                <td><strong>Order id</strong></td>
+                                <td>:{{orderview.id}}</td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>User Name</strong></td>
+                                <td>{{orderview.user.first_name}}</td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Total price</strong></td>
+                                <td>:${{orderview.total_price}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Payment method</strong></td>
+                                <td>:{{orderview.payment_mode}}</td>
+                            </tr>
+                            {% if orderview.payment_mode == 'cod' %}
+                            <tr>
+                                <td><strong>Payment id</strong></td>
+                                <td>:None</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td><strong>Payment id</strong></td>
+                                <td>:{{orderview.payment_id}}</td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <td><strong>Tracking no</strong></td>
+                                <td>:{{orderview.tracking_no}}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ordered date</strong></td>
+                                <td>:{{orderview.created_at}}</td>
+                            </tr>
+                           
+                            <tr>
+                                <td><strong>Ordder status</strong></td>
+                                <td>:{{orderview.order_status.order_status}}</td>
+                            </tr>
+                            
+                            <br>
+
+                        </table>
+                        <br>
+
+                    </div>
+                </div>
+
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover tableitems">
+                        <h5 class="card-title fw-semibold mb-4" style="text-align: center;">Items</h5>
+                        <thead>
+                            <tr>
+                                <th scope="col">image</th>
+                                <th scope="col">Product name</th>
+                                <th scope="col">category</th>
+                                <th scope="col">color</th>
+                                <th scope="col">size</th>
+                                <th scope="col">price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"></th>
+                                {% for i in products %}
+                                {% if i.orderitem_status.item_status == 'Delivered' %}
+                                <th scope="col">Add Your Review</th>
+                                {% endif %}
+
+                                {% endfor %}
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in products %}
+                            <tr>
+                                {% for j in image %}
+                                {% if i.variant.id == j.variant.id %}
+                                <td>
+                                    <div style="width: 30px; margin-left: 15px;" class="overflow-hidden">
+                                        <img class="w-100" src=" {{ j.image.url}} " alt="product image">
+                                    </div>
+                                </td>
+                                {% else %}
+                                {% endif %}
+                                {% endfor %}
+                                <td><b>{{ i.variant.product.product_name }}</td>
+                                <td><b>{{ i.variant.product.category.categories }}</td>
+                                <td><b>{{ i.variant.color }}</td>
+                                <td><b>{{ i.variant.size }}</td>
+                                <td><b>{{ i.variant.product.product_price}}</td>
+                                <td><b>{{ i.quantity }}</td>
+
+                                <!-- Loop through the items -->
+
+                                <td>
+                                    {% if i.orderitem_status.item_status == 'Pending' %}
+                                    <span class="badge rounded-pill alert-secondary status-badge">
+                                        {{ i.orderitem_status.item_status }}</span>
+                                    {% elif i.orderitem_status.item_status == 'Processing' %}
+                                    <span class="badge rounded-pill alert-warning status-badge">
+                                        {{ i.orderitem_status.item_status }}</span>
+                                    {% elif i.orderitem_status.item_status == 'Shipped' %}
+                                    <span class="badge rounded-pill alert-primary status-badge">
+                                        {{ i.orderitem_status.item_status }}</span>
+                                    {% elif i.orderitem_status.item_status == 'Delivered' %}
+                                    <span class="badge rounded-pill alert-success status-badge">
+                                        {{ i.orderitem_status.item_status }}</span>
+                                    {% elif i.orderitem_status.item_status == 'Cancelled' or i.orderitem_status.item_status == 'Return' %}
+                                    <span class="badge rounded-pill alert-danger status-badge">
+                                        {{i.orderitem_status.item_status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    
+                                    {% if i.orderitem_status.item_status == 'Delivered' %}
+                                    
+                                    {% if date %}
+
+                                    <a href="#signin-modal-{{ forloop.counter }}" data-toggle="modal"><span class="btn btn-outline-primary-2" >Return</span></a>
+                                    
+                                    <div class="modal fade" id="signin-modal-{{ forloop.counter }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true"><i class="icon-close"></i></span>
+                                                    </button>
+                                
+                                                    <div class="form-box">
+                                                        <div class="form-tab">
+                                                            <ul class="nav nav-pills nav-fill" role="tablist">
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Return</a>
+                                                                </li>
+                        
+                                                            </ul>
+                                                            <div class="tab-content" id="tab-content-5">
+                                                                <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                                                                  
+                                                                    <form action="{% url 'returnorder' i.id %}" method="POST">
+                                                                        {% csrf_token %}
+                                                            
+                                                                        <!-- Return Reasons -->
+                                                                        <label for="options">Select a Return Reason:</label>
+                                                                        <select id="options" name="options" class="custom-select custom-select-lg mb-3"  >
+                                                                            <option value="Product Damage">Product Damage</option>
+                                                                            <option value="Size Change">Size Change</option>
+                                                                            <option value="Color Change">Color Change</option>
+                                                                            <option value="Other">Other</option>
+                                                                        </select>
+                                                                        <!-- Notes about your Return -->
+                                                                        <textarea class="form-control" cols="30" rows="4" placeholder="Notes about your Return, must be no more than 30 words"
+                                                                            name="reason" value=""></textarea>
+                                                                    
+                                                                        <div class="form-footer">
+                                                                            <button type="submit" class="btn btn-outline-primary-2">
+                                                                                <span>Confirm Return</span>
+                                                                                <i class="icon-long-arrow-right"></i>
+                                                                            </button>
+                                                                        </div><!-- End .form-footer -->
+                                                                    </form>
+                                                                    
+                                                                    
+                                                    
+                                                                   
+                                                                </div><!-- .End .tab-pane -->
+                                                             
+                                                                </div><!-- .End .tab-pane -->
+                                                            </div><!-- End .tab-content -->
+                                                        </div><!-- End .form-tab -->
+                                                    </div><!-- End .form-box -->
+                                                </div><!-- End .modal-body -->
+                                            </div><!-- End .modal-content -->
+                                        </div><!-- End .modal-dialog -->
+                                    </div><!-- End .modal -->
+                                    {% else %}
+                                    {% endif %}
+                                    
+
+                                  
+                                    {% elif i.orderitem_status.item_status == 'Cancelled' or i.orderitem_status.item_status == 'Return' %}
+                                    {% comment %} <a href=""><span class="btn btn-outline-primary-2"></span></a> {% endcomment %}
+                                    {% else %}
+                                    
+                                    <a href="#cancel-modal-{{ forloop.counter }}" data-toggle="modal">
+                                        <span class="btn btn-outline-primary-2">Cancel</span>
+                                    </a>
+                                    <div class="modal fade" id="cancel-modal-{{ forloop.counter }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true"><i class="icon-close"></i></span>
+                                                    </button>
+                                    
+                                                    <div class="form-box">
+                                                        <div class="form-tab">
+                                                            <ul class="nav nav-pills nav-fill" role="tablist">
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link active" data-toggle="tab" role="tab" aria-controls="signin" aria-selected="true">Cancel</a>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="tab-content" id="tab-content-{{ forloop.counter }}">
+                                                                <div class="tab-pane fade show active" id="cancel" role="tabpanel" aria-labelledby="signin-tab">
+                                                                    <form action="{% url 'ordercancel' i.id %}" method="POST">
+                                                                        {% csrf_token %}
+                                                                        <!-- Return Reasons -->
+                                                                        <label for="options">Select a Cancel Reason:</label>
+                                                                        <select id="options" name="options" class="custom-select custom-select-lg mb-3">
+                                                                            <option value="Product Damage">Product Damage</option>
+                                                                            <option value="Size Change">Size Change</option>
+                                                                            <option value="Color Change">Color Change</option>
+                                                                            <option value="Other">Other</option>
+                                                                        </select>
+                                                                        <!-- Notes about your Return -->
+                                                                        <textarea class="form-control" cols="30" rows="4" placeholder="Notes about your Cancel, must be no more than 30 words" name="reason" value=""></textarea>
+                                                                        <div class="form-footer">
+                                                                            <button type="submit" class="btn btn-outline-primary-2">
+                                                                                <span>Confirm Cancel</span>
+                                                                                <i class="icon-long-arrow-right"></i>
+                                                                            </button>
+                                                                        </div><!-- End .form-footer -->
+                                                                    </form>
+                                                                </div><!-- .End .tab-pane -->
+                                                            </div><!-- End .tab-content -->
+                                                        </div><!-- End .form-tab -->
+                                                    </div><!-- End .form-box -->
+                                                </div><!-- End .modal-body -->
+                                            </div><!-- End .modal-content -->
+                                        </div><!-- End .modal-dialog -->
+                                    </div><!-- End .modal -->
+                                
+                                
+                                    {% endif %}
+
+                                </td>
+                                {% if i.orderitem_status.item_status == 'Delivered' %}
+                                <td>
+                                    <a href="#review-modal-{{ forloop.counter }}" data-toggle="modal"><span class="btn btn-outline-primary-2" >Add Review</span></a>
+                                    
+                                    <div class="modal fade" id="review-modal-{{ forloop.counter }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true"><i class="icon-close"></i></span>
+                                                    </button>
+                                    
+                                                    {% comment %} <div class="form-box">
+                                                        <div class="form-tab">
+                                                            <ul class="nav nav-pills nav-fill" role="tablist">
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="true">Add Review</a>
+                                                                </li>
+                                    
+                                                            </ul>
+                                                            <div class="tab-content" id="tab-content-5">
+                                                                <div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
+                                                                  
+                                                                    <form action="{% url 'addreview' %}" method="POST" id="review-form"  class="refa">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" class="form-control" value="{{ i.variant.id }}" name="img_id" required>
+                                                                        <input type="hidden" class="form-control" value="{{ i.variant.product.id }}" name="product_id" required>
+                                                                        <input type="hidden" class="form-control" value="{{ i.id }}" name="view_id" required>
+                                                                        
+                                                                        <div class="form-group">
+                                                                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <input type="text" class="form-control" id="name" name="email" placeholder="Enter your Email" required>
+                                                                        </div>
+                                                        
+                                                                        <div class="form-group">
+                                                                            <select class="form-control" id="rating" name="rating" required>
+                                                                                <option value="5">5 Stars</option>
+                                                                                <option value="4">4 Stars</option>
+                                                                                <option value="3">3 Stars</option>
+                                                                                <option value="2">2 Stars</option>
+                                                                                <option value="1">1 Star</option>
+                                                                            </select>
+                                                                        </div>
+                                                        
+                                                        
+                                                                        <div class="form-group">
+                                                                           
+                                                                            <textarea class="form-control" id="review-content" name="review" placeholder="review-content" required></textarea>
+                                                                        </div>
+                                                        
+                                                                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                                                                    </form>
+                                                                    
+                                                                    
+                                                    
+                                                                   
+                                                                </div><!-- .End .tab-pane -->
+                                                             
+                                                                </div><!-- .End .tab-pane -->
+                                                            </div><!-- End .tab-content -->
+                                                        </div><!-- End .form-tab -->
+                                                    </div><!-- End .form-box --> {% endcomment %}
+                                                </div><!-- End .modal-body -->
+                                            </div><!-- End .modal-content -->
+                                        </div><!-- End .modal-dialog -->
+                                    </div><!-- End .modal -->
+
+                                </td>
+                                {% endif %}
+
+                                {% endfor %}
+
+                               
+
+
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

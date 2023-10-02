@@ -174,7 +174,7 @@
 																			<td><b>{{ last_order.created_at }}</b></td>
 																			<td><b>$ {{ last_order.total_price }}</b></td>
 																			<td><b>{{ last_order.payment_mode }}</b></td>
-																			<td><a href="{% url 'orderview' last_order.id %}"><span class="btn btn-outline-primary-2">View order details</span></a></td>
+																			<td><a href="{% url 'orderviewuser' last_order.id %}"><span class="btn btn-outline-primary-2">View order details</span></a></td>
 																			{% comment %} orderviewuser {% endcomment %}
 																			<td>
 																				<b>
@@ -230,7 +230,7 @@
 																			<td><b>{{ i.created_at }}</b></td>
 																			<td><b>$ {{ i.total_price }}</b></td>
 																			<td><b>{{ i.payment_mode }}</b></td>
-																			<td><a href="{% url 'orderview' i.id %}"><span class="btn btn-outline-primary-2">View order details</span></a></td>
+																			<td><a href="{% url 'orderviewuser' i.id %}"><span class="btn btn-outline-primary-2">View order details</span></a></td>
 																			<td>
 																				<b>
 																					{% if i.order_status.order_status == 'Pending' %}
