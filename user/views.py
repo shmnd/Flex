@@ -19,6 +19,7 @@ from django.core.validators import validate_email
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
 from .models import Address,Wallet
+from registration.models import CustomUser
 
 
 # from checkout.models import Itemstatus, Order,OrderItem
@@ -291,134 +292,51 @@ def viewaddress(request,view_id):
     
     return render(request,'user/userprofile/viewaddress.html',{'viewaddress':viewaddress})   
     
-    
-
-    
-# /////////////////////////////////////////////////////////////////
-# def editprofile(request):
-#     print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         print(email,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-        
-#         first_name = request.POST.get('first_name')
-#         print(first_name,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
-        
-#         last_name = request.POST.get('last_name')
-#         print(last_name,'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjju')
-        
-#         # phone_number = request.POST.get('phone_number')
-#         print(email,first_name,last_name,'hhhuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
-#         try:
-#             user = User.objects.get(email=request.user)    
-#         except:  
-#                return redirect('userprofile') 
-
-#         print(email,first_name,'kkkkkkkkkkkkkkk')
-        
-#         if email.strip()=='':
-#             messages.error(request,'email cannot be empty')
-#             return render(request,'userprofile/editprofile.html',{'user':user})
-#         email_check=validateemail(email)
-#         if email_check is False:
-#             messages.error(request,'email not valid!')
-#             return render(request,'userprofile/editprofile.html',{'user':user})
-        
-#         if first_name.strip() == '' or last_name.strip() == '':
-#             messages.error(request, 'First or Lastname is empty')
-#             return render(request,'userprofile/editprofile.html',{'user':user})
-        
-#         # if phone_number == '':
-#         #     messages.error(request, 'phone_number is empty')
-#         #     return render(request,'userprofile/edit_profile.html',{'user':user})
-        
-#         # if not re.search(re.compile(r'(\+91)?(-)?\s*?(91)?\s*?(\d{3})-?\s*?(\d{3})-?\s*?(\d{4})'),phone_number ): 
-#         #     messages.error(request,'Enter valid phonenumber!')
-#         #     return render(request,'userprofile/editprofile.html',{'user':user})
-#         # phonenumber_checking=len(phone_number)
-#         # if not  phonenumber_checking==10:
-#         #     messages.error(request,'phonenumber should be must contain 10digits!')  
-#         #     return render(request,'userprofile/editprofile.html',{'user':user})
-      
-#         try:
-#             user = User.objects.get(email=request.user)
-#             print(user)
-#             # user.phone_number = phone_number
-#             user.first_name = first_name
-#             user.last_name = last_name
-#             user.email=email
-#             user.save()
-#             messages.success(request, 'userprofile updated successfully')
-#             return redirect('userprofile') 
-            
-#         except:
-#             messages.error(request, 'User does not exist')
-#     try:
-#         user = User.objects.get(email=request.user)    
-#     except:  
-#            return redirect('userprofile')       
-#     return render(request,'user/userprofile/editprofile.html',{'user':user})
-# # ///////////////////////
-
 
 def editprofile(request):
-    print('zkidjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
     if request.method=='POST':
-        print('8888888888888888888888888888')
         
-        phone_number=request.POST.get('phone_number')
         first_name=request.POST.get('first_name')
         last_name=request.POST.get('last_name')
-        email=request.POST.get('email')
-        print(first_name,last_name,email,'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+        emaill=request.POST.get('email')
         
-        
-        try:
-            user=User.objects.get(phone_number=request.user)
+        try:            
+            user = CustomUser.objects.get(emails=request.user)
         except:
             return redirect('userprofile')
 
-        
-        if phone_number == '':
-            messages.error(request, 'phone_number is empty')
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
-        if not re.search(re.compile(r'(\+91)?(-)?\s*?(91)?\s*?(\d{3})-?\s*?(\d{3})-?\s*?(\d{4})'),phone_number ): 
-            messages.error(request,'Enter valid phonenumber!')
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
-        phonenumber_checking=len(phone_number)
-        if not  phonenumber_checking==10:
-            messages.error(request,'phonenumber should be must contain 10digits!')  
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
+        print('llllllllllllllllllllllllllllllllll')
+            
         if first_name.strip() == '' or last_name.strip() == '':
             messages.error(request, 'First or Lastname is empty')
             return render(request,'user/userprofile/editprofile.html',{'user':user})
         
-        
-        if email.strip()=='':
+        if emaill.strip()=='':
             messages.error(request,'email cannot be empty')
             return render(request,'user/userprofile/editprofile.html',{'user':user})
-        email_check=validateemail(email)
+        email_check=validateemail(emaill)
+        
         if email_check is False:
             messages.error(request,'email not valid!')
             return render(request,'user/userprofile/editprofile.html',{'user':user})
         
         try:
-            user=User.objects.get(phone_number=request.user)
+            user=User.objects.get(emaill=request.user)
             print(user)
-            user.phone_number=phone_number
             user.first_name=first_name
             user.last_name=last_name
-            user.email=email
+            user.email=emaill
             user.save()
             messages.success(request,'userprofile updated successfull')
             return redirect('userprofile')
         except:
             messages.error(request,'User does not exist')
-    print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+    # print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
     try:
-        user=User.objects.get(phone_number=request.user)
+        user = CustomUser.objects.get(emails=request.user.email)
+
     except:
-        return redirect('userprofile')
+         return redirect('userprofile')
     return render(request,'user/userprofile/editprofile.html',{'user':user})
 
 
@@ -437,7 +355,7 @@ def changepassword(request):
         new_password=request.POST.get('new_password')
         confirm_newpassword=request.POST.get('confirm_newpassword')
     # validations
-        if new_password.strip()=='' or confirm_newpassword.strip()=='':
+        if new_password.strip()=='' and confirm_newpassword.strip()=='':
             messages.error(request,'column cannot be empty')
             return render(request,'user/userprofile/password.html')
         if new_password != confirm_newpassword:
@@ -504,7 +422,7 @@ def orderviewuser(request,view_id):
             'item_status_o':item_status_o,
             'wishlist_count':wishlist_count,
             'cart_count':cart_count,
-            'orderview':orderview,
+            'orderview':orederview,
         }
         return render(request,'user/userprofile/userprofile.html')
     except Order.DoesNotExist:
