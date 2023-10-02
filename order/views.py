@@ -179,7 +179,7 @@ def returnorder(request,return_id):
     change_all_item_status.order_status=item_status_instance_all
     change_all_item_status.save()
     
-    returnorder=Orederreturn.objects.create(user=request.user,order=order_id,options=options,reason=reason)
+    returnorder=Orderreturn.objects.create(user=request.user,order=order_id,options=options,reason=reason)
     order= Order.objects.filter(id=view_id).first()
     if variant.product.offer:
         total_price=variant.product.product_price*qty
@@ -231,7 +231,7 @@ def ordercancel(request,cancel_id):
         qty=orderitem.quantity
         variant_id=orderitem.variant.id
         variant=Variant.objects.filter(id=variant_id).first()
-        cancelled=Order_Cancelled.objects.createf(user=request.user,order=order)
+        cancelled=Order_cancelled.objects.createf(user=request.user,order=order)
         
         if order.payment_mode=='razopay' or order.payment_mode=='wallet':
             order=Order.objects.get(id=view_id)

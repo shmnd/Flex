@@ -1,11 +1,8 @@
 from django.shortcuts import render
-
-# Create your views here.
 import random
 import string
 from django.shortcuts import redirect, render
 # from coupon.models import Coupon
-
 from wishlist.models import Wishlist
 from .models import Order, OrderItem
 from product.models import Product,Size,Color
@@ -17,6 +14,8 @@ from user.models import Address,Wallet
 from user.models import User
 from django.contrib import messages
 
+# Create your views here.
+
 def checkout(request):
     # request.session['coupon_session']=0
     # request.session['coupon_id']= None
@@ -27,7 +26,7 @@ def checkout(request):
     #         messages.error(request, 'coupon field is cannot empty!')
     #         return redirect('checkout')
         try:
-    #         # check_coupons =Coupon.objects.filter(coupon_code=coupon).first()
+            # check_coupons =Coupon.objects.filter(coupon_code=coupon).first()
             cartitems = Cart.objects.filter(user=request.user)
     
             total_price = 0
@@ -38,15 +37,14 @@ def checkout(request):
     #             if item.variant.product.offer:
     #                 product_price = item.variant.product.product_price
     #                 total_price += product_price * item.product_qty
-    # #                 offer_price = item.variant.product.offer.discount_amount
-    #                 # offer_price_total =offer_price*item.product_qty
+    #                 offer_price = item.variant.product.offer.discount_amount
+    #                 offer_price_total =offer_price*item.product_qty
     #                 total_price= total_price - offer_price_total
     #                 all_offer= all_offer+offer_price_total
                 # else:     
                 product_price = item.variant.product.product_price
                 total_price += product_price * item.product_qty
                     
-           
             grand_total = total_price
             # if grand_total>=check_coupons.min_price:
                 
@@ -55,9 +53,6 @@ def checkout(request):
                 
             #     request.session['coupon_session']= coupon
             #     request.session['coupon_id']= coupon_id
-                
-                
-                
                 
             #     messages.success(request, 'This coupon added successfully!')
             # else:
@@ -90,11 +85,7 @@ def checkout(request):
                 return redirect('home')
             else:
                 return render(request,'checkout/checkout.html',context)
-                
-             
-                
-                
-                 
+         
         except:
             messages.error(request, 'This coupon not valid!')
             return redirect('checkout')
@@ -148,9 +139,7 @@ def checkout(request):
     else:
            
         return render(request,'user/checkout.html',context)
-
-
-
+    
 
 def placeorder(request):
     if request.method == 'POST':
@@ -181,7 +170,6 @@ def placeorder(request):
                
         # neworder.coupon = session_coupons
         
-
         # Calculate the cart total price 
         cart_items = Cart.objects.filter(user=user)
         cart_total_price = 0
@@ -199,9 +187,6 @@ def placeorder(request):
             product_price = item.variant.product.product_price
             cart_total_price += product_price * item.product_qty
         # print(coupon,'asdfghjkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')    
-        
-    
-        
         
         # session_coupon=request.session.get('coupon_session')
         # cart_total_price = cart_total_price - session_coupon
@@ -225,8 +210,7 @@ def placeorder(request):
                 order=neworder,
                 variant=item.variant,
                 price=item.variant.product.product_price,
-                quantity=item.product_qty,
-                
+                quantity=item.product_qty,   
             )
 
             # Decrease the product quantity from the available stock
@@ -242,11 +226,8 @@ def placeorder(request):
             # del request.session['coupon_session']
             # del request.session['coupon_id']
             
-    
             return JsonResponse({'status': "Your order has been placed successfully"})
     
-        
-        
     return redirect('checkout')
 
 
@@ -270,7 +251,5 @@ def razarypaycheck(request):
     # session_coupon=request.session.get('coupon_session')
     # total_price = total_price - session_coupon  
     
-      
- 
          
     return JsonResponse({'total_price': total_price})
