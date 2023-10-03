@@ -237,10 +237,9 @@ def ordercancel(request,cancel_id):
         variant=Variant.objects.filter(id=variant_id).first()
         # print(qty,order,variant,variant_id,'oooooooooooooooooooooooooooooooo')
         
-        
         cancelled=Order_cancelled.objects.create(user=request.user,order=order,options=options,reason=reason)
         
-        if order.payment_mode=='razopay' or order.payment_mode=='wallet':
+        if order.payment_mode=='razorpay' or order.payment_mode=='wallet':
             order=Order.objects.get(id=view_id)
             
             
@@ -271,52 +270,52 @@ def ordercancel(request,cancel_id):
                     wallet.save()
                 except Wallet.DoesNotExist:
                     wallet=Wallet.objects.create(user=request.user,wallet=total_price)
-            # udate the product quantity
-            variant.quantity=variant.quantity+qty
-            variant.save()
-            order_item_id=Itemstatus.objects.get(id=5)
+        # udate the product quantity
+        variant.quantity=variant.quantity+qty
+        variant.save()
+        order_item_id=Itemstatus.objects.get(id=5)
+        # all_order_item=OrderItem.objects.filter(order=view_id)
+        orderitem.orderitem_status=order_item_id
+        orderitem.save()
+        try:
+            # total item_status
             all_order_item=OrderItem.objects.filter(order=view_id)
-            orderitem.orderitem_status=order_item_id
-            orderitem.save()
-            try:
-                # total item_status
-                all_order_item=OrderItem.objects.filter(order=view_id)
-                # import pdb
-                # pdb.set_trace()
-                total_count = all_order_item.count()
-                
-                Pending=all_order_item.filter(orderitem_status__id=1).count()
-                Processing=all_order_item.filter(orderitem_status__id=2).count()
-                Shipped=all_order_item.filter(orderitem_status__id=3).count()
-                Delivered=all_order_item.filter(orderitem_status__id=4).count()
-                Cancelled=all_order_item.filter(orderitem_status__id=5).count()
-                Return=all_order_item.filter(orderitem_status__id=6).count()
-                
-                if total_count == Pending:
-                    total_value = 1
-                elif total_count == Processing:
-                    total_value = 2  
-                elif total_count == Shipped:
-                    total_value = 3
-                elif total_count == Delivered:
-                    total_value = 4
-                elif total_count == Cancelled:
-                    total_value = 5
-                elif total_count == Return:
-                    total_value = 6
-                else:
-                    total_value = 1    
+            # import pdb
+            # pdb.set_trace()
+            total_count = all_order_item.count()
             
-            except:
-                return redirect('orderview',view_id)
+            Pending=all_order_item.filter(orderitem_status__id=1).count()
+            Processing=all_order_item.filter(orderitem_status__id=2).count()
+            Shipped=all_order_item.filter(orderitem_status__id=3).count()
+            Delivered=all_order_item.filter(orderitem_status__id=4).count()
+            Cancelled=all_order_item.filter(orderitem_status__id=5).count()
+            Return=all_order_item.filter(orderitem_status__id=6).count()
             
-            change_all_items_status=Order.objects.get(id=view_id)
-            item_status_instance_all=Orderstatus.objects.get(id=total_value)
-            change_all_items_status.order_status=item_status_instance_all
-            change_all_items_status.save()
-            messages.success(request,'your order cancelled success')
-            return redirect('orderviewuser',view_id)
-        return redirect('userprofile')
+            if total_count == Pending:
+                total_value = 1
+            elif total_count == Processing:
+                total_value = 2  
+            elif total_count == Shipped:
+                total_value = 3
+            elif total_count == Delivered:
+                total_value = 4
+            elif total_count == Cancelled:
+                total_value = 5
+            elif total_count == Return:
+                total_value = 6
+            else:
+                total_value = 1    
+        
+        except:
+            return redirect('orderview',view_id)
+        
+        change_all_items_status=Order.objects.get(id=view_id)
+        item_status_instance_all=Orderstatus.objects.get(id=total_value)
+        change_all_items_status.order_status=item_status_instance_all
+        change_all_items_status.save()
+        messages.success(request,'your order cancelled success')
+        return redirect('orderviewuser',view_id)
+    return redirect('userprofile')
             
             
 def ordersearch(request):
