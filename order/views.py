@@ -63,11 +63,12 @@ def changestatus(request):
     orderitems.save()
     view_id = orderitems.order.id
     
+    
     try:
     # ṭotal item status
         all_order_item=OrderItem.objects.filter(order=view_id)
         
-        total_count=all_order_item()
+        total_count=all_order_item.count()
         
         Pending=all_order_item.filter(orderitem_status__id=1).count()
         Processing = all_order_item.filter(orderitem_status__id=2).count()
@@ -75,6 +76,8 @@ def changestatus(request):
         Delivered = all_order_item.filter(orderitem_status__id=4).count()
         Cancelled = all_order_item.filter(orderitem_status__id=5).count()
         Return = all_order_item.filter(orderitem_status__id=6).count()
+      
+        
         
         if total_count ==Pending:
             total_value==1
@@ -90,7 +93,7 @@ def changestatus(request):
             total_value=6
         else:
             total_value=1
-            
+         
     except:
         return redirect('orderview',view_id)
     
