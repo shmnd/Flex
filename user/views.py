@@ -28,33 +28,30 @@ from registration.models import CustomUser
 # Create your views here.
 @login_required(login_url='signin')
 def userprofile(request):
-    if request.user.is_authenticated:
-        user=CustomUser.objects.filter(email=request.user.email) 
-        address=Address.objects.filter(user=request.user,is_available=True)
-        cart_count=Cart.objects.filter(user=request.user).count()
-        wishlist_count=Wishlist.objects.filter(user=request.user).count()
-        last_order=Order.objects.filter(user=request.user).last()
-        order =Order.objects.filter(user=request.user) 
         
-        try:
-            wallet=wallet.objects.get(user=request.user)
-        except:
-            wallet=0
-            
-        context={
-            'user':user,
-            'address':address,
-            'wallet':wallet,
-            'cart_count':cart_count,
-            'wishlist_count':wishlist_count,
-            'order':order,
-            'last_order':last_order,        
-        }
-        return render(request,'user/userprofile/userprofile.html',context)
-    else:
-        messages.error(request,'user did not logged in')
-        return redirect('home')
+    user=CustomUser.objects.filter(email=request.user.email) 
+    address=Address.objects.filter(user=request.user,is_available=True)
+    cart_count=Cart.objects.filter(user=request.user).count()
+    wishlist_count=Wishlist.objects.filter(user=request.user).count()
+    last_order=Order.objects.filter(user=request.user).last()
+    order =Order.objects.filter(user=request.user) 
     
+    try:
+        wallet=wallet.objects.get(user=request.user)
+    except:
+        wallet=0
+        
+    context ={
+        'user1':user,
+        'address':address,
+        'wallet':wallet,
+        'cart_count':cart_count,
+        'wishlist_count':wishlist_count,
+        'order':order,
+        'last_order':last_order,        
+    }
+    return render(request,'user/userprofile/userprofile.html',context)
+
     
 
 
@@ -320,7 +317,7 @@ def editprofile(request):
         
         try:
             user=User.objects.get(emaill=request.user)
-            print(user)
+            print(user,'lhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
             user.first_name=first_name
             user.last_name=last_name
             user.email=emaill

@@ -52,6 +52,7 @@ def changestatus(request):
     
     if not request.user.is_superuser:
         return redirect('adminsignin')
+    
     orderitem_id = request.POST.get('orderitem_id')
     order_status = request.POST.get('status')
     order_variant = request.POST.get('variant_id')
@@ -76,8 +77,6 @@ def changestatus(request):
         Delivered = all_order_item.filter(orderitem_status__id=4).count()
         Cancelled = all_order_item.filter(orderitem_status__id=5).count()
         Return = all_order_item.filter(orderitem_status__id=6).count()
-      
-        
         
         if total_count ==Pending:
             total_value==1
@@ -104,7 +103,6 @@ def changestatus(request):
     
     messages.success(request,'status updated')
     return redirect('orderview',view_id)
-
 
 
 def returnorder(request,return_id):
