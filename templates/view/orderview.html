@@ -1,7 +1,7 @@
-{% extends 'adminside/basedashboard.html' %}
+{% extends 'admin/dashboardbase.html' %}
 {% block title %}order_view{% endblock %}
 {% load static %}
-{% block dashbody %}
+{% block body %}
 <style>
     .status {
         display: flex;
@@ -183,7 +183,7 @@
         {% endif %}
     </td>
     <td>
-        <form class="status-form" action="{% url 'change_status' %}" method="post">
+        <form class="status-form" action="{% url 'changestatus' %}" method="post">
             {% csrf_token %}
             <input type="hidden" value="{{ i.variant.id }}" name="variant_id">
             <input type="hidden" value="{{ i.id }}" name="orderitem_id">
@@ -211,20 +211,6 @@
     });
 </script>
 
-
-
-                            </tr>
-
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-
-
-        </div>
-    </div>
-</div>
 
 
 {% endblock %}

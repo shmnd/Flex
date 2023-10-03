@@ -192,37 +192,10 @@
                                   {% if cartitems %}
                                 <table class="table table-summary">
                                     
-                                    <tbody>{% for i in cartitems  %}
-                                        <tr>
-                                            <td><a href="#">{{i.variant.product.product_name}}</a></td>
-                                            
-
-                                            <td><a href="#">{{i.variant.size.size_chart}}</a></td>
-
-                                            <td><a href="#">{{i.variant.color.color_name}}</a></td>
-
-                                            <td><a href="#">{{i.product_qty}}</a></td>
-
-                                            <td><a href="#">{{i.variant.product.product_price}}</a></td>
-
-
-
-                                            {% comment %} <td></td>
-                                            <td><a href="#">{{i.product_qty}}</a></td> {% endcomment %}
-                                            {% comment %} {% if i.variant.product.offer %}
-                                            
-                                            {% with product_total=i.variant.product.product_price|mul:i.product_qty  offer_total=i.variant.product.offer.discount_amount|mul:i.product_qty %}
-                                            <td><span><del>${{i.variant.product.product_price |mul:i.product_qty}} </del> </span>${{ product_total|sub:offer_total }} </td>
-                                            {% endwith %}
-                                            {% else %}
-                                            <td>${{i.variant.product.product_price |mul:i.product_qty}}</td>
-                                            {% endif %} {% endcomment %}
-                                            
-                                        </tr>
-                                        {% endfor %}
+                                    
                                        
                                         <tr class="summary-subtotal">
-                                            {% if coupon and offer %}
+                                            {% comment %} {% if coupon and offer %}
                                             <tr>
                                                 <td>Subtotal:</td>
                                                 <td>${{total_price|add:all_offer}}</td>
@@ -268,7 +241,7 @@
                                                 {% else %}
                                                 <input type="hidden" name="" value="">
                                                 {% endif %}
-                                                {% endif %}
+                                                {% endif %} {% endcomment %}
                                                 {% if not offer and not coupon %}
                                                 <tr>
                                                     <td>Subtotal:</td>

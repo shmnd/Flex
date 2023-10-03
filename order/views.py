@@ -20,13 +20,13 @@ def orderlist(request):
         'order':order,
     }
     
-    return render(request,'admin/order.html')
+    return render(request,'admin/order.html',context)
 
 
 def orderview(request,view_id):
     
     try:
-        orderview=Order.objects.all(id=view_id)
+        orderview=Order.objects.get(id=view_id)
         address=Address.objects.get(id=orderview.address.id)
         products=OrderItem.objects.filter(order=view_id)
         variant_ids=[product.variant.id for product in products]
@@ -37,9 +37,9 @@ def orderview(request,view_id):
             'address':address,
             'products':products,
             'image':image,
-            'item_status_o':item_status_o,
-            
+            'item_status_o':item_status_o
         }
+        
         return render(request,'view/orderview.html',context)
     except Order.DoesNotExist:
         print('order does not exist')
@@ -51,7 +51,7 @@ def orderview(request,view_id):
 def changestatus(request):
     
     if not request.user.is_superuser:
-        return redirect('admin_login1')
+        return redirect('adminsignin')
     orderitem_id = request.POST.get('orderitem_id')
     order_status = request.POST.get('status')
     order_variant = request.POST.get('variant_id')
@@ -61,13 +61,12 @@ def changestatus(request):
 
     orderitems.orderitem_status = item_status_instance
     orderitems.save()
-    view_id= orderitems.order.id
+    view_id = orderitems.order.id
     
     try:
     # ṭotal item status
         all_order_item=OrderItem.objects.filter(order=view_id)
-          
-          
+        
         total_count=all_order_item()
         
         Pending=all_order_item.filter(orderitem_status__id=1).count()
@@ -101,7 +100,7 @@ def changestatus(request):
     change_all_item_status.save()
     
     messages.success(request,'status updated')
-    return redirect('order_view',view_id)
+    return redirect('orderview',view_id)
 
 
 
@@ -181,12 +180,12 @@ def returnorder(request,return_id):
     
     returnorder=Orderreturn.objects.create(user=request.user,order=order_id,options=options,reason=reason)
     order= Order.objects.filter(id=view_id).first()
-    if variant.product.offer:
-        total_price=variant.product.product_price*qty
-        offer_price=variant.product.offer.discount_amount*qty
-        total_price= total_price-offer_price
-    else:
-        total_price=variant.product.product_price*qty
+    # if variant.product.offer:
+    #     total_price=variant.product.product_price*qty
+    #     offer_price=variant.product.offer.discount_amount*qty
+    #     total_price= total_price-offer_price
+    # else:
+    total_price=variant.product.product_price*qty
     if order.return_total_price:
         pass
     else:
@@ -214,10 +213,10 @@ def ordercancel(request,cancel_id):
         view_id=orderitem_id.order.id
     except:
         return redirect('userprofile')
+    
     if request.method=='POST':
         options=request.POST.get('options')
         reason= request.POST.get('reason')
-        # print(options,'kkkkdddddddddddddddkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
     #  validation
     
         if options.strip()=='':
@@ -226,13 +225,20 @@ def ordercancel(request,cancel_id):
         if reason.strip()=='':
             messages.error(request,'reason must be added')
             return redirect('orderviewuser',view_id)
+        reason_checking=len(reason)
+        if not  reason_checking < 225:
+            messages.error(request, " reason want to minimum 3 words!")
+            return redirect('orderviewuser',view_id,)
         
         
         order=Order.objects.filter(id=view_id).first()
         qty=orderitem.quantity
         variant_id=orderitem.variant.id
         variant=Variant.objects.filter(id=variant_id).first()
-        cancelled=Order_cancelled.objects.create(user=request.user,order=order)
+        # print(qty,order,variant,variant_id,'oooooooooooooooooooooooooooooooo')
+        
+        
+        cancelled=Order_cancelled.objects.create(user=request.user,order=order,options=options,reason=reason)
         
         if order.payment_mode=='razopay' or order.payment_mode=='wallet':
             order=Order.objects.get(id=view_id)
@@ -269,7 +275,7 @@ def ordercancel(request,cancel_id):
             variant.quantity=variant.quantity+qty
             variant.save()
             order_item_id=Itemstatus.objects.get(id=5)
-            all_order_item=OrderItem.object.filter(order=view_id)
+            all_order_item=OrderItem.objects.filter(order=view_id)
             orderitem.orderitem_status=order_item_id
             orderitem.save()
             try:
@@ -317,7 +323,7 @@ def ordersearch(request):
     search=request.POST.get('search')
     if search is None or search.strip() == '':
         messages.error(request,'Filed cannot empty!')
-        return redirect('order_list')
+        return redirect('orderlist')
     order=Order.objects.filter(Q(user__first_name__icontains=search)| Q(created_at__icontains=search) |Q(total_price__icontains=search))
     context={'order':order,}
     if order:

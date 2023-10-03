@@ -12,7 +12,7 @@
                 <div class="row gx-3">
                     <div class="col-lg-4 col-md-6 me-auto">
                         <form action="{% url 'ordersearch' %}" method="POST">
-                            {% csrf_token %}
+                        {% csrf_token %}
                             <div class="input-group">
                                 <input type="text" placeholder="Search..." name="search" class="form-control" />
                                 <button type="submit" class="btn btn-primary"><i class="ti ti-search"></i></button>
@@ -103,6 +103,8 @@
                 </div>
             </div>
         </div>
+
+
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const statusSelect = document.getElementById('status-select');
@@ -112,6 +114,7 @@
                 });
             });
         </script>
+        
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const statusSelect = document.getElementById('status-selectt');

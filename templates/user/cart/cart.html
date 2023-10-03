@@ -156,10 +156,10 @@
 
                             <table class="table table-summary">
                                 <tbody>
-                                    <tr class="summary-subtotal">
+                                    {% comment %} <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
                                         <td>$<span id='Subtotal'>{{total_price}}</span></td>
-                                    </tr><!-- End .summary-subtotal -->
+                                    </tr><!-- End .summary-subtotal --> {% endcomment %}
                                     {% comment %} <tr class="summary-shipping">
                                         <td>Shipping:</td>
                                         <span>&nbsp;</span>
@@ -215,7 +215,7 @@
                                     
                                     {% comment %} ///////////////////////////////////////////////////////// {% endcomment %}
 
-                                    <tr class="summary-shipping-row">
+                                    {% comment %} <tr class="summary-shipping-row">
                                         <td>
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" id="free-shipping" name="shipping"
@@ -255,12 +255,12 @@
                                         <td>Estimate for Your Country<br> <a href="#">Change address</a>
                                         </td>
                                         <td>&nbsp;</td>
-                                    </tr><!-- End .summary-shipping-estimate -->  {% endcomment %}
+                                    </tr><!-- End .summary-shipping-estimate -->  {% endcomment %} 
 
                                     <tr class="summary-total">
                                         <td>Total:</td>
                                         <td>$<span id='grand_total'>{{total_price}}</span></td>
-                                    </tr><!-- End .summary-total -->
+                                    </tr><!-- End .summary-total --> 
                                 </tbody>
                             </table><!-- End .table table-summary -->
 
