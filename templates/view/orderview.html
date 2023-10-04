@@ -1,6 +1,6 @@
 {% extends 'admin/dashboardbase.html' %}
-{% block title %}order_view{% endblock %}
 {% load static %}
+{% block title %}order view{% endblock %}
 {% block body %}
 <style>
     .status {
@@ -113,7 +113,7 @@
                             </tr>
                             <tr></tr>
                             <tr>
-                                <td><strong>Ordder status</strong></td>
+                                <td><strong>Order status</strong></td>
                                 <td>:{{orderview.order_status.order_status}}</td>
                             </tr>
                             <br>
@@ -164,39 +164,39 @@
 
                         <!-- Loop through the items -->
 
-    <td>
-        {% if i.orderitem_status.item_status == 'Pending' %}
-        <span class="badge rounded-pill alert-secondary status-badge">
-            {{ i.orderitem_status.item_status }}</span>
-        {% elif i.orderitem_status.item_status == 'Processing' %}
-        <span class="badge rounded-pill alert-warning status-badge">
-            {{ i.orderitem_status.item_status }}</span>
-        {% elif i.orderitem_status.item_status == 'Shipped' %}
-        <span class="badge rounded-pill alert-primary status-badge">
-            {{ i.orderitem_status.item_status }}</span>
-        {% elif i.orderitem_status.item_status == 'Delivered' %}
-        <span class="badge rounded-pill alert-success status-badge">
-            {{ i.orderitem_status.item_status }}</span>
-        {% elif i.orderitem_status.item_status == 'Cancelled' or i.orderitem_status.item_status == 'Return' %}
-        <span class="badge rounded-pill alert-danger status-badge">
-            {{i.orderitem_status.item_status }}</span>
-        {% endif %}
-    </td>
-    <td>
-        <form class="status-form" action="{% url 'changestatus' %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" value="{{ i.variant.id }}" name="variant_id">
-            <input type="hidden" value="{{ i.id }}" name="orderitem_id">
-            <div class="col-lg-11 col-11 col-md-10">
-                <select class="form-select status-select" name="status">
-                    {% for item in item_status_o %}
-                    <option value="{{ item.id }}" {% if item.id == i.orderitem_status.id %}selected{% endif %}>
-                        {{ item.item_status }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </form>
-    </td>
+                            <td>
+                                {% if i.orderitem_status.item_status == 'Pending' %}
+                                <span class="badge rounded-pill alert-secondary status-badge">
+                                    {{ i.orderitem_status.item_status }}</span>
+                                {% elif i.orderitem_status.item_status == 'Processing' %}
+                                <span class="badge rounded-pill alert-warning status-badge">
+                                    {{ i.orderitem_status.item_status }}</span>
+                                {% elif i.orderitem_status.item_status == 'Shipped' %}
+                                <span class="badge rounded-pill alert-primary status-badge">
+                                    {{ i.orderitem_status.item_status }}</span>
+                                {% elif i.orderitem_status.item_status == 'Delivered' %}
+                                <span class="badge rounded-pill alert-success status-badge">
+                                    {{ i.orderitem_status.item_status }}</span>
+                                {% elif i.orderitem_status.item_status == 'Cancelled' or i.orderitem_status.item_status == 'Return' %}
+                                <span class="badge rounded-pill alert-danger status-badge">
+                                    {{i.orderitem_status.item_status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <form class="status-form" action="{% url 'changestatus' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ i.variant.id }}" name="variant_id">
+                                    <input type="hidden" value="{{ i.id }}" name="orderitem_id">
+                                    <div class="col-lg-11 col-11 col-md-10">
+                                        <select class="form-select status-select" name="status">
+                                            {% for item in item_status_o %}
+                                            <option value="{{ item.id }}" {% if item.id == i.orderitem_status.id %}selected{% endif %}>
+                                                {{ item.item_status }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </form>
+                            </td>
 
 {% endfor %}
 
@@ -212,5 +212,17 @@
 </script>
 
 
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
 
 {% endblock %}

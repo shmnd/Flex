@@ -38,9 +38,9 @@ def orderview(request,view_id):
             'products':products,
             'image':image,
             'item_status_o':item_status_o
-        }
-        
+        } 
         return render(request,'view/orderview.html',context)
+    
     except Order.DoesNotExist:
         print('order does not exist')
     except Address.DoesNotExist:

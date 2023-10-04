@@ -14,7 +14,7 @@ class UserOTP(models.Model):
 
 
 class CustomUser(User):
-    emails = models.CharField(max_length=10, blank=True)
+    emails = models.EmailField(max_length=20, blank=True)
 
     def __str__(self):
         return self.username

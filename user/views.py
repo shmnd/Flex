@@ -27,30 +27,33 @@ from registration.models import CustomUser
 
 # Create your views here.
 @login_required(login_url='signin')
+@never_cache
 def userprofile(request):
+    if request.user ==  None:
+        return redirect('signin')
+    else:
+        user=User.objects.filter(email=request.user) 
+        address=Address.objects.filter(user=request.user,is_available=True)
+        cart_count=Cart.objects.filter(user=request.user).count()
+        wishlist_count=Wishlist.objects.filter(user=request.user).count()
+        last_order=Order.objects.filter(user=request.user).last()
+        order =Order.objects.filter(user=request.user) 
         
-    user=CustomUser.objects.filter(email=request.user.email) 
-    address=Address.objects.filter(user=request.user,is_available=True)
-    cart_count=Cart.objects.filter(user=request.user).count()
-    wishlist_count=Wishlist.objects.filter(user=request.user).count()
-    last_order=Order.objects.filter(user=request.user).last()
-    order =Order.objects.filter(user=request.user) 
-    
-    try:
-        wallet=wallet.objects.get(user=request.user)
-    except:
-        wallet=0
-        
-    context ={
-        'user1':user,
-        'address':address,
-        'wallet':wallet,
-        'cart_count':cart_count,
-        'wishlist_count':wishlist_count,
-        'order':order,
-        'last_order':last_order,        
-    }
-    return render(request,'user/userprofile/userprofile.html',context)
+        try:
+            wallet=wallet.objects.get(user=request.user)
+        except:
+            wallet=0
+            
+        context ={
+            'user':user,
+            'address':address,
+            'wallet':wallet,
+            'cart_count':cart_count,
+            'wishlist_count':wishlist_count,
+            'order':order,
+            'last_order':last_order,        
+        }
+        return render(request,'user/userprofile/userprofile.html',context)
 
     
 
@@ -288,47 +291,52 @@ def viewaddress(request,view_id):
     return render(request,'user/userprofile/viewaddress.html',{'viewaddress':viewaddress})   
     
 
-def editprofile(request):
-    if request.method=='POST':
+def editprofile(request): 
+    
+    if request.method =='POST':  
+        print('dsssssssssssssssdddddddddddddddddddddddddd')  
         
         first_name=request.POST.get('first_name')
         last_name=request.POST.get('last_name')
-        emaill=request.POST.get('email')
+        email=request.POST.get('email')
         
-        try:            
-            user = CustomUser.objects.get(emails=request.user)
+        try:          
+            print('jjjjjjjjjjjjjjjjjjjj')  
+            user = User.objects.get(email=request.user)
+            print(user,'hhhhhhhhhhhhhhhhhhhhhhhhhhh')
         except:
             return redirect('userprofile')
 
-        print('llllllllllllllllllllllllllllllllll')
             
         if first_name.strip() == '' or last_name.strip() == '':
             messages.error(request, 'First or Lastname is empty')
             return render(request,'user/userprofile/editprofile.html',{'user':user})
         
-        if emaill.strip()=='':
+        if email.strip()=='':
             messages.error(request,'email cannot be empty')
             return render(request,'user/userprofile/editprofile.html',{'user':user})
-        email_check=validateemail(emaill)
+        email_check=validateemail(email)
         
         if email_check is False:
             messages.error(request,'email not valid!')
             return render(request,'user/userprofile/editprofile.html',{'user':user})
         
         try:
-            user=User.objects.get(emaill=request.user)
+            user=User.objects.get(email=request.user)
             print(user,'lhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
             user.first_name=first_name
             user.last_name=last_name
-            user.email=emaill
+            user.email=email
             user.save()
             messages.success(request,'userprofile updated successfull')
             return redirect('userprofile')
         except:
             messages.error(request,'User does not exist')
-    # print('yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+            
     try:
-        user = CustomUser.objects.get(emails=request.user.email)
+        
+        user = User.objects.get(email=request.user)
+        print(user,'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
 
     except:
          return redirect('userprofile')

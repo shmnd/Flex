@@ -118,10 +118,10 @@
 									<a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders"
 										role="tab" aria-controls="tab-orders" aria-selected="false">ORDERS</a>
 								</li>
-								<li class="nav-item">
+								{% comment %} <li class="nav-item">
 									<a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads"
 										role="tab" aria-controls="tab-downloads" aria-selected="false">WALLET</a>
-								</li>
+								</li> {% endcomment %}
 								<li class="nav-item">
 									<a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
 										role="tab" aria-controls="tab-address" aria-selected="false">ADDRESSES</a>
@@ -142,7 +142,7 @@
 
 								<div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
 									aria-labelledby="tab-dashboard-link">
-									{% if user %}
+									{% if user1 %}
 									<h5> HELLO </h5>
 									<h5 style="text-transform: uppercase;">{{ user.first_name }}
 									</h5>
@@ -260,7 +260,7 @@
 								</div><!-- End .tab-pane -->
 								
 								
-
+										{% comment %} 
 										<div class="tab-pane fade" id="tab-downloads" role="tabpanel"
 											aria-labelledby="tab-downloads-link">
 
@@ -272,21 +272,21 @@
 														<table>
 															<tr>
 																<td><strong>First Name</strong></td>
-																<td>:{{user.first_name}}</td>
+																<td>:{{user1.first_name}}</td>
 															</tr>
 															<tr>
 																<td><strong>Last Name</strong></td>
-																<td>:{{user.last_name}}</td>
+																<td>:{{user1.last_name}}</td>
 															</tr>
-															{% comment %} <tr>
+															 <tr>
 																<td><strong>Phone Number</strong></td>
 																<td>:{{user.phone_number}}</td>
-															</tr> {% endcomment %}
+															</tr> 
 															<tr>
 																<td><strong>Email</strong></td>
-																<td>:{{user.email}}</td>
+																<td>:{{user1.email}}</td>
 															</tr>
-															{% if wallet %}
+															 {% if wallet %}
 															<tr>
 																<td><strong>Wallet Amount</strong></td>
 																<td> <b>: $ {{ wallet.wallet }}</td>
@@ -296,7 +296,7 @@
 																<td><strong>Wallet Amount</strong></td>
 																<td>:$0</td>
 															</tr>
-															{% endif %}
+															{% endif %} 
 														</table>
 
 														
@@ -306,7 +306,7 @@
 											</div><!-- End .col-lg-6 -->
 
 											
-										</div><!-- .End .tab-pane -->
+										</div><!-- .End .tab-pane --> {% endcomment %}
 
 										<div class="tab-pane fade" id="tab-address" role="tabpanel"
 											aria-labelledby="tab-address-link">
@@ -413,7 +413,9 @@
 																<td><strong>Last Name</strong></td>
 																<td>:{{user.last_name}}</td>
 															</tr>
+
 															
+
 															<tr>
 																<td><strong>Email</strong></td>
 																<td>:{{user.email}}</td>
