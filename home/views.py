@@ -17,8 +17,9 @@ from wishlist.models import Wishlist
 
 
 def home(request):
-    # if  request.user.is_superuser:
-    #     return redirect('dashboard')
+    if  request.user.is_superuser:
+        messages.error(request,'admin cannot acess the userside')
+        return redirect('adminsignin') 
     
     categories=category.objects.all()
     products=Product.objects.all()
