@@ -114,13 +114,13 @@ def shopsort(request):
     
     variant_images=VariantImage.objects.filter(variant__product__is_available=True)
     
-    if name=='aplus':
+    if name=='AtoZ':
         variant_images=variant_images.order_by('variant__product__product_name')
-    elif name == 'aminus':
+    elif name == 'ZtoA':
         variant_images = variant_images.order_by('-variant__product__product_name')
-    elif name == 'priceplus':
+    elif name == 'LtoH':
         variant_images = variant_images.order_by('variant__product__product_price')
-    elif name == 'priceminus':
+    elif name == 'HtoL':
         variant_images = variant_images.order_by('-variant__product__product_price')
     else:
         variant_images = variant_images.order_by('variant__product')
