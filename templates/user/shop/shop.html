@@ -2,7 +2,7 @@
 {% block title %}SHOP{% endblock title %}
 {% block body %}
 {% load static %}
-
+{% load mathfilters %}
 <style>.page-header {
     background-image: url('{% static "template/assets/images/page-header-bg.jpg" %}');
 }
@@ -52,347 +52,188 @@
 
             <div class="products">
                 <div class="row">
+                    {% if variant_images %}
+                    {% for c in variant_images %}
                     <div class="col-6 col-md-4 col-lg-4 col-xl-3">
                         <div class="product">
                             <figure class="product-media">
                                 <span class="product-label label-new">New</span>
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-1.jpg" alt="Product image" class="product-image">
+                                <a href="{% url "productshow" c.variant.product.id c.variant.id %}">
+                                    <img src="{{ c.imgae.url }}" alt="Product image" class="product-image">
                                 </a>
 
                                 <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                    <a href="" class="btn-product-icon btn-wishlist btn-expandable wish-list" data-product_id="{{ c.variant.id }}"><span>add to wishlist</span></a>
                                 </div><!-- End .product-action -->
 
                                 <div class="product-action action-icon-top">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
-                                    <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
+                                    <input readonly class='mtext-104 cl3 txt-center num-product' type='hidden' name='num-product' value='1' id='qty-input'>
+                                    <input type='hidden' value='{{ c.variant.size.id }} id='size-i'>
+                                    <a href="" data-product-id={{ c.variant.id }} class="btn-product btn-cart"><span>add to cart</span></a>
                                 </div><!-- End .product-action -->
                             </figure><!-- End .product-media -->
 
                             <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Women</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Nunc dignissim risus</a></h3><!-- End .product-title -->
+                
+                                <h3 class="product-title"><a href="{% url "productshow" c.variant.product.id c.variant.id %}">{{ c.variant.product.product_name }}</a></h3><!-- End .product-title -->
+                                {% if c.variant.product.offer %}
                                 <div class="product-price">
-                                    $50.00
+                                    <del style="color:rgb(97, 97, 226);">₹{{ c.variant.product.product_price }}</del>  <span style="color:white;"></span> <span style="color: black;">₹ {{ c.variant.product.product_price | sub:c.variant.product.offer.discount_amount }}</span>
                                 </div><!-- End .product-price -->
+                                {% else %}
+                                <div class="product-price">
+                                    <del style="color:rgb(97, 97, 226);">₹{{ c.variant.product.product_price }}</del>  <span style="color:white;">--</span> <span style="color: black;"></span>
+                                </div><!-- End .product-price -->
+                                {% endif %}
+
                                 <div class="ratings-container">
                                     <div class="ratings">
-                                        <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
+                                        {% for rating  in ratings  %}
+                                        {% if c.variant.product.id == rating.id %}
+                                        {% if rating.avg_rating >= 4.5 %}
+                                            <div class='ratings-val' style='width:100%;'>
+                                        {% elif rating.avg_rating >=3.5 %}
+                                            <div class='ratings-val' style='width:80%;'>
+                                        {% elif rating.avg_rating >= 2.5 %}
+                                            <div class='ratings-val' style='width:60%;'>
+                                        {% elif rating.avg_rating >= 1.5 %}
+                                            <div class='ratings-val' style='width:40%;'>
+                                        {% elif rating.avg_rating >=0.5 %}
+                                            <div class='ratings-val' style='width:20%;'>
+                                        {% else %}
+                                        {% endif %}
+                                        {% endif %}
+                                        {% endfor %}
                                     </div><!-- End .ratings -->
                                     <span class="ratings-text">( 0 Reviews )</span>
                                 </div><!-- End .rating-container -->
 
                                 <div class="product-nav product-nav-dots">
-                                    <a href="#" style="background: #cc9966;"><span class="sr-only">Color name</span></a>
-                                    <a href="#" class="active" style="background: #ebebeb;"><span class="sr-only">Color name</span></a>
+                                    <a href="#" id ='colorLink {{ forloop.counter }}'><span class="sr-only">Color name</span></a>
+                                        <script>
+                                            var colorCode='{{ c.variant.color.color_code }}';
+                                            var colorLink=document.getElementById('colorLink {{forloop.counter}}');
+                                            colorLink.style.background=colorCode;
+                                        </script>
                                 </div><!-- End .product-nav -->
                             </div><!-- End .product-body -->
                         </div><!-- End .product -->
                     </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
+                    {% endfor %}
 
-                    <div class="col-6 col-md-4 col-lg-4 col-xl-3">
-                        <div class="product">
-                            <figure class="product-media">
-                                <a href="product.html">
-                                    <img src="assets/images/products/product-2.jpg" alt="Product image" class="product-image">
-                                </a>
-
-                                <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                </div><!-- End .product-action -->
-
-                                <div class="product-action action-icon-top">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
-                                    <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
-                                </div><!-- End .product-action -->
-                            </figure><!-- End .product-media -->
-
-                            <div class="product-body">
-                                <div class="product-cat">
-                                    <a href="#">Accessories</a>
-                                </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html">Cras ornare tristique</a></h3><!-- End .product-title -->
-                                <div class="product-price">
-                                    $32.00
-                                </div><!-- End .product-price -->
-                                <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                    </div><!-- End .ratings -->
-                                    <span class="ratings-text">( 11 Reviews )</span>
-                                </div><!-- End .rating-container -->
-                            </div><!-- End .product-body -->
-                        </div><!-- End .product -->
-                    </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
-
-                    
-
-                    
-
-                    
+                </div> <!-- End .row -->
+                {% else %}
+                <h5 style="text-align: center;">Search not found</h5>
+                {% endif %}
 
                 <div class="load-more-container text-center">
-                    <a href="{% url "shop" %}" class="btn btn-outline-darker btn-load-more">More Products <i class="icon-refresh"></i></a>
+                    <form action="{% url 'shop' %}" method="GET" >
+                        <input type ="hidden" value="More" name="Moreproducts">
+                        <button type="submit" class="btn btn-outline-darker btn-load-more">
+                            More Products <i class="icon-refresh"></i>
+                        </button>
+                    </form>
                 </div><!-- End .load-more-container -->
             </div><!-- End .products -->
-
-            <div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
-            <aside class="sidebar-shop sidebar-filter">
-                <div class="sidebar-filter-wrapper">
-                    <div class="widget widget-clean">
-                        <label><i class="icon-close"></i>Filters</label>
-                        <a href="#" class="sidebar-filter-clear">Clean All</a>
-                    </div><!-- End .widget -->
-                    <div class="widget widget-collapsible">
-                        <h3 class="widget-title">
-                            <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
-                                Category
-                            </a>
-                        </h3><!-- End .widget-title -->
-
-                        <div class="collapse show" id="widget-1">
-                            <div class="widget-body">
-                                <div class="filter-items filter-items-count">
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="cat-1">
-                                            <label class="custom-control-label" for="cat-1">Dresses</label>
-                                        </div><!-- End .custom-checkbox -->
-                                        <span class="item-count">3</span>
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="cat-2">
-                                            <label class="custom-control-label" for="cat-2">T-shirts</label>
-                                        </div><!-- End .custom-checkbox -->
-                                        <span class="item-count">0</span>
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="cat-3">
-                                            <label class="custom-control-label" for="cat-3">Bags</label>
-                                        </div><!-- End .custom-checkbox -->
-                                        <span class="item-count">4</span>
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="cat-4">
-                                            <label class="custom-control-label" for="cat-4">Jackets</label>
-                                        </div><!-- End .custom-checkbox -->
-                                        <span class="item-count">2</span>
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="cat-5">
-                                            <label class="custom-control-label" for="cat-5">Shoes</label>
-                                        </div><!-- End .custom-checkbox -->
-                                        <span class="item-count">2</span>
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="cat-6">
-                                            <label class="custom-control-label" for="cat-6">Jumpers</label>
-                                        </div><!-- End .custom-checkbox -->
-                                        <span class="item-count">1</span>
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="cat-7">
-                                            <label class="custom-control-label" for="cat-7">Jeans</label>
-                                        </div><!-- End .custom-checkbox -->
-                                        <span class="item-count">1</span>
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="cat-8">
-                                            <label class="custom-control-label" for="cat-8">Sportwear</label>
-                                        </div><!-- End .custom-checkbox -->
-                                        <span class="item-count">0</span>
-                                    </div><!-- End .filter-item -->
-                                </div><!-- End .filter-items -->
-                            </div><!-- End .widget-body -->
-                        </div><!-- End .collapse -->
-                    </div><!-- End .widget -->
-
-                    <div class="widget widget-collapsible">
-                        <h3 class="widget-title">
-                            <a data-toggle="collapse" href="#widget-2" role="button" aria-expanded="true" aria-controls="widget-2">
-                                Size
-                            </a>
-                        </h3><!-- End .widget-title -->
-
-                        <div class="collapse show" id="widget-2">
-                            <div class="widget-body">
-                                <div class="filter-items">
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="size-1">
-                                            <label class="custom-control-label" for="size-1">XS</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="size-2">
-                                            <label class="custom-control-label" for="size-2">S</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" checked id="size-3">
-                                            <label class="custom-control-label" for="size-3">M</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" checked id="size-4">
-                                            <label class="custom-control-label" for="size-4">L</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="size-5">
-                                            <label class="custom-control-label" for="size-5">XL</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="size-6">
-                                            <label class="custom-control-label" for="size-6">XXL</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-                                </div><!-- End .filter-items -->
-                            </div><!-- End .widget-body -->
-                        </div><!-- End .collapse -->
-                    </div><!-- End .widget -->
-
-                    <div class="widget widget-collapsible">
-                        <h3 class="widget-title">
-                            <a data-toggle="collapse" href="#widget-3" role="button" aria-expanded="true" aria-controls="widget-3">
-                                Colour
-                            </a>
-                        </h3><!-- End .widget-title -->
-
-                        <div class="collapse show" id="widget-3">
-                            <div class="widget-body">
-                                <div class="filter-colors">
-                                    <a href="#" style="background: #b87145;"><span class="sr-only">Color Name</span></a>
-                                    <a href="#" style="background: #f0c04a;"><span class="sr-only">Color Name</span></a>
-                                    <a href="#" style="background: #333333;"><span class="sr-only">Color Name</span></a>
-                                    <a href="#" class="selected" style="background: #cc3333;"><span class="sr-only">Color Name</span></a>
-                                    <a href="#" style="background: #3399cc;"><span class="sr-only">Color Name</span></a>
-                                    <a href="#" style="background: #669933;"><span class="sr-only">Color Name</span></a>
-                                    <a href="#" style="background: #f2719c;"><span class="sr-only">Color Name</span></a>
-                                    <a href="#" style="background: #ebebeb;"><span class="sr-only">Color Name</span></a>
-                                </div><!-- End .filter-colors -->
-                            </div><!-- End .widget-body -->
-                        </div><!-- End .collapse -->
-                    </div><!-- End .widget -->
-
-                    <div class="widget widget-collapsible">
-                        <h3 class="widget-title">
-                            <a data-toggle="collapse" href="#widget-4" role="button" aria-expanded="true" aria-controls="widget-4">
-                                Brand
-                            </a>
-                        </h3><!-- End .widget-title -->
-
-                        <div class="collapse show" id="widget-4">
-                            <div class="widget-body">
-                                <div class="filter-items">
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="brand-1">
-                                            <label class="custom-control-label" for="brand-1">Next</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="brand-2">
-                                            <label class="custom-control-label" for="brand-2">River Island</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="brand-3">
-                                            <label class="custom-control-label" for="brand-3">Geox</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="brand-4">
-                                            <label class="custom-control-label" for="brand-4">New Balance</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="brand-5">
-                                            <label class="custom-control-label" for="brand-5">UGG</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="brand-6">
-                                            <label class="custom-control-label" for="brand-6">F&F</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="brand-7">
-                                            <label class="custom-control-label" for="brand-7">Nike</label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
-
-                                </div><!-- End .filter-items -->
-                            </div><!-- End .widget-body -->
-                        </div><!-- End .collapse -->
-                    </div><!-- End .widget -->
-
-                    <div class="widget widget-collapsible">
-                        <h3 class="widget-title">
-                            <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true" aria-controls="widget-5">
-                                Price
-                            </a>
-                        </h3><!-- End .widget-title -->
-
-                        <div class="collapse show" id="widget-5">
-                            <div class="widget-body">
-                                <div class="filter-price">
-                                    <div class="filter-price-text">
-                                        Price Range:
-                                        <span id="filter-price-range"></span>
-                                    </div><!-- End .filter-price-text -->
-
-                                    <div id="price-slider"></div><!-- End #price-slider -->
-                                </div><!-- End .filter-price -->
-                            </div><!-- End .widget-body -->
-                        </div><!-- End .collapse -->
-                    </div><!-- End .widget -->
-                </div><!-- End .sidebar-filter-wrapper -->
-            </aside><!-- End .sidebar-filter -->
         </div><!-- End .container -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $('.btn-cart').click(function (e){
+        e.preventDefault();
+
+        var product_id= $(this).data('product_id');
+        var add_qty = $('#qty_input').val();
+        var add_size =$('#size-input').val();
+
+        console.log(product_id,add_qty,add_size,'kkkkkkkkkkkkk')
+        $.ajax({
+            method:'POST',
+            url:"{% url 'addcart' %}",
+            data:{
+                'variant_id':product_id,
+                'add_size':add_size,
+                'add_qty':add_qty,
+                csrfmiddlewaretoken:'{{ csrf_token }}'   
+            },
+            success:  function (response){
+                console.log(response);
+
+                if (response.status ==='No such product found' || response.status==='Only few quantity available' || response.status === 'Product already in cart' ){
+                    swal.fire("Error", response.status,"error");
+                    $('.cartdata').load(location.href + ".cartdata");
+                } 
+                else if(response.status ==== 'Product added successfully'){
+                    swal.fire("",response.status,"success");
+                    $('.cartdata').load(location.href + " .cartdata");
+                }
+                else if (response.status=== 'You are not login please Login to continue'){
+                    swal.fire("",response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                }
+                else if (response.status === 'Sorry this variant is not available'){
+                    swal.fire("",response.status, "warning")
+                }
+                else{
+                    swal("Error",response.status,"error");
+                    $('.cartdata').load(location.href + " .cartdata")
+                }
+
+            }
+        })
+    })
+</script>
+
+<script>
+    $('.btn-cart').click(function (e){
+        e.preventDefault();
+
+        var product_id= $(this).data('product_id');
+        var add_qty = $('#qty_input').val();
+        var add_size =$('#size-input').val();
+
+        console.log(product_id,add_qty,add_size,'kkkkkkkkkkkkk')
+        $.ajax({
+            method:'POST',
+            url:"{% url 'addcart' %}",
+            data:{
+                'variant_id':product_id,
+                'add_size':add_size,
+                'add_qty':add_qty,
+                csrfmiddlewaretoken:'{{ csrf_token }}'   
+            },
+            success:  function (response){
+                console.log(response);
+
+                if (response.status ==='No such product found' || response.status==='Only few quantity available' || response.status === 'Product already in cart' ){
+                    swal.fire("Error", response.status,"error");
+                    $('.cartdata').load(location.href + ".cartdata");
+                } 
+                else if(response.status ==== 'Product added successfully'){
+                    swal.fire("",response.status,"success");
+                    $('.cartdata').load(location.href + " .cartdata");
+                }
+                else if (response.status=== 'You are not login please Login to continue'){
+                    swal.fire("",response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                }
+                else if (response.status === 'Sorry this variant is not available'){
+                    swal.fire("",response.status, "warning")
+                }
+                else{
+                    swal("Error",response.status,"error");
+                    $('.cartdata').load(location.href + " .cartdata")
+                }
+
+            }
+        })
+    })
+</script>
+
+
 
 {% endblock  %} 
