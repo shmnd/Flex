@@ -89,20 +89,19 @@
                                 <div class="ratings-container">
                                     <div class="ratings">
                                         {% for rating  in ratings  %}
-                                        {% if c.variant.product.id == rating.id %}
-                                        {% if rating.avg_rating >= 4.5 %}
-                                            <div class='ratings-val' style='width:100%;'>
-                                        {% elif rating.avg_rating >=3.5 %}
-                                            <div class='ratings-val' style='width:80%;'>
-                                        {% elif rating.avg_rating >= 2.5 %}
-                                            <div class='ratings-val' style='width:60%;'>
-                                        {% elif rating.avg_rating >= 1.5 %}
-                                            <div class='ratings-val' style='width:40%;'>
-                                        {% elif rating.avg_rating >=0.5 %}
-                                            <div class='ratings-val' style='width:20%;'>
-                                        {% else %}
-                                        {% endif %}
-                                        {% endif %}
+                                            {% if c.variant.product.id == rating.id %}
+                                                {% if rating.avg_rating >= 4.5 %}
+                                                    <div class='ratings-val' style='width:100%;'></div>
+                                                {% elif rating.avg_rating >= 3.5 %}
+                                                    <div class='ratings-val' style='width:80%;'></div>
+                                                {% elif rating.avg_rating >= 2.5 %}
+                                                    <div class='ratings-val' style='width:60%;'></div>
+                                                {% elif rating.avg_rating >= 1.5 %}
+                                                    <div class='ratings-val' style='width:40%;'></div>
+                                                {% else %}
+                                                    <div class='ratings-val' style='width:20%;'></div>
+                                                {% endif %}
+                                            {% endif %}
                                         {% endfor %}
                                     </div><!-- End .ratings -->
                                     <span class="ratings-text">( 0 Reviews )</span>
@@ -188,32 +187,32 @@
     })
 </script>
 
+{% comment %} wishlist ajax {% endcomment %}
+
 <script>
-    $('.btn-cart').click(function (e){
+    $('.wish-list').click(function (e){
         e.preventDefault();
 
         var product_id= $(this).data('product_id');
-        var add_qty = $('#qty_input').val();
         var add_size =$('#size-input').val();
 
-        console.log(product_id,add_qty,add_size,'kkkkkkkkkkkkk')
+        console.log(product_id,add_size,'9999999999999999')
         $.ajax({
             method:'POST',
-            url:"{% url 'addcart' %}",
+            url:"{% url 'add_wishlist1' %}",
             data:{
                 'variant_id':product_id,
-                'add_size':add_size,
-                'add_qty':add_qty,
+                'add_size':add_size,.
                 csrfmiddlewaretoken:'{{ csrf_token }}'   
             },
             success:  function (response){
                 console.log(response);
 
-                if (response.status ==='No such product found' || response.status==='Only few quantity available' || response.status === 'Product already in cart' ){
+                if (response.status ==='No such product found' || response.status==='Only few quantity available' || response.status === 'Product already in wishlist' ){
                     swal.fire("Error", response.status,"error");
                     $('.cartdata').load(location.href + ".cartdata");
                 } 
-                else if(response.status ==== 'Product added successfully'){
+                else if(response.status ==== 'Product added successfully in wishlist'){
                     swal.fire("",response.status,"success");
                     $('.cartdata').load(location.href + " .cartdata");
                 }
