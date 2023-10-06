@@ -6,13 +6,14 @@ from category.models import category
 from cart.models import Cart
 from wishlist.models import Wishlist
 
+
 # Create your views here.
 
 
 def shop(request):
     variant_images=(VariantImage.objects.filter(variant__product__is_available=True)
                     .order_by('variant__product').distinct('variant__product'))
-    ratings=Product.objects.annotate(avg_rating=Avg('review__rating'))
+    ratings=Product.objects.annotate(avg_rating=Avg('reviews__rating'))
     catergory_filter=category.objects.filter(is_available=True)
     size_filter=Size.objects.filter(is_available=True)
     color_filter=Color.objects.filter(is_available=True)
@@ -34,7 +35,7 @@ def shop(request):
         
     }
     
-    return render(request,'user/shop/shop.html')
+    return render(request,'user/shop/shop.html',context)
 
 def shopfilter(request):
     

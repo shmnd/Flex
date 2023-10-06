@@ -56,7 +56,7 @@
 
                     {% for c in variant_images %}
                     <div class="col-6 col-md-4 col-lg-4 col-xl-3">
-                        
+
                         <div class="product">
                             <figure class="product-media">
                                 <span class="product-label label-new">New</span>
@@ -268,7 +268,7 @@
                                                 <input type="checkbox" value="{{ category.id }}" name="categoryfilter" class="custom-control-input" id="cat-{{ forloop.counter }}">
                                                 <label class="custom-control-label" for="cat-{{ forloop.counter }}">{{ category.categories }}</label>
                                             </div><!-- End .custom-checkbox -->
-                                            <span class="item-count">3</span>
+                                            <span class="item-count"></span>
                                         </div><!-- End .filter-item -->
                                     {% endfor %}
                                     <script>
@@ -310,7 +310,7 @@
                                                 <input type="checkbox" value="{{ size.id }}" name="sizefilter" class="custom-control-input" id="cat-{{ forloop.counter }}">
                                                 <label class="custom-control-label" for="cat-{{ forloop.counter }}">{{ size.size_chart }}</label>
                                             </div><!-- End .custom-checkbox -->
-                                            <span class="item-count">3</span>
+                                            <span class="item-count"></span>
                                         </div><!-- End .filter-item -->
                                     {% endfor %}
 
@@ -352,7 +352,7 @@
                                                 <input type="checkbox" value="{{ color.id }}" name="colorfilter" class="custom-control-input color-checkbox" id="color-{{ forloop.counter }}">
                                                 <label class="custom-control-label" for="color-{{ forloop.counter }}"><a class="{% if color.color_code == '#cc3333' %}selected{% endif %}" style="background {{ color.color_code }};"><a href=""></a></label>
                                             </div><!-- End .custom-checkbox -->
-                                            <span class="item-count">3</span>
+                                            <span class="item-count"></span>
                                         </div><!-- End .filter-item -->
                                     {% endfor %}
 
