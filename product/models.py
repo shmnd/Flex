@@ -1,4 +1,3 @@
-from collections.abc import Iterable
 from django.db import models
 from brand.models import Brand
 from category.models import category
@@ -31,7 +30,6 @@ class Color(models.Model):
     def __str__(self):
         return self.color_name
 
-
 # product 
 class Product(models.Model):
     product_name=models.CharField(unique=True,max_length=50)
@@ -41,11 +39,28 @@ class Product(models.Model):
     brand=models.ForeignKey(Brand,on_delete=models.CASCADE)
     slug=models.SlugField(max_length=250,unique=True)
     is_available=models.BooleanField(default=True)
-    # quantity(stock)
-    # stock=models.PositiveIntegerField(default=0)
+
     
     def __str__(self):
         return self.product_name
+
+class ProductReview(models.Model):
+    RATING_CHOICES=(
+        (1,'1 Star'),
+        (2,'2 Star'),
+        (3,'3 Star'),
+        (4,'4 Star'),
+        (5,'5 Star'),
+    )
+
+    product= models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    rating=models.PositiveBigIntegerField(choices=RATING_CHOICES)
+    review_text=models.TextField()
+    name=models.CharField(max_length=50)
+    email=models.EmailField()
+    created_at=models.DateTimeField(auto_now_add=True)
+    
+
     
 
     
