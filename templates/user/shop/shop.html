@@ -53,8 +53,10 @@
             <div class="products">
                 <div class="row">
                     {% if variant_images %}
+
                     {% for c in variant_images %}
                     <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                        
                         <div class="product">
                             <figure class="product-media">
                                 <span class="product-label label-new">New</span>
@@ -234,5 +236,159 @@
 </script>
 
 
+<!-- Add this before the closing </body> tag of your HTML -->
+<script src="https://unpkg.com/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
+            <aside class="sidebar-shop sidebar-filter">
+                <div class="sidebar-filter-wrapper">
+                    <div class="widget widget-clean">
+                        <label><i class="icon-close"></i>Filters</label>
+                        <a href="{% url "shop" %}" class="sidebar-filter-clear">Clean All</a>
+                    </div><!-- End .widget -->
+
+                <form action="{% url "shopfilter" %}" method="POST">
+                    {% csrf_token %}
+                    <div class="widget widget-collapsible">
+                        <h3 class="widget-title">
+                            <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
+                                Category
+                            </a>
+                        </h3><!-- End .widget-title -->
+
+                        <div class="collapse show" id="widget-1">
+                            <div class="widget-body">
+                                <div class="filter-items filter-items-count">
+
+                                    <!-- Your category checkbox rendering code -->
+                                    {% for category in categoryfilter %}
+                                        <div class="filter-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" value="{{ category.id }}" name="categoryfilter" class="custom-control-input" id="cat-{{ forloop.counter }}">
+                                                <label class="custom-control-label" for="cat-{{ forloop.counter }}">{{ category.categories }}</label>
+                                            </div><!-- End .custom-checkbox -->
+                                            <span class="item-count">3</span>
+                                        </div><!-- End .filter-item -->
+                                    {% endfor %}
+                                    <script>
+                                        $(document).ready(function() {
+                                            // When a category checkbox is clicked
+                                            $(".cat-checkbox").click(function() {
+                                                // Uncheck all other category checkboxes
+                                                if ($(this).prop("checked")) {
+                                                    // Only uncheck other category checkboxes if the current one is checked
+                                                    $(".cat-checkbox").not(this).prop("checked", false);
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                
+                                </div><!-- End .filter-items -->
+                            </div><!-- End .widget-body -->
+                        </div><!-- End .collapse -->
+                    </div><!-- End .widget -->
+
+                    {% comment %} widgett 2 {% endcomment %}
+
+                    <div class="widget widget-collapsible">
+                        <h3 class="widget-title">
+                            <a data-toggle="collapse" href="#widget-2" role="button" aria-expanded="true" aria-controls="widget-2">
+                                Size
+                            </a>
+                        </h3><!-- End .widget-title -->
+
+                        <div class="collapse show" id="widget-2">
+                            <div class="widget-body">
+                                <div class="filter-items">
+                                    <!-- Include jQuery -->
+
+                                    <!-- Your checkbox rendering code -->
+                                    {% for size in size_filter %}
+                                        <div class="filter-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" value="{{ size.id }}" name="sizefilter" class="custom-control-input" id="cat-{{ forloop.counter }}">
+                                                <label class="custom-control-label" for="cat-{{ forloop.counter }}">{{ size.size_chart }}</label>
+                                            </div><!-- End .custom-checkbox -->
+                                            <span class="item-count">3</span>
+                                        </div><!-- End .filter-item -->
+                                    {% endfor %}
+
+                                    <!-- JavaScript to handle checkbox behavior -->
+                                    <script>
+                                        $(document).ready(function() {
+                                            // When a size checkbox is clicked
+                                            $(".size-checkbox").click(function() {
+                                                // Uncheck all other checkboxes
+                                                $(".size-checkbox").not(this).prop("checked", false);
+                                            });
+                                        });
+                                    </script>
+                                
+                                </div><!-- End .filter-items -->
+                            </div><!-- End .widget-body -->
+                        </div><!-- End .collapse -->
+                    </div><!-- End .widget -->
+
+
+                    {% comment %} widgett 3 {% endcomment %}
+
+                    <div class="widget widget-collapsible">
+                        <h3 class="widget-title">
+                            <a data-toggle="collapse" href="#widget-3" role="button" aria-expanded="true" aria-controls="widget-3">
+                                Color filter
+                            </a>
+                        </h3><!-- End .widget-title -->
+
+                        <div class="collapse show" id="widget-3">
+                            <div class="widget-body">
+                                <div class="filter-colors">
+                                    <!-- Include jQuery -->
+
+                                    <!-- Your checkbox rendering code -->
+                                    {% for color in color_filter %}
+                                        <div class="filter-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" value="{{ color.id }}" name="colorfilter" class="custom-control-input color-checkbox" id="color-{{ forloop.counter }}">
+                                                <label class="custom-control-label" for="color-{{ forloop.counter }}"><a class="{% if color.color_code == '#cc3333' %}selected{% endif %}" style="background {{ color.color_code }};"><a href=""></a></label>
+                                            </div><!-- End .custom-checkbox -->
+                                            <span class="item-count">3</span>
+                                        </div><!-- End .filter-item -->
+                                    {% endfor %}
+
+                                    <!-- JavaScript to handle checkbox behavior -->
+                                    <script>
+                                        $(document).ready(function() {
+                                            // When a color checkbox is clicked
+                                            $(".color-checkbox").click(function() {
+                                                // Uncheck all other checkboxes
+                                                $(".color-checkbox").not(this).prop("checked", false);
+                                            });
+                                        });
+                                    </script>
+                                
+                                </div><!-- End .filter-items -->
+                            </div><!-- End .widget-body -->
+                        </div><!-- End .collapse -->
+                    </div><!-- End .widget -->
+                </div><!-- End .sidebar-filter-wrapper -->
+
+                <div class="form-group"> 
+                    <button type="submit" class="btn btn-primary btn-block"> FILTER </button>
+                </div> <!-- form-group// --><br>
+            </form>
+
+            </aside><!-- End .sidebar-filter -->
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const statusSelect = document.getElementById('sort-select');
+                    
+                    statusSelect.addEventListener('change', function () {
+                        document.getElementById('shop-sorting').submit();
+                    });
+                });
+            </script>
+            
 
 {% endblock  %} 
