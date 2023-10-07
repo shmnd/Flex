@@ -274,26 +274,27 @@
                                 <div class="filter-items filter-items-count">
 
                                     <!-- Your category checkbox rendering code -->
-                                    {% for category in categoryfilter %}
-                                        <div class="filter-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" value="{{ category.id }}" name="categoryfilter" class="custom-control-input" id="cat-{{ forloop.counter }}">
-                                                <label class="custom-control-label" for="cat-{{ forloop.counter }}">{{ category.categories }}</label>
-                                            </div><!-- End .custom-checkbox -->
-                                            <span class="item-count"></span>
-                                        </div><!-- End .filter-item -->
+                                    {% for category in category_filter %}
+                                    <div class="filter-item">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" value="{{ category.id  }}" name="categoryfilter" class="custom-control-input cat-checkbox" id="cat-{{ forloop.counter }}">
+                                            <label class="custom-control-label" for="cat-{{ forloop.counter }}">{{ category.categories }}</label>
+                                        </div><!-- End .custom-checkbox -->
+                                    </div><!-- End .filter-item -->
                                     {% endfor %}
+                                    
+                                    <!-- JavaScript to handle category checkbox behavior -->
                                     <script>
-                                        $(document).ready(function() {
-                                            // When a category checkbox is clicked
-                                            $(".cat-checkbox").click(function() {
-                                                // Uncheck all other category checkboxes
-                                                if ($(this).prop("checked")) {
-                                                    // Only uncheck other category checkboxes if the current one is checked
-                                                    $(".cat-checkbox").not(this).prop("checked", false);
-                                                }
-                                            });
+                                    $(document).ready(function() {
+                                        // When a category checkbox is clicked
+                                        $(".cat-checkbox").click(function() {
+                                            // Uncheck all other category checkboxes
+                                            if ($(this).prop("checked")) {
+                                                // Only uncheck other category checkboxes if the current one is checked
+                                                $(".cat-checkbox").not(this).prop("checked", false);
+                                            }
                                         });
+                                    });
                                     </script>
                                 
                                 </div><!-- End .filter-items -->
@@ -357,27 +358,24 @@
                                 <div class="filter-colors">
                                     <!-- Include jQuery -->
 
-                                    <!-- Your checkbox rendering code -->
                                     {% for color in color_filter %}
-                                        <div class="filter-item">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" value="{{ color.id }}" name="colorfilter" class="custom-control-input color-checkbox" id="color-{{ forloop.counter }}">
-                                                <label class="custom-control-label" for="color-{{ forloop.counter }}"><a class="{% if color.color_code == '#cc3333' %}selected{% endif %}" style="background {{ color.color_code }};"><a href=""></a></label>
-                                            </div><!-- End .custom-checkbox -->
-                                            <span class="item-count"></span>
-                                        </div><!-- End .filter-item -->
+                                    <div class="filter-item">
+                                        <label class="color-label">
+                                            <input type="checkbox" value="{{ color.id }}" name="colorfilter" class="color-checkbox" id="color-{{ forloop.counter }}">
+                                            <span class="color-box" style="background: {{ color.color_code }};"></span>
+                                            <span class="color-name">{{ color.color_name }},</span>
+                                            <span style="white-space: pre-wrap;"> </span>
+                                        </label>
+                                    </div><!-- End .filter-item -->
                                     {% endfor %}
-
+                                    
                                     <!-- JavaScript to handle checkbox behavior -->
                                     <script>
                                         $(document).ready(function() {
                                             // When a color checkbox is clicked
                                             $(".color-checkbox").click(function() {
-                                            console.log('JJJJJJJJJJJJbbbbbbbbbbbbbbbbbbbbbbbbbbbJJJ');
-
                                                 // Uncheck all other checkboxes
                                                 $(".color-checkbox").not(this).prop("checked", false);
-
                                             });
                                         });
                                     </script>

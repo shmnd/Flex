@@ -35,15 +35,20 @@ def shop(request):
         'wishlist_count':wishlist_count,
         
     }
+    for i in category_filter:
+        print(i.id,i.categories,'ddddddddddddddddddddddddddddddddd')
     
     return render(request,'user/shop/shop.html',context)
 
 def shopfilter(request):
     
+    variant_images=[]
+    
     if request.method=='POST':
         color=request.POST.get('colorfilter')
         size=request.POST.get('sizefilter')
         categories=request.POST.get('categoryfilter')
+        print(categories,'yyyyyyyyyyyyyyyyyyyyyyyy')
         
         print(size,color,categories,'kkkkkkkkkkkkkk')
         
@@ -55,7 +60,7 @@ def shopfilter(request):
                             variant__product__is_available=True)
                           .order_by('variant__product').distinct('variant__product'))
                 
-        elif color and size :
+        elif color and size:
                 variant_images=(VariantImage.objects.filter
                                 (variant__color__id=color,variant__size__id=size,
                                 variant__product__is_available=True)
