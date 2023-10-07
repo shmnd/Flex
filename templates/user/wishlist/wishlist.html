@@ -118,55 +118,55 @@
 
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script>
-    $('.btn-outline-primary-2').click(function (e) {
-        e.preventDefault();
+            <script>
+                $('.btn-outline-primary-2').click(function (e) {
+                    e.preventDefault();
 
-        var product_id = $(this).data('product_id');
-        var add_qty = $('#qty-input').val();
-        var add_size = $(this).data('size-id');
+                    var product_id = $(this).data('product_id');
+                    var add_qty = $('#qty-input').val();
+                    var add_size = $(this).data('size-id');
 
-      
-        console.log(product_id, add_qty,add_size, 'yyyyyyyyyyyyyyyyyyyyyyy1')
+                
+                    console.log(product_id, add_qty,add_size, 'yyyyyyyyyyyyyyyyyyyyyyy1')
 
 
-        
-        $.ajax({
-            method: "POST",
-            {% comment %} url: "{% url 'add_cart' %}", {% endcomment %}
-            data: {
+                    
+                    $.ajax({
+                        method: "POST",
+                        url: "{% url 'addcart' %}", 
+                        data: {
 
-                'variant_id': product_id,
-                'add_size':add_size,
-                'add_qty': add_qty,
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-            },
-            success: function (response) {
+                            'variant_id': product_id,
+                            'add_size':add_size,
+                            'add_qty': add_qty,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        success: function (response) {
 
-                console.log(response);
+                            console.log(response);
 
-                if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in cart' ) {
-                    swal.fire("Error!", response.status, "error");
-                    $('.cartdata').load(location.href + " .cartdata");
-                } else if (response.status === 'Product added successfully') { 
-                    swal.fire("", response.status, "success");
-                    $('.cartdata').load(location.href + " .cartdata");
-                } else if (response.status === 'you are not login please Login to continue') {
-                    swal.fire("", response.status, "warning");
-                    $('.cartdata').load(location.href + " .cartdata");
-                } 
-                else if (response.status === 'Sorry! this variant not available') {
-                    swal.fire("", response.status, "warning");
-                    $('.cartdata').load(location.href + " .cartdata");
-                } 
-                else {
-                    swal("Error!", response.status, "error");
-                    $('.cartdata').load(location.href + " .cartdata");
-                }
-            }
-        });
-    });
-</script>
+                            if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in cart' ) {
+                                swal.fire("Error!", response.status, "error");
+                                $('.cartdata').load(location.href + " .cartdata");
+                            } else if (response.status === 'Product added successfully') { 
+                                swal.fire("", response.status, "success");
+                                $('.cartdata').load(location.href + " .cartdata");
+                            } else if (response.status === 'you are not login please Login to continue') {
+                                swal.fire("", response.status, "warning");
+                                $('.cartdata').load(location.href + " .cartdata");
+                            } 
+                            else if (response.status === 'Sorry! this variant not available') {
+                                swal.fire("", response.status, "warning");
+                                $('.cartdata').load(location.href + " .cartdata");
+                            } 
+                            else {
+                                swal("Error!", response.status, "error");
+                                $('.cartdata').load(location.href + " .cartdata");
+                            }
+                        }
+                    });
+                });
+            </script>
 
 <script src="https://unpkg.com/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>
 
