@@ -196,110 +196,61 @@
         });
     </script> 
 
+{% comment %} ajax wishlisssst {% endcomment %}
 
-    <script>
-        $('.wish-list').click(function (e) {
-            e.preventDefault();
-    
-            var product_id = $(this).data('product_id');
-            var add_size = $('select[name="size"]').val();
-    
-            console.log(product_id,add_size, 'yyyyyyyyyyyyyyyyyyyyyyy1')
-            $.ajax({
-                method: "POST",
-                url: "{% url 'add_wishlist1' %}",
-                data: {
-    
-                    'variant_id': product_id,
-                    'add_size':add_size,
-                 
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function (response) {
-    
-                    console.log(response);
-    
-                    if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in Wishlist' ) {
-                        swal.fire("Error!", response.status, "error");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } else if (response.status === 'Product added successfully in Wishlist') { 
-                        swal.fire("", response.status, "success");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } else if (response.status === 'you are not login please Login to continue') {
-                        swal.fire("", response.status, "warning");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } 
-                    else if (response.status === 'Sorry! this variant not available') {
-                        swal.fire("", response.status, "warning");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } 
-                    else {
-                        swal("Error!", response.status, "error");
-                        $('.cartdata').load(location.href + " .cartdata");
+        <script>
+            $('.wish-list').click(function (e){
+                e.preventDefault();
+
+                var product_id= $(this).data('product_id');
+                var add_size =$('#size-input').val();
+
+                console.log(product_id,add_size,'9999999999999999')
+                $.ajax({
+                    method:'POST',
+                    url:"{% url 'add_wishlist1' %}",
+                    data:{
+                        'variant_id':product_id,
+                        'add_size':add_size,.
+                        csrfmiddlewaretoken:'{{ csrf_token }}'   
+                    },
+                    success:  function (response){
+                        console.log(response);
+
+                        if (response.status ==='No such product found' || response.status === 'Only few quantity available' || response.status === 'Product already in wishlist' ){
+                            swal.fire("Error", response.status,"error");
+                            $('.cartdata').load(location.href + ".cartdata");
+                        } 
+                        else if(response.status ==== 'Product added successfully in wishlist'){
+                            swal.fire("",response.status,"success");
+                            $('.cartdata').load(location.href + " .cartdata");
+                        }
+                        else if (response.status=== 'You are not login please Login to continue'){
+                            swal.fire("",response.status, "warning");
+                            $('.cartdata').load(location.href + " .cartdata");
+                        }
+                        else if (response.status === 'Sorry this variant is not available'){
+                            swal.fire("",response.status, "warning")
+                        }
+                        else{
+                            swal("Error",response.status,"error");
+                            $('.cartdata').load(location.href + " .cartdata")
+                        }
+
                     }
-                }
-            });
-        });
-    </script>
-
-
-
-
-
-
-{% comment %} wishlist ajax {% endcomment %}
-
-    {% comment %} <script>
-        $('.wish-list').click(function (e){
-            e.preventDefault();
-
-            var product_id= $(this).data('product_id');
-            var add_size =$('#size-input').val();
-
-            console.log(product_id,add_size,'9999999999999999')
-            $.ajax({
-                method:'POST',
-                url:"{% url 'add_wishlist1' %}",
-                data:{
-                    'variant_id':product_id,
-                    'add_size':add_size,.
-                    csrfmiddlewaretoken:'{{ csrf_token }}'   
-                },
-                success:  function (response){
-                    console.log(response);
-
-                    if (response.status ==='No such product found' || response.status === 'Only few quantity available' || response.status === 'Product already in wishlist' ){
-                        swal.fire("Error", response.status,"error");
-                        $('.cartdata').load(location.href + ".cartdata");
-                    } 
-                    else if(response.status ==== 'Product added successfully in wishlist'){
-                        swal.fire("",response.status,"success");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    }
-                    else if (response.status=== 'You are not login please Login to continue'){
-                        swal.fire("",response.status, "warning");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    }
-                    else if (response.status === 'Sorry this variant is not available'){
-                        swal.fire("",response.status, "warning")
-                    }
-                    else{
-                        swal("Error",response.status,"error");
-                        $('.cartdata').load(location.href + " .cartdata")
-                    }
-
-                }
+                })
             })
-        })
-    </script> {% endcomment %}
+        </script>
 
 
 
+{% comment %} -----------------------------------------------------------FILTERSS-------------------------------------------------------- {% endcomment %}
 
 
 <!-- Add this before the closing </body> tag of your HTML -->
 <script src="https://unpkg.com/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 <div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
             <aside class="sidebar-shop sidebar-filter">
@@ -422,8 +373,11 @@
                                         $(document).ready(function() {
                                             // When a color checkbox is clicked
                                             $(".color-checkbox").click(function() {
+                                            console.log('JJJJJJJJJJJJbbbbbbbbbbbbbbbbbbbbbbbbbbbJJJ');
+
                                                 // Uncheck all other checkboxes
                                                 $(".color-checkbox").not(this).prop("checked", false);
+
                                             });
                                         });
                                     </script>

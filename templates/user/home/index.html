@@ -312,7 +312,7 @@
                    
 
                 <div class="more-container text-center mt-5">
-                    <a href="category.html" class="btn btn-outline-lightgray btn-more btn-round"><span>View more products</span><i class="icon-long-arrow-right"></i></a>
+                    <a href="{% url "shop" %}" class="btn btn-outline-lightgray btn-more btn-round"><span>View more products</span><i class="icon-long-arrow-right"></i></a>
                 </div><!-- End .more-container -->
             </div><!-- End .container -->
 
@@ -347,30 +347,30 @@
                         }'>
                         <article class="entry">
                             <figure class="entry-media">
-                                <a href="single.html">
+                                <a href="{% url "home" %}">
                                     <img src="{% static 'template/assets/images/demos/demo-10/blog/post-1.jpg' %}" alt="image desc">
                                 </a>
                             </figure><!-- End .entry-media -->
 
                             <div class="entry-body text-center">
                                 <div class="entry-meta">
-                                    <a href="#">Nov 22, 2018</a>, 0 Comments
+                                    <a href="{% url "home" %}">Nov 22, 2018</a>, 0 Comments
                                 </div><!-- End .entry-meta -->
 
                                 <h3 class="entry-title">
-                                    <a href="single.html">Sed adipiscing ornare.</a>
+                                    <a href="{% url "home" %}">Sed adipiscing ornare.</a>
                                 </h3><!-- End .entry-title -->
 
                                 <div class="entry-content">
                                     <p>Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel, dapibus id, mattis vel, nisi. </p> 
-                                    <a href="single.html" class="read-more">READ MORE</a>
+                                    <a href="{% url "home" %}" class="read-more">READ MORE</a>
                                 </div><!-- End .entry-content -->
                             </div><!-- End .entry-body -->
                         </article><!-- End .entry -->
                     
                         <article class="entry">
                             <figure class="entry-media">
-                                <a href="single.html">
+                                <a href="{% url "home" %}">
                                     <img src="{% static 'template/assets/images/demos/demo-10/blog/post-2.jpg' %}" alt="image desc">
                                 </a>
                             </figure><!-- End .entry-media -->
@@ -381,19 +381,19 @@
                                 </div><!-- End .entry-meta -->
 
                                 <h3 class="entry-title">
-                                    <a href="single.html">Fusce lacinia arcuet nulla.</a>
+                                    <a href="{% url "home" %}">Fusce lacinia arcuet nulla.</a>
                                 </h3><!-- End .entry-title -->
 
                                 <div class="entry-content">
                                     <p>Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc tortor eu nibh. </p>
-                                    <a href="single.html" class="read-more">READ MORE</a>
+                                    <a href="{% url "home" %}" class="read-more">READ MORE</a>
                                 </div><!-- End .entry-content -->
                             </div><!-- End .entry-body -->
                         </article><!-- End .entry -->
 
                         <article class="entry">
                             <figure class="entry-media">
-                                <a href="single.html">
+                                <a href="{% url "home" %}">
                                     <img src="{% static 'template/assets/images/demos/demo-10/blog/post-3.jpg' %}" alt="image desc">
                                 </a>
                             </figure><!-- End .entry-media -->
@@ -404,19 +404,19 @@
                                 </div><!-- End .entry-meta -->
 
                                 <h3 class="entry-title">
-                                    <a href="single.html">Aliquam erat volutpat.</a>
+                                    <a href="{% url "home" %}">Aliquam erat volutpat.</a>
                                 </h3><!-- End .entry-title -->
 
                                 <div class="entry-content">
                                     <p>Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel, dapibus id, mattis vel, nisi. </p>
-                                    <a href="single.html" class="read-more">READ MORE</a>
+                                    <a href="{% url "home" %}" class="read-more">READ MORE</a>
                                 </div><!-- End .entry-content -->
                             </div><!-- End .entry-body -->
                         </article><!-- End .entry -->
 
                         <article class="entry">
                             <figure class="entry-media">
-                                <a href="single.html">
+                                <a href="{% url "home" %}">
                                     <img src="{% static 'template/assets/images/demos/demo-10/blog/post-4.jpg' %}" alt="image desc">
                                 </a>
                             </figure><!-- End .entry-media -->
@@ -427,19 +427,19 @@
                                 </div><!-- End .entry-meta -->
 
                                 <h3 class="entry-title">
-                                    <a href="single.html">Quisque a lectus.</a>
+                                    <a href="{% url "home" %}">Quisque a lectus.</a>
                                 </h3><!-- End .entry-title -->
 
                                 <div class="entry-content">
                                     <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. </p>
-                                    <a href="single.html" class="read-more">READ MORE</a>
+                                    <a href="{% url "home" %}" class="read-more">READ MORE</a>
                                 </div><!-- End .entry-content -->
                             </div><!-- End .entry-body -->
                         </article><!-- End .entry -->
                     </div><!-- End .owl-carousel -->
 
                     <div class="more-container text-center mt-1">
-                        <a href="blog.html" class="btn btn-outline-lightgray btn-more btn-round"><span>View more articles</span><i class="icon-long-arrow-right"></i></a>
+                        <a href="{% url "home" %}" class="btn btn-outline-lightgray btn-more btn-round"><span>View more articles</span><i class="icon-long-arrow-right"></i></a>
                     </div><!-- End .more-container -->
                 </div><!-- End .container -->
             </div><!-- End .blog-posts -->
