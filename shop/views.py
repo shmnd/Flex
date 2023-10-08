@@ -124,25 +124,26 @@ def shopfilter(request):
 
 
 def shopsort(request):
+    print(name,'zzzzzwwwwwwwwwwwwwwwzzzzzzzzz')
+    
     name=request.POST.get('sort_select')
     
     variant_images=VariantImage.objects.filter(variant__product__is_available=True)
     
-    if name=='AtoZ':
-        variant_images=variant_images.order_by('variant__product__product_name')
-    elif name == 'ZtoA':
+    if name == 'aplus':
+        variant_images = variant_images.order_by('variant__product__product_name')
+    elif name == 'aminus':
         variant_images = variant_images.order_by('-variant__product__product_name')
-    elif name == 'LtoH':
+    elif name == 'priceplus':
         variant_images = variant_images.order_by('variant__product__product_price')
-    elif name == 'HtoL':
+    elif name == 'priceminus':
         variant_images = variant_images.order_by('-variant__product__product_price')
     else:
         variant_images = variant_images.order_by('variant__product')
-    
-    if name=='AtoZ' or name=='ZtoA':
-        variant_images=variant_images.distinct('variant__product__product_name')
-    if name=='LtoH' or 'HtoL':
-        variant_images=variant_images.distinct('variant__product__product_price')
+    if name == 'aplus'or name == 'aminus':
+        variant_images = variant_images.distinct('variant__product__product_name')  
+    if  name == 'priceplus' or name == 'priceminus':
+        variant_images = variant_images.distinct('variant__product__product_price')
         
     ratings=Product.objects.annotate(avg_rating=Avg('reviews__rating'))
     category_filter=category.objects.filter(is_available=True)
