@@ -33,16 +33,16 @@
                 <div class="toolbox-right">
                     <div class="toolbox-sort">
                         <label for="sortby">Sort by:</label>
-                        <form id="shop-sorting" method="post" action="{% url 'shopsort'%}">
-                            {% csrf_token %}
+                        <form id="shop-sorting" method="post" action="{% url 'shopsort' %}">
+                            {% csrf_token %}  
                             <div class="select-custom">
-                                <select name="sort_select" id="sortby" class="form-control">
+                                <select name="sort_select" id="sort-select" class="form-control">
+
                                     <option value="all" selected="selected">SORT</option>
                                     <option value="aplus" >A TO Z</option>
                                     <option value="aminus">Z TO A</option>
                                     <option value="priceminus">HIGH LOW PRICE</option>
                                     <option value="priceplus">LOW TO HIGH PRICE</option>
-
                                 </select>
                             </div>
                             <input type="hidden" name="auto_submit" value="true">
@@ -61,7 +61,7 @@
                         <div class="product">
                             <figure class="product-media">
                                 <span class="product-label label-new">New</span>
-                                <a href="{% url "productshow" c.variant.product.id c.variant.id %}">
+                                <a href="{% url 'productshow' c.variant.product.id c.variant.id %}">
                                     <img src="{{ c.image.url }}" alt="Product image" class="product-image">
                                 </a>
 
@@ -78,7 +78,7 @@
 
                             <div class="product-body">
                 
-                                <h3 class="product-title"><a href="{% url "productshow" c.variant.product.id c.variant.id %}">{{ c.variant.product.product_name }}</a></h3><!-- End .product-title -->
+                                <h3 class="product-title"><a href="{% url 'productshow' c.variant.product.id c.variant.id %}">{{ c.variant.product.product_name }}</a></h3><!-- End .product-title -->
                                 
                                 <div class="product-price">
                                     ₹{{ c.variant.product.product_price }}  <span style="color: black;"></span>
@@ -212,7 +212,7 @@
                     url:"{% url 'add_wishlist1' %}",
                     data:{
                         'variant_id':product_id,
-                        'add_size':add_size,.
+                        'add_size':add_size,
                         csrfmiddlewaretoken:'{{ csrf_token }}'   
                     },
                     success:  function (response){
@@ -222,7 +222,7 @@
                             swal.fire("Error", response.status,"error");
                             $('.cartdata').load(location.href + ".cartdata");
                         } 
-                        else if(response.status ==== 'Product added successfully in wishlist'){
+                        else if(response.status === 'Product added successfully in wishlist'){
                             swal.fire("",response.status,"success");
                             $('.cartdata').load(location.href + " .cartdata");
                         }
@@ -258,10 +258,10 @@
                 <div class="sidebar-filter-wrapper">
                     <div class="widget widget-clean">
                         <label><i class="icon-close"></i>Filters</label>
-                        <a href="{% url "shop" %}" class="sidebar-filter-clear">Clean All</a>
+                        <a href="{% url 'shop' %}" class="sidebar-filter-clear">Clean All</a>
                     </div><!-- End .widget -->
 
-                <form action="{% url "shopfilter" %}" method="POST">
+                <form action="{% url 'shopfilter' %}" method="POST">
                     {% csrf_token %}
                     <div class="widget widget-collapsible">
                         <h3 class="widget-title">

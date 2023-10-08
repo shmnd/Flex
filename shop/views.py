@@ -124,11 +124,10 @@ def shopfilter(request):
 
 
 def shopsort(request):
-    print(name,'zzzzzwwwwwwwwwwwwwwwzzzzzzzzz')
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+    name = request.POST.get('sort_select')
     
-    name=request.POST.get('sort_select')
-    
-    variant_images=VariantImage.objects.filter(variant__product__is_available=True)
+    variant_images = VariantImage.objects.filter(variant__product__is_available=True)
     
     if name == 'aplus':
         variant_images = variant_images.order_by('variant__product__product_name')
@@ -143,26 +142,27 @@ def shopsort(request):
     if name == 'aplus'or name == 'aminus':
         variant_images = variant_images.distinct('variant__product__product_name')  
     if  name == 'priceplus' or name == 'priceminus':
-        variant_images = variant_images.distinct('variant__product__product_price')
-        
-    ratings=Product.objects.annotate(avg_rating=Avg('reviews__rating'))
-    category_filter=category.objects.filter(is_available=True)
-    size_filter=Size.objects.filter(is_available=True)
-    color_filter=Color.objects.filter(is_available=True)
-        
+        variant_images = variant_images.distinct('variant__product__product_price') 
+    
+    ratings = Product.objects.annotate(avg_rating=Avg('reviews__rating'))
+    category_filter = category.objects.filter(is_available=True)
+    size_filter = Size.objects.filter(is_available=True)
+    color_filter = Color.objects.filter(is_available=True)
     try:
-        cart_count=Cart.objects.filter(user=request.user).count()
-        wishlist_count=Wishlist.filter(user=request.user).count()
+        cart_count =Cart.objects.filter(user =request.user).count()
+        wishlist_count =Wishlist.objects.filter(user=request.user).count()
     except:
-        cart_count=False
-        wishlist_count=False
-    context={
-              'variant_images': variant_images,
-              'ratings':ratings,
-              'wishlist_count':wishlist_count,
-              'cart_count' :cart_count,
-              'category_filter':category_filter,
-              'size_filter':size_filter,
-              'color_filter':color_filter,
-            }
-    return render(request,'user/shop/shop.html',context)
+        cart_count =False
+        wishlist_count =False 
+    
+    context = {
+        'variant_images': variant_images,
+        'ratings': ratings,
+        'wishlist_count': wishlist_count,
+        'cart_count': cart_count,
+        'category_filter': category_filter,
+        'size_filter': size_filter,
+        'color_filter': color_filter,
+    }
+    
+    return render(request, 'user/shop/shop.html', context)
