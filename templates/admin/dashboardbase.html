@@ -1,4 +1,3 @@
-
 {% load static %}
 <!doctype html>
 <html lang="en">
@@ -169,34 +168,36 @@
                </span>
                <span class="hide-menu">order</span>
              </a>
-           </li>
+            </li>
 
-            <!-- <li class="sidebar-item">
-              <a class="sidebar-link" href="{% url 'productvariant' %}" aria-expanded="false"> 
-               <span>
-                 <i class="ti ti-file-description"></i>
-               </span>
-               <span class="hide-menu">Variants</span>
-             </a>
-           </li> -->
-<!-- qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq -->
-           <li class="sidebar-item">
-            <a class="sidebar-link" href="{% url 'productsize' %}" aria-expanded="false"> 
+   
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="{% url 'productsize' %}" aria-expanded="false"> 
+                <span>
+                  <i class="ti ti-dimensions"></i>
+                </span>
+                <span class="hide-menu">Size</span>
+              </a>
+            </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{% url 'productcolor' %}" aria-expanded="false"> 
+                <span>
+                  <i class="ti ti-color-filter"></i>
+                </span>
+                <span class="hide-menu">Color</span>
+            </a>
+          </li>
+
+
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{% url 'coupon' %}" aria-expanded="false"> 
              <span>
-               <i class="ti ti-dimensions"></i>
+               <i class="ti ti-gift-card"></i>
              </span>
-             <span class="hide-menu">Size</span>
+             <span class="hide-menu">coupon</span>
            </a>
-         </li>
-
-         <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'productcolor' %}" aria-expanded="false"> 
-           <span>
-             <i class="ti ti-color-filter"></i>
-           </span>
-           <span class="hide-menu">Color</span>
-         </a>
-       </li>
+          </li>
 
 
             {% comment %} not using  now {% endcomment %}

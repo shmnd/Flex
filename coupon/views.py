@@ -13,15 +13,15 @@ def coupon(request):
         'coupon':Coupon.objects.filter(is_available=True).order_by('id')
     }
 
-    return render(request,'admim/admincoupon.html',context)
+    return render(request,'admin/admincoupon.html',context)
 
 
 @login_required(login_url='adminsignin')
 def addcoupon(request):
-    if request.mehod=='POST':
+    if request.method=='POST':
         coupon_name=request.POST.get('coupon_name')
         coupon_code=request.POST.get('coupon_code')
-        min_price=request.POST.get('min_price')
+        min_price=request.POST.get('minimum_price')
         coupon_discount_amount=request.POST.get('coupon_discount_amount')
         start_date_str=request.POST.get('start_date')
         end_date_str=request.POST.get('end_date')
@@ -78,10 +78,13 @@ def addcoupon(request):
     
 @login_required(login_url='adminsignin')
 def editcoupon(request,coupon_id):
+    
+    print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+    
     if request.method=='POST':
         coupon_name=request.POST.get('coupon_name')
         coupon_code=request.POST.get('coupon_code')
-        min_price=request.POST.get('min_price')
+        min_price=request.POST.get('minimum_price')
         coupon_discount_amount=request.POST.get('coupon_discount_price')
         start_date_str=request.POST.get('start_date_str')
         end_date_str=request.POST.get('end_date_str')
@@ -94,7 +97,7 @@ def editcoupon(request,coupon_id):
             messages.error(request,'coupon must include letters and numbers')
             return redirect('coupon')
         
-        if min_price.strip()=='':
+        if min_price.strip()=="":
             messages.error(request,'minimum price cannot be blank')
             return redirect('coupon')
         
