@@ -291,8 +291,7 @@ def viewaddress(request,view_id):
     return render(request,'user/userprofile/viewaddress.html',{'viewaddress':viewaddress})   
     
 
-def editprofile(request): 
-    
+def editprofile(request):    
     if request.method =='POST':  
         print('dsssssssssssssssdddddddddddddddddddddddddd')  
         
@@ -301,7 +300,7 @@ def editprofile(request):
         email=request.POST.get('email')
         
         try:          
-            print('jjjjjjjjjjjjjjjjjjjj')  
+            print('jjjjjjjjjjjjjjjjjjjj')
             user = User.objects.get(email=request.user)
             print(user,'hhhhhhhhhhhhhhhhhhhhhhhhhhh')
         except:

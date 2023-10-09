@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Checkout{% endblock %}
 {% load static %}
-{% comment %} {% load mathfilters %} {% endcomment %}
+{% load mathfilters %}
 {% block body %}     
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
@@ -68,7 +68,7 @@
         <div class="checkout">
             <div class="container">
                
-                {% comment %} <div class="spshafi lg-2" >
+                <div class="spshafi lg-2" >
                     <div class="cart-discount">
                         <h5>Discount Coupon</h5>
                         <form action="{% url 'checkout' %}" method="POST">
@@ -81,11 +81,9 @@
                             </div><!-- .End .input-group -->
                         </form>
                     </div>
-                </div> {% endcomment %}
-                
+                </div>
                 <br>
 
-                
               <form action="{% url 'placeorder' %}" method="POST" id="orderform">
                 {% csrf_token %}
                     <div class="row">
@@ -155,7 +153,7 @@
                         </div><!-- End .col-lg-2 -->
 
                         <aside class="col-lg-4">
-                            {% comment %} <div class="summary checoupon">
+                            <div class="summary checoupon">
 
                                 
                                 <h3 class="summary-title">Now Available Coupon</h3><!-- End .summary-title -->
@@ -178,7 +176,7 @@
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                            </div> {% endcomment %}
+                            </div>
                             <br>
                             <br>
                                 
@@ -195,7 +193,7 @@
                                     
                                        
                                         <tr class="summary-subtotal">
-                                            {% comment %} {% if coupon and offer %}
+                                            {% if coupon and offer %}
                                             <tr>
                                                 <td>Subtotal:</td>
                                                 <td>${{total_price|add:all_offer}}</td>
@@ -241,7 +239,7 @@
                                                 {% else %}
                                                 <input type="hidden" name="" value="">
                                                 {% endif %}
-                                                {% endif %} {% endcomment %}
+                                                {% endif %} 
                                                 {% if not offer and not coupon %}
                                                 <tr>
                                                     <td>Subtotal:</td>
@@ -254,13 +252,13 @@
                                             <td>Free shipping</td>
                                         </tr>
                                         <tr class="summary-total">
-                                            {% comment %} {% if coupon %}
+                                            {% if coupon %}
                                             <td>Total:</td>
                                             <td>${{ grand_total|sub:coupon }}</td>
                                             {% else %}
                                             <td>Total:</td>
                                             <td>${{grand_total}}</td>
-                                            {% endif %} {% endcomment %}
+                                            {% endif %}
                                         </tr><!-- End .summary-total -->
                                     </tbody>
                                 </table><!-- End .table table-summary -->
