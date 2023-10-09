@@ -17,14 +17,14 @@ from django.contrib import messages
 # Create your views here.
 
 def checkout(request):
-    # request.session['coupon_session']=0
-    # request.session['coupon_id']= None
+    request.session['coupon_session']=0
+    request.session['coupon_id']= None
     
     if request.method == 'POST':
-    #     coupon = request.POST.get('coupon')
-    #     if coupon is None:
-    #         messages.error(request, 'coupon field is cannot empty!')
-    #         return redirect('checkout')
+        coupon = request.POST.get('coupon')
+        if coupon is None:
+            messages.error(request, 'coupon field is cannot empty!')
+            return redirect('checkout')
         try:
             # check_coupons =Coupon.objects.filter(coupon_code=coupon).first()
             cartitems = Cart.objects.filter(user=request.user)
