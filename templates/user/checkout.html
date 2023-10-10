@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
     .page-header {
-        background-image: url('{% static "user/assets/images/page-header-bg.jpg" %}');
+        background-image: url('{% static "template/assets/images/page-header-bg.jpg" %}');
 
     }
     .addressmgt {
@@ -84,6 +84,7 @@
                 </div>
                 <br>
 
+                
               <form action="{% url 'placeorder' %}" method="POST" id="orderform">
                 {% csrf_token %}
                     <div class="row">
@@ -186,11 +187,34 @@
                               
                                
                                
-                                <h3 class="summary-title">Your Ordered Product</h3><!-- End .summary-title -->
+                                <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
                                   {% if cartitems %}
                                 <table class="table table-summary">
                                     
-                                    
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            {% comment %} <th>Quantity</th> {% endcomment %}
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>{% for i in cartitems  %}
+                                        <tr>
+                                            <td><a href="#">{{i.variant.product.product_name}}</a></td>
+                                            {% comment %} <td></td>
+                                            <td><a href="#">{{i.product_qty}}</a></td> {% endcomment %}
+                                            {% if i.variant.product.offer %}
+                                            
+                                            {% with product_total=i.variant.product.product_price|mul:i.product_qty  offer_total=i.variant.product.offer.discount_amount|mul:i.product_qty %}
+                                            <td><span><del>${{i.variant.product.product_price |mul:i.product_qty}} </del> </span>${{ product_total|sub:offer_total }} </td>
+                                            {% endwith %}
+                                            {% else %}
+                                            <td>${{i.variant.product.product_price |mul:i.product_qty}}</td>
+                                            {% endif %}
+                                            
+                                        </tr>
+                                        {% endfor %}
                                        
                                         <tr class="summary-subtotal">
                                             {% if coupon and offer %}
@@ -239,7 +263,7 @@
                                                 {% else %}
                                                 <input type="hidden" name="" value="">
                                                 {% endif %}
-                                                {% endif %} 
+                                                {% endif %}
                                                 {% if not offer and not coupon %}
                                                 <tr>
                                                     <td>Subtotal:</td>
@@ -314,8 +338,6 @@
                                                 <a class="collapsed" role="button" data-toggle="collapse"
                                                     href="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
                                                     Credit Card 
-                                                    {% comment %} <img src="{% static 'cart/payments-summary.png' %}" {% endcomment %}
-                                                        {% comment %} alt="payments cards"> {% endcomment %}
                                                 </a>
                                             </h2>
                                         </div><!-- End .card-header -->
@@ -377,7 +399,7 @@
                   var data = {
 
                       "payment_method": paymentMethod,
-                      {% comment %} "couponOrder": couponOrder, {% endcomment %}
+                      "couponOrder": couponOrder,
                       "order_note": order_note,
                       "address": selectedAddress,
                       "csrfmiddlewaretoken": token
@@ -398,7 +420,7 @@
                           if (response.status === 'Your wallet amount is very low') {
                               swal("Error!", response.status, "error");
                               $('.placeorder').load(location.href + " .placeorder");
-                              window.location.href = '/user/checkout/';
+                              window.location.href = '/checkout/checkout/';
                           } else if (response.status === 'Your order has been placed successfully') {
                               swal("Congratulations!", response.status, "success");
                               $('.placeorder').load(location.href + " .placeorder");
@@ -427,24 +449,13 @@
                             Swal.fire("Error!", response.status, "error");
                             $('.placeorder').load(location.href + " .placeorder");
                         } else if (response.status === 'Your order has been placed successfully') {
-                            Swal.fire({
-                                title: "Congratulations!",
-                                text: response.status,
-                                icon: "success",
-                            });
+                            Swal.fire("Congratulations!", response.status, "success");
                             $('.placeorder').load(location.href + " .placeorder");
-                        
-                            // Automatically close the Swal modal after 5 seconds
-                            setTimeout(function() {
-                                Swal.close();
-                                window.location.href = '/';
-                            }, 5000);
                         } else {
                             Swal.fire("Error!", response.status, "error");
                             $('.placeorder').load(location.href + " .placeorder");
-                            window.location.href = '/';
                         }
-                        
+                        window.location.href = '/';
                     }).fail(function(xhr, errmsg, err) {
                         alert('Error: ' + errmsg);
                         console.log(xhr.responseText);
@@ -459,11 +470,11 @@
                         url:"{% url 'razarypaycheck' %}",
                         success: function(response) {
                          var options = {
-                           "key": "rzp_test_6M76xdgpXrFgY7", // Enter the Key ID generated from the Dashboard
+                           "key": "rzp_test_mMbA6UvMUpGXUl", // Enter the Key ID generated from the Dashboard
                            "amount": response.total_price*100,// Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                            //"amount": 1*100,//response.total_price * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                            "currency": "INR",
-                           "name": "FLEX",
+                           "name": "COOT",
                            "description": "Thank you for buying with us",
                            "image": "https://example.com/your_logo",
                            //"order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1

@@ -164,7 +164,7 @@ def placeorder(request):
         neworder.message = request.POST.get('order_note')
         session_coupon_id=request.session.get('coupon_id')
         if session_coupon_id!=None:
-            session_coupons =Coupon.objects.get(id=sessifon_coupon_id)
+            session_coupons =Coupon.objects.get(id=session_coupon_id)
         else:
             session_coupons = None
                
@@ -186,10 +186,9 @@ def placeorder(request):
             # else:    
             product_price = item.variant.product.product_price
             cart_total_price += product_price * item.product_qty
-        # print(coupon,'asdfghjkjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')    
         
-        # session_coupon=request.session.get('coupon_session')
-        # cart_total_price = cart_total_price - session_coupon
+        session_coupon=request.session.get('coupon_session')
+        cart_total_price = cart_total_price - session_coupon
         neworder.total_price = cart_total_price
 
         # Generate a unique tracking number
@@ -248,8 +247,8 @@ def razarypaycheck(request):
         #     total_price = total_price-total_offer
         # else:    
         total_price = total_price + item.variant.product.product_price * item.product_qty
-    # session_coupon=request.session.get('coupon_session')
-    # total_price = total_price - session_coupon  
+    session_coupon=request.session.get('coupon_session')
+    total_price = total_price - session_coupon  
     
          
     return JsonResponse({'total_price': total_price})
