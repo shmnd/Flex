@@ -320,6 +320,18 @@
     </div>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
+
+{% for message in messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                text: "{{ message }}",
+                timer: 5000, // Adjust the timer to control how long each alert stays visible (in milliseconds)
+            });
+        });
+    </script>
+{% endfor %}
 
 <script src="{% static 'dashboard/assets/libs/jquery/dist/jquery.min.js' %}"></script>
 <script src="{% static 'dashboard/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>

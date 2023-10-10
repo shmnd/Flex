@@ -78,19 +78,25 @@ def addcoupon(request):
     
 @login_required(login_url='adminsignin')
 def editcoupon(request,coupon_id):
-    
-    print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
-    
+    print('ZZZZZZZZZZZZZZZZZZ')
     if request.method=='POST':
         coupon_name=request.POST.get('coupon_name')
         coupon_code=request.POST.get('coupon_code')
         min_price=request.POST.get('minimum_price')
-        coupon_discount_amount=request.POST.get('coupon_discount_price')
-        start_date_str=request.POST.get('start_date_str')
-        end_date_str=request.POST.get('end_date_str')
+        coupon_discount_amount=request.POST.get('coupon_discount_amount')
+        start_date_str=request.POST.get('start_date')
+        end_date_str=request.POST.get('end_date')
+        
+        print(coupon_discount_amount,min_price,'lottaaaaaaaaaaaa')
+        
+        print(coupon_name,coupon_code,min_price,coupon_discount_amount,start_date_str,end_date_str,'222222222222222222222222')
+        
         
         if coupon_name is None or coupon_name.strip() == '':
+            print(coupon_name,'jjjjjjjjjjjjjjj')
             messages.error(request,'coupon field can not be empty ')
+            print(coupon_name,coupon_code,min_price,coupon_discount_amount,start_date_str,end_date_str,'0000000000000000000000000')
+            
             return redirect('coupon')
         
         if not re.search(r'\b[A-z0-9a-z]{2,}\b',coupon_code):
@@ -100,9 +106,9 @@ def editcoupon(request,coupon_id):
         if min_price.strip()=="":
             messages.error(request,'minimum price cannot be blank')
             return redirect('coupon')
-        
         min_price=int(min_price)
-        if min_price >0:
+        # print(type(min_price),min_price,'shafffffffffffffffffffffffffff')
+        if not min_price >0:
             messages.error(request,'minimum price must be positive')
             return redirect('coupon')
                
@@ -110,11 +116,10 @@ def editcoupon(request,coupon_id):
             messages.error(request,'discount cannot be blank')
             return redirect('coupon')
         coupon_discount_amount=int(coupon_discount_amount)
-        
+        print(coupon_discount_amount,'lottaaaaaaaaaaaa')
         if not coupon_discount_amount >=0:
             messages.error(request,'discount price must be positive')
             return redirect('coupon')
-        
         try:
             start_date=datetime.strptime(start_date_str,'%Y-%m-%d').date()
             end_date=datetime.strptime(end_date_str,'%Y-%m-%d').date()
@@ -122,7 +127,7 @@ def editcoupon(request,coupon_id):
             messages.error(request,'invalid date format. Use YYYY-MM-DD')
             return redirect('coupon')
         
-        if start_date >=end_date:
+        if start_date >= end_date:
             messages.error(request, 'strat date must before end date')
             return redirect('coupon')
         
@@ -140,17 +145,17 @@ def editcoupon(request,coupon_id):
         coupon_edit.min_price=min_price
         coupon_edit.coupon_discount_amount=coupon_discount_amount
         coupon_edit.start_date=start_date
-        coupon_edit=end_date=end_date
+        coupon_edit.end_date=end_date
         coupon_edit.save()
+        print(coupon_edit,'qqqqqqqqqqqqqqqqqqqq')
         messages.success(request,'Coupon edited sucessfully')    
         return redirect('coupon')
     coupon :Coupon.objects.get(id=coupon_id)
-    context={
-        'coupon':coupon,
+    context = {
+        'coupon': coupon,
     }
     return render(request,'admin/admincoupon.html',context)
         
-
 
 @login_required(login_url='adminsignin')
 def searchcoupon(request):
@@ -165,12 +170,13 @@ def searchcoupon(request):
     )
 
 
-
 @login_required(login_url='adminsignin')
 def deletecoupon(request,coupon_id):
     try:
-        coupon_delete=Coupon.objects.filter(id=coupon_id)
-        coupon_delete.is_availabel=False
+        coupon_delete=Coupon.objects.get(id=coupon_id)
+        print(coupon_delete,'deleteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+        
+        coupon_delete.is_available=False
         coupon_delete.save()
         messages.success(request,'coupon deleted')
         return redirect('coupon')
@@ -178,4 +184,3 @@ def deletecoupon(request,coupon_id):
         messages.error(request,'The specified coupon does not  exist')
     return redirect('coupon')
     
-
