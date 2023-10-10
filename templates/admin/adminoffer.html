@@ -1,20 +1,20 @@
 {% extends 'admin/dashboardbase.html' %}
-{% block title %}User management{% endblock %}
+{% block title %}Offers{% endblock %}
 {% load static %}
-{% block dashbody %}
+{% block body %}
 
 
 
 
 <!--Add offer  Modal -->
-<div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
+<div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog" >
+    <div class="modal-content" >
+      <div class="modal-header" >
         <h1 class="modal-title fs-5" id="exampleModalLabel">Add Offer</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" >
 
         <form action="{% url 'addoffer'%}" enctype="multipart/form-data" method="POST">
           {% csrf_token %}
@@ -23,7 +23,7 @@
           </div>
 
           <div class="form-outline mb-4">
-            <input name='offerrname' type="text" id="form3Example3cg" class="form-control form-control-lg" required />
+            <input name='offername' type="text" id="form3Example3cg" class="form-control form-control-lg" required />
             <label class="form-label" for="form3Example3cg">Offer name</label>
           </div>
 
@@ -54,7 +54,7 @@
 
 <div class="col-lg-12 grid-margin stretch-card">
   <div class="card">
-    <div class="card-body">
+    <div class="card-body" style="margin-top: 50px;">
       <a type="button" href="{% url 'addoffer'%}" class="btn btn-primary w-60"
         style="margin-top: 20px;margin-left: 10px;" data-bs-toggle="modal" data-bs-target="#addCategory">
         <i class="fa fa-plus">Add Offer</i>

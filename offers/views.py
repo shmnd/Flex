@@ -17,13 +17,15 @@ def offer(request):
 
 @login_required(login_url='adminsignin')
 def addoffer(request):
-    if request.mehod=='POST':
+    if request.method=='POST':
         offername=request.POST.get('offername')
         discount=request.POST.get('discount')
         start_date_str=request.POST.get('start_date')
         end_date_str=request.POST.get('end_date')
         
-        if offername is None and offername.strip()=='':
+        print(start_date_str,end_date_str,'zzzzzzzzzzzzzzzzzzzzzzzzzzz')
+        
+        if offername is None or offername.strip()=='':
             messages.error(request,' offername cannot be empty ')
             return redirect('offer')
         
@@ -31,8 +33,8 @@ def addoffer(request):
             messages.error(request,'cannot blank discount')
             return redirect('offer')
         try:
-            start_date=datetime.strptime(start_date_str,'%y-%m-%d').date()
-            end_date=datetime.strftime(end_date_str,'%y-%m-%d').date()
+            start_date=datetime.strptime(start_date_str,'%Y-%m-%d').date()
+            end_date=datetime.strptime(end_date_str,'%Y-%m-%d').date()
         except ValueError:
             messages.error(request,'Invalid date format .Use YYYY-MM-DD')
             return redirect('offer')
@@ -47,13 +49,15 @@ def addoffer(request):
     
         offer=Offer.objects.create(
             offer_name=offername,
-            discount=discount,
+            discount_amount=discount,
             start_date=start_date,
             end_date=end_date
         )
         offer.save()
         messages.success(request,'product successfully saved successfully')
         return redirect('offer')
+    
+    
 @login_required(login_url='adminsignin')
 def editoffer(request,offer_id):
     if request.method=='POST':
@@ -69,8 +73,8 @@ def editoffer(request,offer_id):
         if Offer.objects.filter(offer_name=offername,is_available=True).exclude(id=offer_id).exists():
             messages.error(request,'Offer name already exists')
         try:
-            start_date=datetime.strptime(start_date_str,'%y-%m-%d').date()
-            end_date=datetime.strftime(end_date_str,'%y-%m-%d').date()
+            start_date=datetime.strptime(start_date_str,'%Y-%m-%d').date()
+            end_date=datetime.strptime(end_date_str,'%Y-%m-%d').date()
         except ValueError:
             messages.error(request,'Invalid date format .Use YYYY-MM-DD')
             return redirect('offer')
@@ -96,7 +100,7 @@ def editoffer(request,offer_id):
     return render(request,'admin/admincoupon.html',context)
 
 @login_required(login_url='adminsignin')        
-def searchoffer(request,delete_id):
+def deleteoffer(request,delete_id):
     try:
         offer=Offer.objects.get(id=delete_id)
         offer.is_available=False
@@ -107,7 +111,7 @@ def searchoffer(request,delete_id):
     return redirect('offer')
     
 @login_required(login_url='adminsignin')
-def deleteoffer(request):
+def searchoffer(request,):
     search=request.POST.get('search')
     if search is None or search.strip()=='':
         messages.error(request,'search feild is empty')
