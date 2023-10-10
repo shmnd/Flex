@@ -112,93 +112,104 @@
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Home</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{% url 'dashboard' %}" aria-expanded="false">
+              <li class="nav-small-cap">
+                <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                <span class="hide-menu">Home</span>
+              </li>
+
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'dashboard' %}" aria-expanded="false">
+                  <span>
+                    <i class="ti ti-layout-dashboard"></i>
+                  </span>
+                  <span class="hide-menu">Dashboard</span>
+                </a>
+              </li>
+              
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'user' %}" aria-expanded="false">
+                  <span>
+                    <i class="ti ti-user"></i>
+                  </span>
+                  <span class="hide-menu">Users</span>
+                </a>
+              </li>
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'categories' %}" aria-expanded="false">
+                  <span>
+                    <i class="ti ti-menu"></i>
+                  </span>
+                  <span class="hide-menu">Category</span>
+                </a>
+              </li>
+              
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'brand' %}" aria-expanded="false"> 
+                  <span>
+                    <i class="ti ti-aperture"></i>
+                  </span>
+                  <span class="hide-menu">Brand</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'product' %}" aria-expanded="false"> 
+                  <span>
+                    <i class="ti ti-shopping-cart"></i>
+                  </span>
+                  <span class="hide-menu">Products</span>
+                </a>
+              </li>
+
+
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'orderlist' %}" aria-expanded="false"> 
                 <span>
-                  <i class="ti ti-layout-dashboard"></i>
+                  <i class="ti ti-ship"></i>
                 </span>
-                <span class="hide-menu">Dashboard</span>
+                <span class="hide-menu">order</span>
               </a>
-            </li>
+              </li>
+
+    
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'productsize' %}" aria-expanded="false"> 
+                  <span>
+                    <i class="ti ti-dimensions"></i>
+                  </span>
+                  <span class="hide-menu">Size</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'productcolor' %}" aria-expanded="false"> 
+                    <span>
+                      <i class="ti ti-color-filter"></i>
+                    </span>
+                    <span class="hide-menu">Color</span>
+                </a>
+              </li>
+
+
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'coupon' %}" aria-expanded="false"> 
+                <span>
+                  <i class="ti ti-gift-card"></i>
+                </span>
+                <span class="hide-menu">coupon</span>
+              </a>
+              </li>
             
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{% url 'user' %}" aria-expanded="false">
+
+
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'offer' %}" aria-expanded="false"> 
                 <span>
-                  <i class="ti ti-user"></i>
+                  <i class="ti ti-gift-off"></i>
                 </span>
-                <span class="hide-menu">Users</span>
+                <span class="hide-menu">offers</span>
               </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{% url 'categories' %}" aria-expanded="false">
-                <span>
-                  <i class="ti ti-menu"></i>
-                </span>
-                <span class="hide-menu">Category</span>
-              </a>
-            </li>
-            
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{% url 'brand' %}" aria-expanded="false"> 
-                <span>
-                  <i class="ti ti-aperture"></i>
-                </span>
-                <span class="hide-menu">Brand</span>
-              </a>
-            </li>
-
-            <li class="sidebar-item">
-               <a class="sidebar-link" href="{% url 'product' %}" aria-expanded="false"> 
-                <span>
-                  <i class="ti ti-shopping-cart"></i>
-                </span>
-                <span class="hide-menu">Products</span>
-              </a>
-            </li>
-
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{% url 'orderlist' %}" aria-expanded="false"> 
-               <span>
-                 <i class="ti ti-ship"></i>
-               </span>
-               <span class="hide-menu">order</span>
-             </a>
-            </li>
-
-   
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{% url 'productsize' %}" aria-expanded="false"> 
-                <span>
-                  <i class="ti ti-dimensions"></i>
-                </span>
-                <span class="hide-menu">Size</span>
-              </a>
-            </li>
-
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="{% url 'productcolor' %}" aria-expanded="false"> 
-                <span>
-                  <i class="ti ti-color-filter"></i>
-                </span>
-                <span class="hide-menu">Color</span>
-            </a>
-          </li>
-
-
-          <li class="sidebar-item">
-            <a class="sidebar-link" href="{% url 'coupon' %}" aria-expanded="false"> 
-             <span>
-               <i class="ti ti-gift-card"></i>
-             </span>
-             <span class="hide-menu">coupon</span>
-           </a>
-          </li>
-
+              </li>
 
             {% comment %} not using  now {% endcomment %}
 

@@ -66,7 +66,8 @@ def editoffer(request,offer_id):
             messages.error(request,' offername cannot be empty ')
             return redirect('offer')
         
-        if Offer.objects.filter(offer_name=offername,is_available=True).exclude(id=offer_id).exists()
+        if Offer.objects.filter(offer_name=offername,is_available=True).exclude(id=offer_id).exists():
+            messages.error(request,'Offer name already exists')
         try:
             start_date=datetime.strptime(start_date_str,'%y-%m-%d').date()
             end_date=datetime.strftime(end_date_str,'%y-%m-%d').date()
