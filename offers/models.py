@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 # Create your models here.
-class offer(models.Model):
+class Offer(models.Model):
     offer_name=models.CharField(max_length=100)
     discount_amount=models.PositiveBigIntegerField()
     start_date=models.DateField(default=timezone.now)
