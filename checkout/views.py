@@ -2,7 +2,7 @@ from django.shortcuts import render
 import random
 import string
 from django.shortcuts import redirect, render
-# from coupon.models import Coupon
+from coupon.models import Coupon
 from wishlist.models import Wishlist
 from .models import Order, OrderItem
 from product.models import Product,Size,Color
@@ -26,7 +26,7 @@ def checkout(request):
             messages.error(request, 'coupon field is cannot empty!')
             return redirect('checkout')
         try:
-            # check_coupons =Coupon.objects.filter(coupon_code=coupon).first()
+            check_coupons =Coupon.objects.filter(coupon_code=coupon).first()
             cartitems = Cart.objects.filter(user=request.user)
     
             total_price = 0
@@ -46,23 +46,23 @@ def checkout(request):
                 total_price += product_price * item.product_qty
                     
             grand_total = total_price
-            # if grand_total>=check_coupons.min_price:
+            if grand_total>=check_coupons.min_price:
                 
-            #     coupon=check_coupons.coupon_discount_amount
-            #     coupon_id=check_coupons.id
+                coupon=check_coupons.coupon_discount_amount
+                coupon_id=check_coupons.id
                 
-            #     request.session['coupon_session']= coupon
-            #     request.session['coupon_id']= coupon_id
+                request.session['coupon_session']= coupon
+                request.session['coupon_id']= coupon_id
                 
-            #     messages.success(request, 'This coupon added successfully!')
-            # else:
-            #     coupon=False 
-            #     messages.error(request, ' purchase minimum price!')    
+                messages.success(request, 'This coupon added successfully!')
+            else:
+                coupon=False 
+                messages.error(request, ' purchase minimum price!')    
                 
             address = Address.objects.filter(user= request.user,is_available=True)
             cart_count =Cart.objects.filter(user =request.user).count()
             wishlist_count =Wishlist.objects.filter(user=request.user).count()
-            # coupon_checkout =Coupon.objects.filter(is_available=True)
+            coupon_checkout =Coupon.objects.filter(is_available=True)
             if offer_price_total == 0:
                 offer_price_total =False
             else:
@@ -71,14 +71,14 @@ def checkout(request):
             context = {
                 'all_offer':all_offer,
                 'offer' :offer_price_total,
-                # 'coupon_checkout':coupon_checkout,
+                'coupon_checkout':coupon_checkout,
                 'cartitems': cartitems,
                 'total_price': total_price,
                 'grand_total': grand_total,
                 'address': address,
                 'wishlist_count':wishlist_count,
                 'cart_count' :cart_count,   
-                # 'coupon':coupon
+                'coupon':coupon
                 
             }
             if total_price==0:
@@ -114,7 +114,7 @@ def checkout(request):
     address = Address.objects.filter(user= request.user,is_available=True)
     cart_count =Cart.objects.filter(user =request.user).count()
     wishlist_count =Wishlist.objects.filter(user=request.user).count()
-    # coupon_checkout =Coupon.objects.filter(is_available=True)
+    coupon_checkout =Coupon.objects.filter(is_available=True)
     coupon =False
     if offer_price_total ==0:
         offer_price_total =False
@@ -124,7 +124,7 @@ def checkout(request):
     context = {
         'all_offer':all_offer,
         'offer' :offer_price_total,
-        # 'coupon_checkout':coupon_checkout,
+        'coupon_checkout':coupon_checkout,
         'cartitems': cartitems,
         'total_price': total_price,
         'grand_total': grand_total,
@@ -162,13 +162,13 @@ def placeorder(request):
         neworder.user = user
         neworder.payment_mode = request.POST.get('payment_method')
         neworder.message = request.POST.get('order_note')
-        # session_coupon_id=request.session.get('coupon_id')
-        # if session_coupon_id!=None:
-        #     session_coupons =Coupon.objects.get(id=sessifon_coupon_id)
-        # else:
-        #     session_coupons = None
+        session_coupon_id=request.session.get('coupon_id')
+        if session_coupon_id!=None:
+            session_coupons =Coupon.objects.get(id=sessifon_coupon_id)
+        else:
+            session_coupons = None
                
-        # neworder.coupon = session_coupons
+        neworder.coupon = session_coupons
         
         # Calculate the cart total price 
         cart_items = Cart.objects.filter(user=user)
@@ -223,8 +223,8 @@ def placeorder(request):
 
         payment_mode = request.POST.get('payment_method')
         if payment_mode == 'cod' or payment_mode == 'razorpay' :
-            # del request.session['coupon_session']
-            # del request.session['coupon_id']
+            del request.session['coupon_session']
+            del request.session['coupon_id']
             
             return JsonResponse({'status': "Your order has been placed successfully"})
     
