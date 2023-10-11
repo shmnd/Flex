@@ -6,7 +6,6 @@ class Variant(models.Model):
     product=models.ForeignKey(Product,on_delete=models.CASCADE)
     color=models.ForeignKey(Color,on_delete=models.CASCADE)
     size=models.ForeignKey(Size,on_delete=models.CASCADE)
-    # pricerange=models.ForeignKey(price_range,on_delete=models.CASCADE)
     quantity=models.IntegerField()
     is_available=models.BooleanField(default=True)
 

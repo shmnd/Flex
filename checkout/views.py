@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from user.models import Address,Wallet
 from user.models import User
 from django.contrib import messages
+from offers.models import Offer
 
 # Create your views here.
 
@@ -98,14 +99,14 @@ def checkout(request):
     offer_price_total=0
     all_offer= 0
     for item in cartitems:
-        # if item.variant.product.offer:
-        #     product_price = item.variant.product.product_price
-        #     total_price += product_price * item.product_qty
-        #     offer_price = item.variant.product.offer.discount_amount
-        #     offer_price_total =offer_price*item.product_qty
-        #     total_price= total_price - offer_price_total
-        #     all_offer= all_offer+offer_price_total
-        # else:     
+        if item.variant.product.offer:
+            product_price = item.variant.product.product_price
+            total_price += product_price * item.product_qty
+            offer_price = item.variant.product.offer.discount_amount
+            offer_price_total =offer_price*item.product_qty
+            total_price= total_price - offer_price_total
+            all_offer= all_offer+offer_price_total
+        else:     
             product_price = item.variant.product.product_price
             total_price += product_price * item.product_qty
     
@@ -177,17 +178,17 @@ def placeorder(request):
         offer_total_price = 0
         
         for item in cart_items:
-            # if item.variant.product.offer:
-            #     product_price = item.variant.product.product_price
-            #     cart_total_price += product_price * item.product_qty
-            #     offer_total_price =item.variant.product.offer.discount_amount
-            #     offer_total_price = offer_total_price*item.product_qty
-            #     cart_total_price = cart_total_price - offer_total_price  
+            if item.variant.product.offer:
+                product_price = item.variant.product.product_price
+                cart_total_price += product_price * item.product_qty
+                offer_total_price =item.variant.product.offer.discount_amount
+                offer_total_price = offer_total_price*item.product_qty
+                cart_total_price = cart_total_price - offer_total_price  
                 
-            # else:    
-            product_price = item.variant.product.product_price
-            cart_total_price += product_price * item.product_qty
-        
+            else:    
+                product_price = item.variant.product.product_price
+                cart_total_price += product_price * item.product_qty
+            
         session_coupon=request.session.get('coupon_session')
         cart_total_price = cart_total_price - session_coupon
         neworder.total_price = cart_total_price
@@ -242,12 +243,12 @@ def razarypaycheck(request):
     total_price = 0
     total_offer = 0
     for item in cart:
-        # if item.variant.product.offer:
-        #     total_price = total_price + item.variant.product.product_price * item.product_qty
-        #     total_offer = item.variant.product.offer.discount_amount*item.product_qty
-        #     total_price = total_price-total_offer
-        # else:    
-        total_price = total_price + item.variant.product.product_price * item.product_qty
+        if item.variant.product.offer:
+            total_price = total_price + item.variant.product.product_price * item.product_qty
+            total_offer = item.variant.product.offer.discount_amount*item.product_qty
+            total_price = total_price-total_offer
+        else:    
+            total_price = total_price + item.variant.product.product_price * item.product_qty
     session_coupon=request.session.get('coupon_session')
     total_price = total_price - session_coupon  
     

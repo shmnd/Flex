@@ -3,6 +3,7 @@ from brand.models import Brand
 from category.models import category
 from django.utils.text import slugify
 from django.urls import reverse
+from offers.models import Offer
 
 # Create your models here.
 
@@ -39,6 +40,7 @@ class Product(models.Model):
     brand=models.ForeignKey(Brand,on_delete=models.CASCADE)
     slug=models.SlugField(max_length=250,unique=True)
     is_available=models.BooleanField(default=True)
+    offer=models.ForeignKey(Offer,on_delete=models.SET_NULL,null=True)
 
     
     def __str__(self):
