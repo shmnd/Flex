@@ -34,19 +34,20 @@ def checkout(request):
             offer_price_total=0
             all_offer =0
             for item in cartitems:
-    #             if item.variant.product.offer:
-    #                 product_price = item.variant.product.product_price
-    #                 total_price += product_price * item.product_qty
-    #                 offer_price = item.variant.product.offer.discount_amount
-    #                 offer_price_total =offer_price*item.product_qty
-    #                 total_price= total_price - offer_price_total
-    #                 all_offer= all_offer+offer_price_total
-                # else:     
-                product_price = item.variant.product.product_price
-                total_price += product_price * item.product_qty
+                if item.variant.product.offer:
+                    product_price = item.variant.product.product_price
+                    total_price += product_price * item.product_qty
+                    offer_price = item.variant.product.offer.discount_amount
+                    offer_price_total =offer_price*item.product_qty
+                    total_price= total_price - offer_price_total
+                    all_offer= all_offer+offer_price_total
+                else:     
+                    product_price = item.variant.product.product_price
+                    total_price += product_price * item.product_qty
                     
             grand_total = total_price
             if grand_total>=check_coupons.min_price:
+                print(grand_total,check_coupons.min_price,'qqqqqqqqqqqqqqqq')
                 
                 coupon=check_coupons.coupon_discount_amount
                 coupon_id=check_coupons.id
@@ -84,8 +85,8 @@ def checkout(request):
             if total_price==0:
                 return redirect('home')
             else:
-                return render(request,'checkout/checkout.html',context)
-         
+                return render(request,'checkout/checkout.html',context) 
+            
         except:
             messages.error(request, 'This coupon not valid!')
             return redirect('checkout')

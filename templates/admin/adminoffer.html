@@ -1,210 +1,222 @@
 {% extends 'admin/dashboardbase.html' %}
-{% block title %}Offers{% endblock %}
+{% block title %}offer{% endblock %}
 {% load static %}
 {% block body %}
 
+<section class="content-main">
+    <div class="content-header">
+       
 
-
-
-<!--Add offer  Modal -->
-<div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog" >
-    <div class="modal-content" >
-      <div class="modal-header" >
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Offer</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" >
-
-        <form action="{% url 'addoffer'%}" enctype="multipart/form-data" method="POST">
-          {% csrf_token %}
-          <div style="width: 100px;"
-            class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
-          </div>
-
-          <div class="form-outline mb-4">
-            <input name='offername' type="text" id="form3Example3cg" class="form-control form-control-lg" required />
-            <label class="form-label" for="form3Example3cg">Offer name</label>
-          </div>
-
-          <div class="form-outline mb-4">
-            <input name='discount' type="number" id="form3Example3cg" class="form-control form-control-lg" required />
-            <label class="form-label" for="form3Example3cg">Discount</label>
-          </div>
-          <div class="form-outline mb-4">
-            <input type="date" id="start-date" name="start_date" id="form3Example3cg"
-              class="form-control form-control-lg" required>
-            <label class="form-label" for="form3Example3cg">Start date</label>
-          </div>
-          <div class="form-outline mb-4">
-            <input type="date" id="end-date" name="end_date" id="form3Example3cg" class="form-control form-control-lg"
-              required>
-            <label class="form-label" for="form3Example3cg">End date</label>
-          </div>
-          <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light" type="submit">Save
-              Changes</button>
-          </div>
-        </form>
-      </div>
     </div>
-  </div>
-</div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3">
+                <div class="col-lg-2 col-6 col-md-3">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#addCategory">
+                        <button type="submit" class="btn btn-primary"><i class="ti ti-plus"></i> Add offer</button>
 
-
-<div class="col-lg-12 grid-margin stretch-card">
-  <div class="card">
-    <div class="card-body" style="margin-top: 50px;">
-      <a type="button" href="{% url 'addoffer'%}" class="btn btn-primary w-60"
-        style="margin-top: 20px;margin-left: 10px;" data-bs-toggle="modal" data-bs-target="#addCategory">
-        <i class="fa fa-plus">Add Offer</i>
-      </a>
-      <div class="search-field d-none d-xl-block" style="float: right;">
-        <form class="d-flex align-items-center" action="#">
-          <div class="input-group form-control">
-            <div class=" bg-transparent border-0" style="font-size: 25px;">
-              <a href="#"> <i class="mdi mdi-refresh"></i></a>
-            </div>
-
-            <input type="text" class="form-control bg-transparent border-0 h-100" name="keyword"
-              placeholder="Search Offer">
-            <div class=" bg-transparent border-0">
-              <button type="submit"> <i class=" mdi mdi-magnify"></i></button>
-            </div>
-          </div>
-
-        </form>
-      </div>
-      <br>
-      <br>
-      <h4 class="card-title">Offer</h4>
-
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-
-            <th scope="col">Offer name</th>
-
-            <th scope="col">Discount</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for c in offer %}
-
-          <tr>
-            <td> {{c.id}} </td>
-
-            <td> {{c.offer_name}} </td>
-
-            <td> {{c.discount_amount}} </td>
-            <td> {{c.start_date}} </td>
-            <td> {{c.end_date}} </td>
-            <td> {% if c.is_offer_expired %}Expired{% else %}Active{% endif %} </td>
-            <!-- edit -->
-            <td>
-              <!-- Button trigger modal -->
-              <a type="button" class="fs-7 btn btn-warning" data-bs-toggle="modal"
-                data-bs-target="#confirmEdit{{forloop.counter}}">
-                <i title="" class="fa fa-edit text-black">edit</i>
-              </a>
-              <!--Edit Modal -->
-              <div class="modal fade" id="confirmEdit{{forloop.counter}}" tabindex="-1"
-                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Offer</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <form method="POST" action="{% url 'editoffer' c.id %}" enctype="multipart/form-data">
+                    </a>
+                </div>
+                <div class="col-lg-4 col-md-6 me-auto">
+                    <form action="{% url 'searchoffer' %}" method="POST">
                         {% csrf_token %}
-
-
-
-
-                        <div class="form-outline mb-4">
-                          <input name='offername' value="{{c.offer_name}}" type="text" id="form3Example3cg"
-                            class="form-control form-control-lg" required />
-                          <label class="form-label" for="form3Example3cg">Offer name</label>
+                        <div class="input-group">
+                            <input type="text" placeholder="Search..." name="search" class="form-control" />
+                            <button type="submit" class="btn btn-primary"><i class="ti ti-search"></i></button>
                         </div>
-
-                        <div class="form-outline mb-4">
-                          <input name='discount' value="{{c.discount_amount}}" type="number" id="form3Example3cg"
-                            class="form-control form-control-lg" required />
-                          <label class="form-label" for="form3Example3cg">Discount</label>
-                        </div>
-                        <div class="form-outline mb-4">
-                          <input type="date" id="start-date" name="start_date" value="{{c.start_date}}"
-                            id="form3Example3cg" class="form-control form-control-lg" required>
-                          <label class="form-label" for="form3Example3cg">Start date</label>
-                        </div>
-                        <div class="form-outline mb-4">
-                          <input type="date" id="end-date" name="end_date" value="{{c.end_date}}" id="form3Example3cg"
-                            class="form-control form-control-lg" required>
-                          <label class="form-label" for="form3Example3cg">End date</label>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                          <button type="submit" class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light"
-                            type="submit">Save Changes</button>
-                        </div>
-
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Button trigger modal -->
-
-              <button type="button" class="btn btn-danger text-black" data-bs-toggle="modal"
-                data-bs-target="#exampleModal{{forloop.counter}}">
-                Delete
-              </button>
-            </td>
-            <!-- Modal  for delete the product -->
-            <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1"
-              aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    delete Offer {{c.offer_name }}
-                  </div>
-                  <div class="modal-footer">
-                    <!-- one here -->
-                    <form action="{% url 'deleteoffer' c.id %}">
-
-                      <button type="submit" class="btn btn-danger">Confirm</button>
                     </form>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  </div>
                 </div>
-              </div>
+
+
+               
             </div>
+        </header>
+        <!-- card-header end// -->
+        <div class="card-body" style="margin-top: 50px";>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">id</th>
+                            <th scope="col">Offer name</th>
+                            <th scope="col">Discount</th>
+                            <th scope="col">Start Date</th>
+                            <th scope="col">End Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in offer %}
+                        <tr>
+                            <td> {{c.id}} </td>
+                            <td> {{c.offer_name}} </td>
+                            <td> {{c.discount_amount}} </td>
+                            <td> {{c.start_date}} </td>
+                            <td> {{c.end_date}} </td>
+                            <td> {% if c.is_offer_expired %}<span class="badge rounded-pill alert-warning">Expired</span>{% else %}<span class="badge rounded-pill alert-success">Active</span>{% endif %} </td>
 
-            </td>
-            <!--deleting ended-->
+                            <td>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn spacer c"
+                                    style="background-color: rgb(246, 250, 10); color:rgb(102, 94, 94)"
+                                    data-bs-toggle="modal" data-bs-target="#confirmEdit{{forloop.counter}}"><i
+                                        class="ti ti-edit"></i>
+                                    Edit
+                                </button>
 
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
 
+
+
+
+                                <!--Edit Modal -->
+                                <div class="modal fade" id="confirmEdit{{forloop.counter}}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title fs-5" id="exampleModalLabel">Edit offer</h3>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="POST" action="{% url 'editoffer' c.id %}"
+                                                    enctype="multipart/form-data">
+                                                    {% csrf_token %}
+
+
+                                                    <div class="form-outline mb-4">
+                                                        <input name="offername" value="{{c.offer_name}}" type="text" id="form3Example3cg"
+                                                          class="form-control form-control-lg" required />
+                                                        <label class="form-label" for="form3Example3cg">Offer name</label>
+                                                      </div>
+                              
+                                                      <div class="form-outline mb-4">
+                                                        <input name="discount" value="{{c.discount_amount}}" type="number" id="form3Example3cg"
+                                                          class="form-control form-control-lg" required />
+                                                        <label class="form-label" for="form3Example3cg">Discount</label>
+                                                      </div>
+                                                      <div class="form-outline mb-4">
+                                                        <input type="date" id="start-date" name="start_date" value="{{ c.start_date|date:'Y-m-d' }}" class="form-control form-control-lg" >
+
+
+                                                        <label class="form-label" for="start-date">Start date</label>
+                                                    </div>
+                                                    <div class="form-outline mb-4">
+                                                        <input type="date" id="end-date" name="end_date" value="{{ c.end_date|date:'Y-m-d' }}" class="form-control form-control-lg" >
+                                                        <label class="form-label" for="end-date">End date</label>
+                                                    </div>
+                                                    
+                                                    
+                                                      <div class="d-flex justify-content-center">
+                                                        <button type="submit" class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light"
+                                                          type="submit">Save Changes</button>
+                                                      </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Button trigger modal -->
+
+                                <button type="button" class="btn btn c"
+                                    style="background-color: rgb(239, 7, 54); color:rgb(255, 255, 255)"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal{{forloop.counter}}"><i
+                                        class="ti ti-trash"></i>
+                                    Delete
+                                </button>
+                            </td>
+                            <!-- Modal  for delete the Category -->
+                            <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            delete Offer {{c.offer_name }}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <!-- one here -->
+                                            <form action="{% url 'deleteoffer' c.id %}">
+
+                                                <button type="submit" class="btn btn"
+                                                    style="background-color: rgb(239, 7, 54); color:rgb(255, 255, 255)">Confirm</button>
+                                            </form>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- table-responsive //end -->
+        </div>
+        <!-- card-body end// -->
     </div>
+    <!-- card end// -->
 
-  </div>
-</div><!-- End Recent Sales -->
+</section>
 
+<div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Offer</h1>
+                <br>
 
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form action="{% url 'addoffer'%}" enctype="multipart/form-data" method="POST">
+                    {% csrf_token %}
+                    <div style="width: 100px;" class="">
+                    </div>
+                    <div class="form-outline mb-4">
+                        <input name="offername" value="{{c.offer_name}}" type="text" id="form3Example3cg"
+                          class="form-control form-control-lg" required />
+                        <label class="form-label" for="form3Example3cg">Offer name</label>
+                      </div>
+
+                      <div class="form-outline mb-4">
+                        <input name="discount" value="{{c.discount_amount}}" type="number" id="form3Example3cg"
+                          class="form-control form-control-lg" required />
+                        <label class="form-label" for="form3Example3cg">Discount</label>
+                      </div>
+                      <div class="form-outline mb-4">
+                        <input type="date" id="start-date" name="start_date" value="{{c.start_date}}"
+                          id="form3Example3cg" class="form-control form-control-lg" required>
+                        <label class="form-label" for="form3Example3cg">Start date</label>
+                      </div>
+                      <div class="form-outline mb-4">
+                        <input type="date" id="end-date" name="end_date" value="{{c.end_date}}" id="form3Example3cg"
+                          class="form-control form-control-lg" required>
+                        <label class="form-label" for="form3Example3cg">End date</label>
+                      </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light"
+                            type="submit">Save </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

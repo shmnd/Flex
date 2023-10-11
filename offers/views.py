@@ -87,17 +87,20 @@ def editoffer(request,offer_id):
             messages.error(request,'start date cannot be in past days')
             return redirect('offer')
         
-        editoff=Offer.objects.get(id=offer_id)
-        editoff.offer_name=offername
-        editoff.discount_amount=discount
-        editoff.start_date=start_date
-        editoff.end_date=end_date
-        editoff.save()
-    offers:Offer.objects.get(id=offer_id)
+        off = Offer.objects.get(id=offer_id)
+        off.offer_name=offername
+        off.discount_amount=discount
+        off.start_date=start_date
+        off.end_date=end_date
+        off.save()
+        messages.success(request, "Offer edited successfully!")
+        return redirect('offer')
+ 
+    offers : Offer.objects.get(id=offer_id)
     context={
         'offer':offers,
     }
-    return render(request,'admin/admincoupon.html',context)
+    return render(request,'admin/adminoffer.html',context)
 
 @login_required(login_url='adminsignin')        
 def deleteoffer(request,delete_id):

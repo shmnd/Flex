@@ -78,7 +78,6 @@ def addcoupon(request):
     
 @login_required(login_url='adminsignin')
 def editcoupon(request,coupon_id):
-    print('ZZZZZZZZZZZZZZZZZZ')
     if request.method=='POST':
         coupon_name=request.POST.get('coupon_name')
         coupon_code=request.POST.get('coupon_code')
@@ -89,13 +88,10 @@ def editcoupon(request,coupon_id):
         
         print(coupon_discount_amount,min_price,'lottaaaaaaaaaaaa')
         
-        print(coupon_name,coupon_code,min_price,coupon_discount_amount,start_date_str,end_date_str,'222222222222222222222222')
         
         
         if coupon_name is None or coupon_name.strip() == '':
-            print(coupon_name,'jjjjjjjjjjjjjjj')
             messages.error(request,'coupon field can not be empty ')
-            print(coupon_name,coupon_code,min_price,coupon_discount_amount,start_date_str,end_date_str,'0000000000000000000000000')
             
             return redirect('coupon')
         
@@ -107,7 +103,6 @@ def editcoupon(request,coupon_id):
             messages.error(request,'minimum price cannot be blank')
             return redirect('coupon')
         min_price=int(min_price)
-        # print(type(min_price),min_price,'shafffffffffffffffffffffffffff')
         if not min_price >0:
             messages.error(request,'minimum price must be positive')
             return redirect('coupon')
@@ -116,7 +111,6 @@ def editcoupon(request,coupon_id):
             messages.error(request,'discount cannot be blank')
             return redirect('coupon')
         coupon_discount_amount=int(coupon_discount_amount)
-        print(coupon_discount_amount,'lottaaaaaaaaaaaa')
         if not coupon_discount_amount >=0:
             messages.error(request,'discount price must be positive')
             return redirect('coupon')
