@@ -102,37 +102,6 @@ def deletecategory(request, deletecategory_id):
 
     return redirect('categories')
  
-# def deletecategory(request,deletecategory_id):
-#     if not request.user.is_superuser:
-#         return redirect('adminsignin')
-    
-    
-#     categr=category.objects.get(id=deletecategory_id)
-    
-    
-#     if request.method=='POST':
-#         deleting_cate_id=request.POST.get('dropcate')
-        
-#         if deleting_cate_id==None:
-#             categr.delete()
-#             return redirect('categories')
-        
-#         else:
-            
-#             # Check if the destination category exists
-#             cate_move=category.objects.get(id=deleting_cate_id)
-#             # Get all products in the deleting category
-#             prod_move=Product.objects.filter(id=deletecategory_id)
-            
-#             for p in prod_move:
-#                 p.category=cate_move
-#                 p.save()
-                
-#         categr=category.objects.get(id=deletecategory_id)
-        
-#         categr.delete()
-#         return redirect('categories')
-
 
 # search category
 
@@ -163,27 +132,6 @@ def searchcategory(request):
             
 
 
-
-# def reassigncategory(request, reassigncategory_id, deletecategory_id):
-#     if not request.user.is_superuser:
-#         return redirect('adminsignin')
-
-#     try:
-#         deletecategory = category.objects.get(id=deletecategory_id)
-#         reassigncategory = category.objects.get(id=reassigncategory_id)
-#     except category.DoesNotExist:
-#         messages.error(request, "One or both categories do not exist")
-#         return redirect('categories')
-        
-#     Productmove = Product.objects.filter(id=deletecategory_id)
-    
-#     for product in Productmove:
-#         product.category = reassigncategory
-#         product.save()
-    
-#     deletecategory.delete()
-    
-#     return redirect('categories')
 
                  
         
