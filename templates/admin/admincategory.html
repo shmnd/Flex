@@ -57,6 +57,8 @@
   <h1 style="font-weight: bold;">Category</h1>
 </div><!-- End Page Title -->
 
+
+
 <section class="section dashboard">
   <div class="row">
 
@@ -74,7 +76,10 @@
                   <tr>
                     <th scope="col">id</th>
                     <th scope="col">Category name</th>
+                    <th scope="col">Offer</th>
+                    {% comment %} {% if offer %} {% endcomment %}
                     <th scope="col">Discription</th>
+                    {% comment %} {% endif %} {% endcomment %}
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -84,7 +89,18 @@
                   <tr>
                     <td>  {{c.id}}  </td>
                     <td>  {{c.categories}} </td>
+
+                        {% if c.offer %}
+                    <td ><b>{{ c.offer.offer_name}}</td>
+                        {% else %}    
+                    <td ><b>No Offer</td>
+                        {% endif %}
+
                     <td>  {{c.categories_description}} </td>
+                    
+
+
+
                     <!-- edit -->
                     <td>
                       <!-- Button trigger modal -->
@@ -105,12 +121,36 @@
                                 {% csrf_token %}
   
                                 <div class="form-outline mb-4">
-                                  <input name='categories' value="{{c.categories}}"  type="text" id="form3Example3cg" class="form-control form-control-lg" />
                                   <label class="form-label" for="form3Example3cg">Category name</label>
+                                  <input name='categories' value="{{c.categories}}"  type="text" id="form3Example3cg" class="form-control form-control-lg" />
                                 </div>
+
+                                {% comment %}  {% endcomment %}
+                                <div class="form-outline mb-4">
+                                  <label class="form-label" for="form3Example3cg">offer</label>
+                                  <select class="form-select" name="offer">
+                                      {% if c.offer %}
+                                      {% for o in offer %}
+                                          {% if o.offer_name == c.offer.offer_name %}
+                                              <option value="{{ o.id }}" selected>{{ o.offer_name }}</option>    
+                                          {% else %}
+                                              <option value="{{ o.id }}">{{ o.offer_name }}</option>
+                                              <option value="">No offer</option>
+                                          {% endif %}
+                                      {% endfor %}
+                                      {% else %}
+                                      <option value="">No offer</option>
+                                      {% for o in offer %}
+                                      <option value="{{ o.id }}">{{ o.offer_name }}</option>
+                                      {% endfor %}
+                                      {% endif %}
+                                  </select>
+                                </div>
+
+                                {% comment %}  {% endcomment %}
                               <div class="form-outline mb-4">
-                                <input name='categories_description' value="{{c.categories_description}}"  type="text" id="form3Example3cg" class="form-control form-control-lg" />
                                 <label class="form-label" for="form3Example3cg">Discription</label>
+                                <input name='categories_description' value="{{c.categories_description}}"  type="text" id="form3Example3cg" class="form-control form-control-lg" />
                               </div>
                                <div class="d-flex justify-content-center">
                                   <button type="submit"
@@ -174,7 +214,6 @@
                     </td>
                     <!--deleting ended-->
 
-                 </tr>
                 {% endfor %}
                 </tbody>
               </table>

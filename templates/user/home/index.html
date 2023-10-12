@@ -2,6 +2,7 @@
 {% extends 'base.html' %}
 {% block title %}FLEX{% endblock  %}
 {% block body %}
+{% load mathfilters %} 
 {% load static %}
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
@@ -272,11 +273,21 @@
                                                
                                             </div><!-- End .product-cat -->
                                             <h3 class="product-title"><a href="{% url 'productshow' c.variant.product.id c.variant.id %}">{{c.variant.product.product_name}}</a></h3><!-- End .product-title -->
-                                            <div class="product-price">
-
+                                            
+                                            {% comment %} <div class="product-price">
                                                 <span class="new-price">${{c.variant.product.product_price}}</span>
-                                        
-                                            </div><!-- End .product-price -->
+                                            </div><!-- End .product-price --> {% endcomment %}
+
+                                            <div class="product-price">
+                                                {% if c.variant.product.category.offer %}
+                                                    <span class="new-price">${{ c.variant.product.product_price|sub:c.variant.product.category.offer.discount_amount }}</span>
+                                                    <span class="old-price">${{ c.variant.product.product_price }}</span>
+                                                {% else %}
+                                                    <span class="new-price">${{ c.variant.product.product_price }}</span>
+                                                {% endif %}
+                                            </div>
+
+
                                         </div><!-- End .product-body -->
 
                                         <div class="product-footer">

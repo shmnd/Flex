@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from product .models import Product
 from django.http import HttpResponse
+from offers.models import Offer
 
 # Create your views here.
 
@@ -12,7 +13,12 @@ def categories(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
     category_data=category.objects.all().order_by('id')
-    return render(request,'admin/admincategory.html',{'category':category_data})
+    product_list={
+        'category' : category_data ,
+        'offer' : Offer.objects.filter(is_available =True).order_by('id')   
+    }
+    return render(request,'admin/admincategory.html',product_list)
+    # return render(request,'admin/admincategory.html',{'category':category_data})
 
 def createcategory(request):
     if not request.user.is_superuser:
@@ -46,6 +52,7 @@ def editcategory(request,editcategory_id):
         
         name=request.POST.get('categories')
         discription=request.POST.get('categories_description')
+        offer_id=request.POST.get('offer')
         
             
 # validation
@@ -58,8 +65,14 @@ def editcategory(request,editcategory_id):
             messages.error(request,'name cannot be empty')
             return redirect('categories')
         
+        if offer_id =='':
+            offer_obj =None
+        else:
+            offer_obj = Offer.objects.get(id=offer_id)
+        
         categr=category.objects.get(id=editcategory_id)
         categr.categories=name
+        categr.offer=offer_obj
         categr.categories_description=discription
         categr.save()
         return redirect('categories')

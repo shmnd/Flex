@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Product view{% endblock %}
 {% load static %}
-{% comment %} {% load mathfilters %} {% endcomment %}
+{% load mathfilters %} 
 {% block body %} 
 <style>
   
@@ -28,19 +28,7 @@ justify-content: center;
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                 <li class="breadcrumb-item"><a href="#">Products</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Centered</li>
-            </ol>
-{% comment %} 
-            <nav class="product-pager ml-auto" aria-label="Product">
-                <a class="product-pager-link product-pager-prev" href="#" aria-label="Previous" tabindex="-1">
-                    <i class="icon-angle-left"></i>
-                    <span>Prev</span>
-                </a>
 
-                <a class="product-pager-link product-pager-next" href="#" aria-label="Next" tabindex="-1">
-                    <span>Next</span>
-                    <i class="icon-angle-right"></i>
-                </a>
-            </nav><!-- End .pager-nav --> {% endcomment %}
         </div><!-- End .container -->
     </nav><!-- End .breadcrumb-nav -->
 
@@ -155,9 +143,14 @@ justify-content: center;
 
 
                                 <div class="product-price">
-                                    $ {{ variant.0.variant.product.product_price }}
-                                </div><!-- End .product-price -->
-                            
+                                    {% if variant.0.variant.product.category.offer %}
+                                        <span><del><b>$ {{ variant.0.variant.product.product_price }}</del></span>
+                                        <span style="color:white;">-</span>
+                                        <span style="color:blue;"><b>$ {{ variant.0.variant.product.product_price|sub:variant.0.variant.product.category.offer.discount_amount }}</span>
+                                    {% else %}
+                                        $ {{ variant.0.variant.product.product_price }}
+                                    {% endif %}
+                                </div>
                                 <br>
                             
                               
@@ -167,19 +160,10 @@ justify-content: center;
                                
                                     {% comment %} <button class="wish-list btn-product btn-wishlist" data-product_id="{{ variant.0.variant.id }}">Add to Wishlist</button> {% endcomment %}
                                     <button class=" add-to-cart-btn btn-product btn-cart btn-product btn-wishlist  wishlistshamnad" data-product_id="{{ variant.0.variant.id }}">Add to Wishlist</button>
-            
-                                 
+                                         
                             </div>
                             
-                            
-                            
-                            
-                            
-                          
-                              
-                                
                             </div><!-- End .details-action-wrapper -->
-                            
 
                         </div><!-- End .product-details -->
                     </div><!-- End .col-md-6 -->

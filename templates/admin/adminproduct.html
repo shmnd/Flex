@@ -1,6 +1,7 @@
 {% extends 'admin/dashboardbase.html' %}
 {% block title %}Products{% endblock %}
 {% load static %}
+{% load mathfilters %} 
 {% block body %}
 
 
@@ -90,10 +91,11 @@
                             <th scope="col">Name</th>
                             <th scope="col">Category</th>
                             <th scope="col">Price</th>
-                            <!-- # <th scope="col">Offer</th> -->
+                            <th scope="col">Offer</th> 
+
                             <th scope="col">Brand</th>
-                            <!-- #  <th scope="col">Product View</th> -->
                             <th scope="col">Variants</th>
+
                             <th scope="col"></th>
                             <th scope="col">Action</th>
 
@@ -106,12 +108,26 @@
                             <td style="text-align: center;"><b>{{user.id}}</td>
                             <td><b>{{ user.product_name }}</td>
                             <td><b>{{ user.category.categories}}</td>
-                            <td ><b>{{ user.product_price }}</td>
+ 
+                            <td>
+                                {% if user.category.offer %} {# Check if the category has an associated offer #}
+                                    <span style="color:red;"><del><b>${{ user.product_price }}</del></span>
+                                    <span style="color:white;">-</span>
+                                    <span style="color:green;"><b>${{ user.product_price|sub:user.category.offer.discount_amount }}</span>
+                                {% else %}
+                                    <b>${{ user.product_price }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.category.offer %} {# Check if the category has an associated offer #}
+                                    <b>{{ user.category.offer.offer_name }}
+                                {% else %}    
+                                    <b>No Offer
+                                {% endif %}
+                            </td>
                             <td ><b>{{ user.brand.names }}</td>
-
-                            <!-- <td><a href=" url 'product_variant_view' user.id"><span class="badge rounded-pill alert-View btn btn ">View</span> </a></td> -->
-                            <!-- <td><b>{{user.variant.count}}</td> -->
-                                <td><a href="{% url 'productview' user.id %}"><span class="badge rounded-pill alert-View btn btn ">View</span> </a></td>
+                           
+                            <td><a href="{% url 'productview' user.id %}"><span class="badge rounded-pill alert-View btn btn ">View</span> </a></td>
 
                             <td><b>{{ Action}}</td>
                             <td>
@@ -121,9 +137,6 @@
                                     data-bs-toggle="modal" data-bs-target="#confirmEdit{{forloop.counter}}"><i class="ti ti-edit"></i>
                                     Edit
                                 </button>
-
-
-
 
 
                                 <!--Edit Modal -->
@@ -178,28 +191,7 @@
                                                           
                                                         </select>
                                                     </div>
-                                                    <!-- <div class="form-outline mb-4">
-                                                        <label class="form-label" for="form3Example3cg">offer</label>
-                                                        <select class="form-select" name="offer">
-                                                            {% if user.offer %}
-                                                            {% for c in offer %}
-                                                                {% if c.offer_name == user.offer.offer_name %}
-                                                                    <option value="{{ c.id }}" selected>{{ c.offer_name }}</option>    
-                                                                {% else %}
-                                                                    <option value="{{ c.id }}">{{ c.offer_name }}</option>
-                                                                    <option value="">No offer</option>
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                            {% else %}
-                                                            <option value="">No offer</option>
-                                                            {% for c in offer %}
-                                                            <option value="{{ c.id }}">{{ c.offer_name }}</option>
-                                                            {% endfor %}
-                                                            {% endif %}
-                                                        </select>
-                                                    </div> -->
-
-                                                    
+                        
 
                                                     <div class="form-outline mb-4">
                                                         <label class="form-label"
