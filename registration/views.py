@@ -97,7 +97,7 @@ def signup(request):
                 return redirect('home')
             else:
                 messages.warning(request,f'You Entered a wrong OTP')
-                return render(request,'registrations/signup.html',{'otp':True,'usr':usr})
+                return render(request,'user/registrations/signup.html',{'otp':True,'usr':usr})
             
         # User registrations validation
         else:
@@ -124,7 +124,7 @@ def signup(request):
                         'pre_password2':password2,
                     }
                     messages.info(request,'some fields are empty')
-                    return render(request,'registrations/signup.html',context)
+                    return render(request,'user/registrations/signup.html',context)
                 else:
                     pass
             
@@ -154,7 +154,7 @@ def signup(request):
                         'pre_password2':password2,
                     }
                 messages.info(request,'Enter valid email')
-                return render(request,'registrations/signup.html',context)
+                return render(request,'user/registrations/signup.html',context)
             else:
                 pass
             
@@ -213,7 +213,7 @@ def signup(request):
                         'pre_password2':password2,
                     }
                 messages.error(request,'password mismatch')
-                return render(request,'registrations/signup.html',context)
+                return render(request,'user/registrations/signup.html',context)
     else:
         return render(request,'user/registrations/signup.html')               
 

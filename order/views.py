@@ -181,12 +181,17 @@ def returnorder(request,return_id):
     
     returnorder=Orderreturn.objects.create(user=request.user,order=order_id,options=options,reason=reason)
     order= Order.objects.filter(id=view_id).first()
-    # if variant.product.offer:
-    #     total_price=variant.product.product_price*qty
-    #     offer_price=variant.product.offer.discount_amount*qty
-    #     total_price= total_price-offer_price
-    # else:
-    total_price=variant.product.product_price*qty
+    
+    if variant.product.category.offer:
+        product_price = variant.product.product_price
+        offer_discount = variant.product.category.offer.discount_amount
+        total_price = product_price * qty
+        discounted_total_price = total_price - (offer_discount * qty)
+    else:
+        total_price = variant.product.product_price * qty
+        discounted_total_price = total_price
+        
+        
     if order.return_total_price:
         pass
     else:

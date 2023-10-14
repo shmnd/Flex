@@ -14,6 +14,7 @@ from user.models import Address,Wallet
 from user.models import User
 from django.contrib import messages
 from offers.models import Offer
+from category.models import category
 
 # Create your views here.
 
@@ -35,10 +36,10 @@ def checkout(request):
             offer_price_total=0
             all_offer =0
             for item in cartitems:
-                if item.variant.product.offer:
+                if item.variant.product.category.offer:
                     product_price = item.variant.product.product_price
                     total_price += product_price * item.product_qty
-                    offer_price = item.variant.product.offer.discount_amount
+                    offer_price = item.variant.product.category.offer.discount_amount
                     offer_price_total =offer_price*item.product_qty
                     total_price= total_price - offer_price_total
                     all_offer= all_offer+offer_price_total
@@ -48,7 +49,6 @@ def checkout(request):
                     
             grand_total = total_price
             if grand_total>=check_coupons.min_price:
-                print(grand_total,check_coupons.min_price,'qqqqqqqqqqqqqqqq')
                 
                 coupon=check_coupons.coupon_discount_amount
                 coupon_id=check_coupons.id
@@ -99,10 +99,10 @@ def checkout(request):
     offer_price_total=0
     all_offer= 0
     for item in cartitems:
-        if item.variant.product.offer:
+        if item.variant.product.category.offer:
             product_price = item.variant.product.product_price
             total_price += product_price * item.product_qty
-            offer_price = item.variant.product.offer.discount_amount
+            offer_price = item.variant.product.category.offer.discount_amount
             offer_price_total =offer_price*item.product_qty
             total_price= total_price - offer_price_total
             all_offer= all_offer+offer_price_total
@@ -150,6 +150,7 @@ def placeorder(request):
         user = request.user
         # Retrieve the address ID from the form data
         coupon = request.POST.get('couponOrder')
+        print(coupon,'hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiihhhhh')
         address_id = request.POST.get('address')
         if address_id is None:
             messages.error(request, 'Address field is mandatory!')
@@ -178,10 +179,10 @@ def placeorder(request):
         offer_total_price = 0
         
         for item in cart_items:
-            if item.variant.product.offer:
+            if item.variant.product.category.offer:
                 product_price = item.variant.product.product_price
                 cart_total_price += product_price * item.product_qty
-                offer_total_price =item.variant.product.offer.discount_amount
+                offer_total_price =item.variant.product.category.offer.discount_amount
                 offer_total_price = offer_total_price*item.product_qty
                 cart_total_price = cart_total_price - offer_total_price  
                 
@@ -243,9 +244,9 @@ def razarypaycheck(request):
     total_price = 0
     total_offer = 0
     for item in cart:
-        if item.variant.product.offer:
+        if item.variant.product.category.offer:
             total_price = total_price + item.variant.product.product_price * item.product_qty
-            total_offer = item.variant.product.offer.discount_amount*item.product_qty
+            total_offer = item.variant.product.category.offer.discount_amount*item.product_qty
             total_price = total_price-total_offer
         else:    
             total_price = total_price + item.variant.product.product_price * item.product_qty

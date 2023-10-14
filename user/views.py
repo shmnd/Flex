@@ -32,7 +32,8 @@ def userprofile(request):
     if request.user ==  None:
         return redirect('signin')
     else:
-        user=User.objects.filter(email=request.user) 
+        user=User.objects.filter(email=request.user.email) 
+        print(user,'999999999999999999999999')
         address=Address.objects.filter(user=request.user,is_available=True)
         cart_count=Cart.objects.filter(user=request.user).count()
         wishlist_count=Wishlist.objects.filter(user=request.user).count()
@@ -40,12 +41,12 @@ def userprofile(request):
         order =Order.objects.filter(user=request.user) 
         
         try:
-            wallet=wallet.objects.get(user=request.user)
+            wallet=Wallet.objects.get(user=request.user)
         except:
             wallet=0
             
         context ={
-            'user':user,
+            'user1':user,
             'address':address,
             'wallet':wallet,
             'cart_count':cart_count,

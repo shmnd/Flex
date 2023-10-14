@@ -25,15 +25,19 @@ def cart(request):
         single_total_offer=0
         
         for item in cart:
-            total_price=total_price+item.variant.product.product_price*item.product_qty
-            single_product_total+item.variant.product.product_price*item.product_qty
-            
-            
-            
+            if item.variant.product.category.offer:  
+                total_price=total_price+item.variant.product.product_price*item.product_qty
+                single_product_total+item.variant.product.product_price*item.product_qty    
+                offer_total_price = offer_total_price + item.variant.product.category.offer.discount_amount * item.product_qty
+                single_total_offer =single_total_offer+item.variant.product.category.offer.discount_amount * item.product_qty
+                
+            else:    
+                total_price = total_price + item.variant.product.product_price * item.product_qty
+                single_product_total+item.variant.product.product_price * item.product_qty
+                
+        single_product_total =single_product_total-single_total_offer
+        total_price=total_price-offer_total_price
         grand_total = total_price 
-        
-        
-        
         
         context={
             'cart':cart,
@@ -62,70 +66,8 @@ def removecart(request,cart_id):
     
     return redirect('cart')
         
-        
-        
-        
-        
-        
-        
-        
-
-
-
-# ///////////////asshiiqquue cooddee//////////////////////////////////////
-# @login_required(login_url='signin')    
-# def addcart(request):
-#     if request.user.is_authenticated:
-        
-#         variant_id = request.POST.get('variant_id')
-#         add_qty = request.POST.get('add_qty')
-
-#         add_size = request.POST.get('add_size')
-        
-#         if add_qty is not None and add_qty.isdigit():
-#                 add_qty = int(add_qty)
-
-#                 add_size = request.POST.get('add_size')
-        
-#         try:
-#             variant_check = Variant.objects.get(id=variant_id)
-#             if variant_check.size == add_size:
-#                 pass
-#             else:
-#                 product = variant_check.product
-#                 color = variant_check.color
-#                 try:
-#                     check_variant = Variant.objects.get(product=product, color=color, size=add_size)
-#                     variant_id = check_variant.id
-#                 except Variant.DoesNotExist:
-#                     return JsonResponse({'status': 'Sorry this variant not available'})
-#         except Variant.DoesNotExist:
-#             return JsonResponse({'status': 'No such product found'})
-        
-#         # Check if the product is already in the user's cart
-#         if Cart.objects.filter(user=request.user, variant_id=variant_id).exists():
-#             return JsonResponse({'status': 'Product already in cart'})
-        
-#         else:
-#             variant_qty = add_qty.strip()  # Remove leading/trailing whitespace
-
-#             if variant_qty.isdigit():  # Check if variant_qty is a valid integer
-#                 variant_qty = int(variant_qty)
-                
-#                 if variant_check.quantity >= variant_qty:  
-#                     total = variant_qty * variant_check.product.product_price
-#                     Cart.objects.create(user=request.user, variant_id=variant_id, product_qty=variant_qty, singletotal=total)
-#                     return JsonResponse({'status': 'Product added successfully'})
-#                 else:
-#                     return JsonResponse({'status': 'Not enough stock for this variant'})
-#             else:
-#                 # return redirect('cart')
-        
-#                 return JsonResponse({'status': 'You are not logged in. Please log in to continue'})
+  
     
-#     # The following line will not be reached because the function will have returned a JsonResponse before this point.
-#     # If you want to redirect, place it inside the else block or remove it.
-# ////////////////////////////////////////////////////////////////
 def addcart(request):
     if request.method =='POST':
         if request.user.is_authenticated:
@@ -133,7 +75,6 @@ def addcart(request):
             variant_id = request.POST.get('variant_id')
             add_qty =int(request.POST.get('add_qty'))
             add_size =request.POST.get('add_size')
-            print(add_qty,add_size,variant_id,'lottaaaaaaaaaaaaaaaaaaaaaaaaa')
             try:
                 variant_check =Variant.objects.get(id=variant_id )
                 if variant_check.size==add_size:
@@ -160,14 +101,17 @@ def addcart(request):
                 variant_qty = add_qty
                 
                 if variant_check.quantity >= variant_qty:
-                    # if variant_check.product.offer:
-                    #     product_offer =variant_qty*variant_check.product.offer.discount_amount
-                    #     total = variant_qty*variant_check.product.product_price
-                    #     total = total -product_offer
-                    # else:   
-                    total = variant_qty*variant_check.product.product_price
-                    Cart.objects.create(user=request.user, variant_id=variant_id, product_qty=variant_qty,single_total=total)    
+                    
+                    if variant_check.product.category.offer:
+                        product_offer =variant_qty*variant_check.product.category.offer.discount_amount
+                        total = variant_qty*variant_check.product.product_price
+                        total = total - product_offer
+                    else:
+                        total = variant_qty * variant_check.product.product_price
+
+                    Cart.objects.create(user=request.user, variant_id=variant_id, product_qty=variant_qty, single_total=total)
                     return JsonResponse({'status': 'Product added successfully'})
+
                 else:
                     return JsonResponse({'status': "Only few quantity available"})
         else:
@@ -180,42 +124,6 @@ def addcart(request):
     
             
 
-#////////////////////////////////////////////////////////////////////////////////////////////
-        
-# @login_required(login_url='signin')
-# def updatecart(request):
-#     print('heloooooooooooooooooooooooooooooooooooooo')
-#     if request.method=='POST':
-#         cart_id=request.POST.get('product_id')
-#         if(Cart.objects.filter(user=request.user,id=cart_id)):
-#             prod_qty=int(request.POST.get('product_qty'))
-            
-#             cart=Cart.objects.get(id=cart_id,user=request.user)
-#             cartes=Cart.variant.quantity
-#             print(cart_id,prod_qty,'innnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
-#             if int(cartes) >= int(prod_qty):
-#                 cart.product_qty = prod_qty
-#                 if cart.variant.product.offer:
-#                     pass
-#                 else:
-#                     single=cart.single_total=prod_qty*cart.variant.product.product_price
-                    
-#                 cart.save()
-                
-#                 carts=Cart.objects.filter(user=request.user).order_by('id')
-#                 total_price=0
-#                 # offer_price=0
-#                 for item in carts:
-#                     total_price = total_price + item.variant.product.product_price * item.product_qty
-#                 print(total_price,single,prod_qty)
-                    
-#                 return JsonResponse({'status': 'Updated successfully','sub_total':total_price,'single':single, 'product_price':cart.variant.product.product_price,'quantity':prod_qty})
-#             else:
-#                 return JsonResponse({'status': 'Not allowed this Quantity'})
-#     return JsonResponse('something went wrong, reload page',safe=False)
-
- 
- 
 @login_required(login_url='user_login1')
 def updatecart(request):
     print('hieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
@@ -230,14 +138,16 @@ def updatecart(request):
             if int(cartes) >= int(prod_qty)  :
                 
                 cart.product_qty = prod_qty
-               
-                # if cart.variant.product.offer:
-                #     offer_price =prod_qty*cart.variant.product.offer.discount_amount
-                #     single=prod_qty*cart.variant.product.product_price
-                #     single =single-offer_price
-                #     cart.single_total = single
-                # else:    
-                single=cart.single_total =prod_qty*cart.variant.product.product_price
+                cart.variant.product.offer
+
+                if cart.variant.product.category.offer:
+                    offer_discount = cart.variant.product.category.offer.discount_amount
+                    single = prod_qty * (cart.variant.product.product_price - offer_discount)
+                else:
+                    single = prod_qty * cart.variant.product.product_price
+
+                cart.single_total = single
+                            
            
                 cart.save()
 
@@ -245,13 +155,15 @@ def updatecart(request):
                 total_price = 0
                 offer_price = 0
                 for item in carts:
-                    # if item.variant.product.offer:
-                    #     total_price = total_price + item.variant.product.product_price * item.product_qty
-                    #     offer_price = item.variant.product.offer.discount_amount * item.product_qty
-                    #     total_price =total_price-offer_price
-                    # else:
-                    total_price = total_price + item.variant.product.product_price * item.product_qty
-                        
+                    product_price = item.variant.product.product_price
+                    product_qty = item.product_qty
+
+                    if item.variant.product.category.offer:
+                        offer_discount = item.variant.product.category.offer.discount_amount
+                        total_price += (product_price - offer_discount) * product_qty
+                    else:
+                        total_price += product_price * product_qty
+    
                             
                 
                 

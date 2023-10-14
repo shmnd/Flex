@@ -118,10 +118,10 @@
 									<a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders"
 										role="tab" aria-controls="tab-orders" aria-selected="false">ORDERS</a>
 								</li>
-								{% comment %} <li class="nav-item">
+								<li class="nav-item">
 									<a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads"
 										role="tab" aria-controls="tab-downloads" aria-selected="false">WALLET</a>
-								</li> {% endcomment %}
+								</li>
 								<li class="nav-item">
 									<a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
 										role="tab" aria-controls="tab-address" aria-selected="false">ADDRESSES</a>
@@ -144,7 +144,7 @@
 									aria-labelledby="tab-dashboard-link">
 									{% if user1 %}
 									<h5> HELLO </h5>
-									<h5 style="text-transform: uppercase;">{{ user.first_name }}
+									<h5 style="text-transform: uppercase;">{{ user1.first_name }}
 									</h5>
 
 									{% endif %}
@@ -260,7 +260,7 @@
 								</div><!-- End .tab-pane -->
 								
 								
-										{% comment %} 
+										
 										<div class="tab-pane fade" id="tab-downloads" role="tabpanel"
 											aria-labelledby="tab-downloads-link">
 
@@ -280,7 +280,7 @@
 															</tr>
 															 <tr>
 																<td><strong>Phone Number</strong></td>
-																<td>:{{user.phone_number}}</td>
+																<td>:{{user1.phone_number}}</td>
 															</tr> 
 															<tr>
 																<td><strong>Email</strong></td>
@@ -306,7 +306,7 @@
 											</div><!-- End .col-lg-6 -->
 
 											
-										</div><!-- .End .tab-pane --> {% endcomment %}
+										</div><!-- .End .tab-pane -->
 
 										<div class="tab-pane fade" id="tab-address" role="tabpanel"
 											aria-labelledby="tab-address-link">
@@ -407,18 +407,18 @@
 														<table>
 															<tr>
 																<td><strong>First Name</strong></td>
-																<td>:{{user.first_name}}</td>
+																<td>:{{user1.first_name}}</td>
 															</tr>
 															<tr>
 																<td><strong>Last Name</strong></td>
-																<td>:{{user.last_name}}</td>
+																<td>:{{user1.last_name}}</td>
 															</tr>
 
 															
 
 															<tr>
 																<td><strong>Email</strong></td>
-																<td>:{{user.email}}</td>
+																<td>:{{user1.email}}</td>
 															</tr>
 															<tr>
 																<td><strong>Password</strong></td>

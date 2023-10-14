@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Cart{% endblock %}
 {% load static %}
-{% comment %} {% load mathfilters %} {% endcomment %}
+{% load mathfilters %}
 {% block body %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css" />
@@ -81,20 +81,18 @@
                                     
                                     <td class="price-col">{{i.variant.size.size_chart}}</td>
                                     
-                                    <td class="price-col">${{i.variant.product.product_price}}</td>
+                                    <td class="price-col">
+                                        {% if i.variant.product.category.offer %}
+                                            ${{ i.variant.product.product_price|sub:i.variant.product.category.offer.discount_amount }}
+                                        {% else %}
+                                            ${{ i.variant.product.product_price }}
+                                        {% endif %}
+                                    </td>
 
 
-                                        {% comment %} template  code {% endcomment %}
-
-
-                                    <!-- <td class="quantity-col">
-                                        <div class="cart-product-quantity changeQuantity" data-variantid="{{i.id}}">
-                                                 <input type="number" class="form-control" value="{{i.product_qty}}" min="1" max="5"  value="{{i.product_qty}}" id="pro_qty{{i.id}}">
-                                            </div><!-- End .cart-product-quantity -->
-                                    </td> -->
                                 
                                         
-                           <td class="quantity-col product_data">
+                                    <td class="quantity-col product_data">
                                         <div class="input-group quantity mx-auto " style="width: 100px;">
                                             <div class="input-group-btn changeQuantity " data-variantid="{{i.id}}">
                                                 <div class="product-details-quantity">
@@ -112,7 +110,23 @@
 
                                    
                                     <!-- Assuming the previous code is here and we focus on the "total-col" element -->
+
                                     <td class="total-col">
+                                        $<span id='single_{{i.id}}'>
+                                            {% if single %}
+                                                {{ single }}
+                                            {% else %}
+                                                {% if i.variant.product.category.offer %}
+                                                    {{ i.single_total|sub:i.variant.product.category.offer.discount_amount }}
+                                                {% else %}
+                                                    {{ i.single_total }}
+                                                {% endif %}
+                                            {% endif %}
+                                        </span>
+                                    </td>
+
+
+                                    {% comment %} <td class="total-col">
                                         $<span id='single_{{i.id}}'>
                                             {% if single %}
                                             {{ single }}
@@ -121,7 +135,7 @@
                                             {% endif %}
                                             
                                         </span>
-                                    </td>
+                                    </td> {% endcomment %}
 
 
                                     <td class="remove-col"><a href="{% url 'removecart' i.id %}"><button
@@ -146,8 +160,6 @@
                                 </form>
                             </div>
 
-                            <!-- <a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i
-                                    class="icon-refresh"></i></a> -->
                         </div><!-- End .cart-bottom -->
                     </div><!-- End .col-lg-9 -->
                     <aside class="col-lg-3">
@@ -156,20 +168,7 @@
 
                             <table class="table table-summary">
                                 <tbody>
-                                    {% comment %} <tr class="summary-subtotal">
-                                        <td>Subtotal:</td>
-                                        <td>$<span id='Subtotal'>{{total_price}}</span></td>
-                                    </tr><!-- End .summary-subtotal --> {% endcomment %}
-                                    {% comment %} <tr class="summary-shipping">
-                                        <td>Shipping:</td>
-                                        <span>&nbsp;</span>
-                                    </tr> {% endcomment %}
-
-
-                                    {% comment %} ///////////////////////////////////////////// {% endcomment %}
-
-
-
+                                    
 
                                     <div class="container mt-4">
                                         <h4>Shipping Options</h4>
@@ -212,55 +211,27 @@
                                         </div>
                                     </div>
 
-                                    
-                                    {% comment %} ///////////////////////////////////////////////////////// {% endcomment %}
-
-                                    {% comment %} <tr class="summary-shipping-row">
-                                        <td>
-                                            <div class="custom-control custom-radio">
-                                                <input type="radio" id="free-shipping" name="shipping"
-                                                    class="custom-control-input">
-                                                <label class="custom-control-label" for="free-shipping">Free
-                                                    Shipping</label>
-                                            </div><!-- End .custom-control -->
-                                        </td>
-                                        <td>$0.00</td>
-                                    </tr><!-- End .summary-shipping-row -->
-
-                                    <tr class="summary-shipping-row">
-                                        <td>
-                                            <div class="custom-control custom-radio">
-                                                <input type="radio" id="standart-shipping" name="shipping"
-                                                    class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                    for="standart-shipping">Standart:</label>
-                                            </div><!-- End .custom-control -->
-                                        </td>
-                                        <td>$10.00</td>
-                                    </tr><!-- End .summary-shipping-row -->
-
-                                    <tr class="summary-shipping-row">
-                                        <td>
-                                            <div class="custom-control custom-radio">
-                                                <input type="radio" id="express-shipping" name="shipping"
-                                                    class="custom-control-input">
-                                                <label class="custom-control-label"
-                                                    for="express-shipping">Express:</label>
-                                            </div><!-- End .custom-control -->
-                                        </td>
-                                        <td>$20.00</td>
-                                    </tr><!-- End .summary-shipping-row --> 
-
-                                  {% comment %} <tr class="summary-shipping-estimate">
-                                        <td>Estimate for Your Country<br> <a href="#">Change address</a>
-                                        </td>
-                                        <td>&nbsp;</td>
-                                    </tr><!-- End .summary-shipping-estimate -->  {% endcomment %} 
-
                                     <tr class="summary-total">
                                         <td>Total:</td>
-                                        <td>$<span id='grand_total'>{{total_price}}</span></td>
-                                    </tr><!-- End .summary-total --> 
+                                        <td>
+                                            $<span id='grand_total'>
+                                                {% if total_price %}
+                                                    {% if variant_check.product.category.offer %}
+                                                        {{ total_price|sub:variant_check.product.category.offer.discount_amount }}
+                                                    {% else %}
+                                                        {{ total_price }}
+                                                    {% endif %}
+                                                {% else %}
+                                                    0.00
+                                                {% endif %}
+                                            </span>
+                                        </td>
+                                    </tr><!-- End .summary-total -->
+                         
+                                    
+
+
+
                                 </tbody>
                             </table><!-- End .table table-summary -->
 
@@ -269,8 +240,8 @@
                                 CHECKOUT</a>
                         </div><!-- End .summary -->
 
-                        {% comment %} <a href="{% url 'Shop' %}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE {% endcomment %}
-                                {% comment %} SHOPPING</span><i class="icon-refresh"></i></a> {% endcomment %}
+                        <a href="{% url 'shop' %}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE
+                                SHOPPING</span><i class="icon-refresh"></i></a>
                     </aside><!-- End .col-lg-3 -->
                 </div><!-- End .row -->
             </div><!-- End .container -->
