@@ -183,14 +183,11 @@ def returnorder(request,return_id):
     order= Order.objects.filter(id=view_id).first()
     
     if variant.product.category.offer:
-        product_price = variant.product.product_price
-        offer_discount = variant.product.category.offer.discount_amount
-        total_price = product_price * qty
-        discounted_total_price = total_price - (offer_discount * qty)
-    else:
+            total_price = variant.product.product_price *qty
+            offer_price =variant.product.category.offer.discount_amount *qty
+            total_price = total_price-offer_price
+    else:   
         total_price = variant.product.product_price * qty
-        discounted_total_price = total_price
-        
         
     if order.return_total_price:
         pass
@@ -248,25 +245,27 @@ def ordercancel(request,cancel_id):
         if order.payment_mode=='razorpay' or order.payment_mode=='wallet':
             order=Order.objects.get(id=view_id)
             
-            
-            # if variant.product.offer:
-            #     total_price= variant.product.product_price*qty
-            #     offer_price=variant.product.offer.discount_amount*qty
-            #     # total_price=total_price-offer_price
-            # else:
-            total_price=variant.product.product_price*qty
+            if variant.product.category.offer:
+                total_price= variant.product.product_price*qty
+                offer_price=variant.product.category.offer.discount_amount*qty
+                total_price=total_price-offer_price
+                print(total_price,'444444444444444444444444')
+            else:
+                total_price=variant.product.product_price*qty
+       
+                
             if order.return_total_price:
                 pass
             else:
                 order.return_total_price=int(order.total_price)
             order.return_total_price=order.return_total_price-total_price
             
-            # if order.coupon:
-            #     if order.return_total_price<order.coupon.min_price:
-            #         total_price=total_price-order.coupon.coupon_discount_amount
-            #         order.coupon=None
-            #     else:
-            #         pass
+            if order.coupon:
+                if order.return_total_price < order.coupon.min_price:
+                    total_price=total_price-order.coupon.coupon_discount_amount
+                    order.coupon=None
+                else:
+                    pass
             if order.return_total_price<0:
                 order.return_total_price=None
                 order.save()

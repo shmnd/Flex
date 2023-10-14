@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}oredr view{% endblock %}
-
+{% load mathfilters %}
 {% block body %}
 
 <style>/* Default styles for the table */
@@ -206,7 +206,16 @@
                                 <td><b>{{ i.variant.product.category.categories }}</td>
                                 <td><b>{{ i.variant.color }}</td>
                                 <td><b>{{ i.variant.size }}</td>
-                                <td><b>{{ i.variant.product.product_price}}</td>
+                                    
+                                <td><b>
+                                    {% if i.variant.product.category.offer %}
+                                        {{ i.variant.product.product_price |sub:i.variant.product.category.offer.discount_amount }}
+                                    
+                                    {% else %}
+                                        {{ i.variant.product.product_price}}
+                                    {% endif %}
+
+
                                 <td><b>{{ i.quantity }}</td>
 
                                 <!-- Loop through the items -->

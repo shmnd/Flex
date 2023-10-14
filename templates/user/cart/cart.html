@@ -114,28 +114,15 @@
                                     <td class="total-col">
                                         $<span id='single_{{i.id}}'>
                                             {% if single %}
-                                                {{ single }}
+                                            {{ single }}
                                             {% else %}
-                                                {% if i.variant.product.category.offer %}
-                                                    {{ i.single_total|sub:i.variant.product.category.offer.discount_amount }}
-                                                {% else %}
-                                                    {{ i.single_total }}
-                                                {% endif %}
+                                            {{i.single_total }}
                                             {% endif %}
                                         </span>
                                     </td>
 
 
-                                    {% comment %} <td class="total-col">
-                                        $<span id='single_{{i.id}}'>
-                                            {% if single %}
-                                            {{ single }}
-                                            {% else %}
-                                            {{  i.single_total }}
-                                            {% endif %}
-                                            
-                                        </span>
-                                    </td> {% endcomment %}
+                           
 
 
                                     <td class="remove-col"><a href="{% url 'removecart' i.id %}"><button
