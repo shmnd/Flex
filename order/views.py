@@ -128,85 +128,87 @@ def returnorder(request,return_id):
             messages.error(request,'write minimum 20 lines')
             return  redirect('overviewstatus',view_id)
         
-    qty=orderitem_id.quantity
-    variant_id=orderitem_id.variant.id
-    order_id=Order.objects.get(id=orderitem_id.order.id)
-    
-    variant=Variant.objects.filter(id=variant_id).first()
-    variant_quantity=variant.quantity +qty
-    variant.save()
-    
-    order_item_id=Itemstatus.objects.get(id=6)
-    orderitem_id.orderitem_status=order_item_id
-    total_P =orderitem_id.price
-    print(total_P)
-    orderitem_id.save()
-    try:
-        # total item status
-        all_order_item=OrderItem.objects.filter(order=view_id)
+        qty=orderitem_id.quantity
+        variant_id=orderitem_id.variant.id
+        order_id=Order.objects.get(id=orderitem_id.order.id)
         
-        # import pdb
-        # pdb.set_trace()
-        total_count= all_order_item.count()
+        variant=Variant.objects.filter(id=variant_id).first()
+        variant.quantity=variant.quantity +qty
+        variant.save()
         
-        Pending=all_order_item.filter(orderitem_status__id=1).count()
-        Processing = all_order_item.filter(orderitem_status__id=2).count()
-        Shipped = all_order_item.filter(orderitem_status__id=3).count()
-        Delivered = all_order_item.filter(orderitem_status__id=4).count()
-        Cancelled = all_order_item.filter(orderitem_status__id=5).count()
-        Return = all_order_item.filter(orderitem_status__id=6).count()
-        
-        if total_count == Pending:
-            total_value = 1
-        elif total_count == Processing:
-            total_value = 2  
-        elif total_count == Shipped:
-            total_value = 3
-        elif total_count == Delivered:
-            total_value = 4
-        elif total_count == Cancelled:
-            total_value = 5
-        elif total_count == Return:
-            total_value = 6
-        else:
-            total_value = 4   
-    
-    except:
-        return redirect('orderview',view_id) 
-    
-    change_all_item_status = Order.objects.get(id=view_id)
-    item_status_instance_all=Orderstatus.objects.get(id=total_value)
-    change_all_item_status.order_status=item_status_instance_all
-    change_all_item_status.save()
-    
-    returnorder=Orderreturn.objects.create(user=request.user,order=order_id,options=options,reason=reason)
-    order= Order.objects.filter(id=view_id).first()
-    
-    if variant.product.category.offer:
-            total_price = variant.product.product_price *qty
-            offer_price =variant.product.category.offer.discount_amount *qty
-            total_price = total_price-offer_price
-    else:   
-        total_price = variant.product.product_price * qty
-        
-    if order.return_total_price:
-        pass
-    else:
-        order.return_total_price=int(order.total_price)
-    order.return_total_price=order.return_total_price-total_price
-    if order.return_total_price<0:
-        order.return_total_price=None
-    order.save()
-    try:
-        wallet=Wallet.objects.get(user=request.user)
-        wallet.wallet += total_price
-        wallet.save()
-    except Wallet.DoesNotExist:
-        wallet=Wallet.objects.create(user=request.user,wallet=total_price)
-        
+        order_item_id=Itemstatus.objects.get(id=6)
+        orderitem_id.orderitem_status=order_item_id
+        total_P =orderitem_id.price
+        print(total_P)
         orderitem_id.save()
-        messages.success(request,'your order return sucessfuly')
-        return redirect('orderviewuser',view_id)
+        try:
+            # total item status
+            all_order_item=OrderItem.objects.filter(order=view_id)
+            
+            # import pdb
+            # pdb.set_trace()
+            total_count= all_order_item.count()
+            
+            Pending=all_order_item.filter(orderitem_status__id=1).count()
+            Processing = all_order_item.filter(orderitem_status__id=2).count()
+            Shipped = all_order_item.filter(orderitem_status__id=3).count()
+            Delivered = all_order_item.filter(orderitem_status__id=4).count()
+            Cancelled = all_order_item.filter(orderitem_status__id=5).count()
+            Return = all_order_item.filter(orderitem_status__id=6).count()
+            
+            if total_count == Pending:
+                total_value = 1
+            elif total_count == Processing:
+                total_value = 2  
+            elif total_count == Shipped:
+                total_value = 3
+            elif total_count == Delivered:
+                total_value = 4
+            elif total_count == Cancelled:
+                total_value = 5
+            elif total_count == Return:
+                total_value = 6
+            else:
+                total_value = 4   
+        
+        except:
+            return redirect('orderview',view_id) 
+        
+        change_all_item_status = Order.objects.get(id=view_id)
+        item_status_instance_all=Orderstatus.objects.get(id=total_value)
+        change_all_item_status.order_status=item_status_instance_all
+        change_all_item_status.save()
+        
+        returnorderspupatofokyj2@10mail.xyz=Orderreturn.objects.create(user=request.user,order=order_id,options=options,reason=reason)
+        order= Order.objects.filter(id=view_id).first()
+        
+        if variant.product.category.offer:
+                total_prices = variant.product.product_price *qty
+                offer_price =variant.product.category.offer.discount_amount *qty
+                total_price = total_prices-offer_price
+                print(total_price,'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+        else:   
+            total_price = variant.product.product_price * qty
+            
+        if order.return_total_price:
+            pass
+        else:
+            order.return_total_price=int(order.total_price)
+        order.return_total_price=order.return_total_price-total_price
+        if order.return_total_price<0:
+            order.return_total_price=None
+        order.save()
+        try:
+            wallet=Wallet.objects.get(user=request.user)
+            wallet.wallet += total_price
+            wallet.save()
+        except Wallet.DoesNotExist:
+            wallet=Wallet.objects.create(user=request.user,wallet=total_price)
+            
+            orderitem_id.save()
+            messages.success(request,'your order return sucessfuly')
+            return redirect('orderviewuser',view_id)
+    return redirect('orderviewuser',view_id)
     
     
 def ordercancel(request,cancel_id):
