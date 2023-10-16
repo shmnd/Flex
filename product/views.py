@@ -203,6 +203,7 @@ def productview(request,product_id):
 def addreview(request):
 
     if request.method == 'POST':
+        
         if request.user.is_authenticated:
             rating = int(request.POST.get('rating'))
             review_text = request.POST.get('review')
@@ -216,12 +217,11 @@ def addreview(request):
 
             # Get the product instance based on the product_id
             product = Product.objects.get(id=product_id)
+            print(product,'22222222222222222')
 
             if rating == 0:
                 messages.error(request,'Please Select Stars!')
                 return redirect('orderviewuser',view_id)
-            
-          
 
             if request.user.email == email:
             # Create and save the product review associated with the product
@@ -230,31 +230,20 @@ def addreview(request):
                 rating=rating,
                 review_text=review_text,
                 name=name,
-                email=email
+                email=email,
             )
-               
+                print(review,'33333333333333333333333333')
                 messages.success(request,'Your Review added successfully!')
-                return redirect('orderviewuser',view_id)
-                
-            
-            
+                return redirect('orderviewuser',view_id)         
             
             else:
                 messages.error(request,'Invalid email! Please log in with the correct email!')
                 return redirect('orderviewuser',view_id)
-               
-            
-    
-
-           
-
-   
+ 
         else:
             messages.error(request,'Login to continue!')
             return redirect('orderviewuser',view_id)
-            
-            
-    
+ 
         messages.error(request,'Invalid request method!')
     
     return redirect('orderviewuser',view_id)
