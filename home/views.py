@@ -2,10 +2,10 @@ from django.shortcuts import render,redirect
 import re
 from django.contrib import messages,auth
 from variant.models import VariantImage, Variant
-from django.db.models import Q 
+from django.db.models import Q ,Avg
 from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
-from product.models import Product,Size,Color
+from product.models import Product, ProductReview,Size,Color
 from category.models import category
 from cart.models import Cart
 from wishlist.models import Wishlist
@@ -50,12 +50,18 @@ def productshow(request,prod_id,img_id):
     variant_images=(VariantImage.objects.filter(variant__product__id=prod_id,is_available=True).distinct('varianat_product'))
     size=Size.objects.all()
     color=VariantImage.objects.filter(variant__product__id=prod_id,is_available=True).distinct('variant__color')
+    
+    reviews = ProductReview.objects.filter(product=prod_id)
+    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
 
     context={
         'variant':variant,
         'size':size,
         'color':color,
         'variant_images':variant_images,
+        'reviews':reviews,
+        'average_rating':average_rating ,
+    
     }
     return render(request,'user/product/productshow.html',context)
 

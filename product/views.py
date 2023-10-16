@@ -217,7 +217,7 @@ def addreview(request):
 
             # Get the product instance based on the product_id
             product = Product.objects.get(id=product_id)
-            print(product,'22222222222222222')
+            print(product, rating,review_text,'lotttttttttttttttttttta22222222222222222')
 
             if rating == 0:
                 messages.error(request,'Please Select Stars!')
