@@ -1,7 +1,6 @@
 {% extends 'admin/dashboardbase.html' %}
 {% load static %}
 {% block title %}dashboard{% endblock %}
-
 {% block body %}
 
 
@@ -133,8 +132,7 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      
+    <div class="row"> 
             
       <div class="col-lg-8 d-flex align-items-stretch">
         <div class="card w-100">
@@ -214,8 +212,7 @@
       day: 'numeric',
       hour: 'numeric',
       minute: 'numeric',
-      second: 'numeric',
-      hour12: true
+      hour24: true
     };
     var formattedDateTime = date.toLocaleString('en-US', options);
     return formattedDateTime;
@@ -232,11 +229,9 @@
   // Update the date and time every second
   setInterval(updateDateTime, 1000);
   
-  
   </script>
  <script>
   $(function () {
-
 
     console.log('reachred hereeeeeeeeeeeeeeee')
     var sales_values = {{ sales_values|safe }};
@@ -261,9 +256,7 @@
       sparkline: { enabled: false },
     },
 
-
     colors: ["#5D87FF", "#49BEFF"],
-
 
     plotOptions: {
       bar: {
@@ -280,11 +273,9 @@
       enabled: false,
     },
 
-
     legend: {
       show: false,
     },
-
 
     grid: {
       borderColor: "rgba(0,0,0,0.1)",
@@ -304,7 +295,6 @@
       },
     },
 
-
     yaxis: {
       show: true,
       min: 0,
@@ -323,7 +313,6 @@
       colors: ["transparent"],
     },
 
-
     tooltip: { theme: "light" },
 
     responsive: [
@@ -338,8 +327,6 @@
         }
       }
     ]
-
-
   };
 
   var chart = new ApexCharts(document.querySelector("#chart"), chart);
@@ -348,8 +335,6 @@
   var status_delivery = {{ status_delivery }};
   var status_cancel = {{ status_cancel }};
   var status_return = {{ status_return }};
-
-
 
   // =====================================
   // Breakup
@@ -405,8 +390,6 @@
   var chart = new ApexCharts(document.querySelector("#breakup"), breakup);
   chart.render();
 
-
-
   // =====================================
   // Earning
   // =====================================
@@ -456,11 +439,6 @@
   new ApexCharts(document.querySelector("#earning"), earning).render();
 })
 
-
-
-
 </script>
-
-
 
 {% endblock %}
