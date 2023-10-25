@@ -9,6 +9,18 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login ,logout
 from brand.models import Brand
 
+
+import csv
+from datetime import date, datetime
+from itertools import groupby
+from fpdf import FPDF
+from django.db.models import Prefetch
+from checkout.models import OrderItem
+
+from checkout.models import OrderItem
+from order.models import Order
+from django.db.models import Sum
+
 # verification email
 from registration.models import UserOTP
 from django.contrib import auth
@@ -231,9 +243,8 @@ def adminlogout(request):
     return redirect('adminsignin')
     
 # ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-from checkout.models import OrderItem
-from order.models import Order
-from django.db.models import Sum
+
+
     
 @login_required(login_url='adminsignin')
 def dashboard(request):
@@ -294,13 +305,6 @@ def dashboard(request):
     return render(request,'admin/dashboard.html',context)
 
 # ///////////////////////////////////////////////////////////////////////////////////////////////////////
-
-import csv
-from datetime import date, datetime
-from itertools import groupby
-from fpdf import FPDF
-from django.db.models import Prefetch
-from checkout.models import OrderItem
 
 
 @login_required(login_url='adminsignin')
