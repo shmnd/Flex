@@ -205,117 +205,9 @@
 
 <script>
     
-
-{% comment %} //////////////mineee/////////////// {% endcomment %}
-$(document).ready(function () {
+  // Function to get the current time
   // Function to get the current date and time
-  function getCurrentDateTime() {
-      var date = new Date();
-      var options = {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-          hour12: true
-      };
-      var formattedDateTime = date.toLocaleString('en-US', options);
-      return formattedDateTime;
-  }
-
-  // Update the element with the current date and time
-  function updateDateTime() {
-      var dateTimeElement = document.getElementById('current-date-time');
-      if (dateTimeElement) {
-          dateTimeElement.textContent = getCurrentDateTime();
-      }
-  }
-
-  // Update the date and time every second
-  setInterval(updateDateTime, 1000);
-
-  console.log('Reached here');
-
-  // Get data values
-  var sales_values = {{ sales_values|safe }};
-  var return_values = {{ return_values|safe }};
-  var status_delivery = {{ status_delivery }};
-  var status_cancel = {{ status_cancel }};
-  var status_return = {{ status_return }};
-
-  // Chart 1: Sales Overview
-  var chart1Options = {
-      series: [
-          { name: "Sales this day", data: sales_values },
-          { name: "Return this day", data: return_values }
-      ],
-      chart: {
-          type: "bar",
-          height: 345,
-          offsetX: -15,
-          toolbar: { show: true },
-          foreColor: "#adb0bb",
-          fontFamily: 'inherit',
-          sparkline: { enabled: false }
-      },
-      colors: ["#5D87FF", "#49BEFF"],
-      // ... other chart options ...
-
-      xaxis: {
-          type: "category",
-          categories: ["23/08", "22/08", "03/08", "02/08", "1/08", "31/07", "22/08", "23/08"],
-          labels: {
-              style: { cssClass: "grey--text lighten-2--text fill-color" }
-          }
-      }
-      // ... other chart options ...
-  };
-
-  var chart1 = new ApexCharts(document.querySelector("#chart"), chart1Options);
-  chart1.render();
-
-  // Chart 2: Total Status Breakup
-  var chart2Options = {
-      color: "#adb5bd",
-      series: [status_delivery, status_cancel, status_return],
-      labels: ["Delivered", "Cancelled", "Return"],
-      chart: {
-          width: 180,
-          type: "donut",
-          fontFamily: "Plus Jakarta Sans', sans-serif",
-          foreColor: "#adb0bb"
-      }
-      // ... other chart options ...
-  };
-
-  var chart2 = new ApexCharts(document.querySelector("#breakup"), chart2Options);
-  chart2.render();
-
-  // Chart 3: Earnings
-  var chart3Options = {
-      chart: {
-          id: "sparkline3",
-          type: "area",
-          height: 60,
-          sparkline: { enabled: true },
-          group: "sparklines",
-          fontFamily: "Plus Jakarta Sans', sans-serif",
-          foreColor: "#adb0bb"
-      }
-      // ... other chart options ...
-  };
-
-  var chart3 = new ApexCharts(document.querySelector("#earning"), chart3Options);
-  chart3.render();
-});
-
-{% comment %} /////////////////////////////////// {% endcomment %}
-
-    
-    // Function to get the current time
-  // Function to get the current date and time
-  {% comment %} function getCurrentDateTime() {
+ function getCurrentDateTime() {
     var date = new Date();
     var options = {
       weekday: 'long',
@@ -549,7 +441,7 @@ $(document).ready(function () {
     },
   };
   new ApexCharts(document.querySelector("#earning"), earning).render();
-}) {% endcomment %}
+}) 
 
 </script>
 
