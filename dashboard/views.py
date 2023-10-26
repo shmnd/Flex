@@ -357,7 +357,7 @@ def sales_report(request):
         'recent_orders': recent_orders,
     }
 
-    return render(request, 'adminside/salesreport.html', {'sales_report': sales_report})
+    return render(request, 'admin/salesreport.html', {'sales_report': sales_report})
 
 @login_required(login_url='adminsignin')
 def export_csv(request):
