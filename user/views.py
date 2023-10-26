@@ -288,56 +288,85 @@ def viewaddress(request,view_id):
     
     return render(request,'user/userprofile/viewaddress.html',{'viewaddress':viewaddress})   
     
-
-def editprofile(request):    
+def editprofile(request):
     if request.method == 'POST':
-        print('dsssssssssssssssdddddddddddddddddddddddddd')  
-        
-        first_name=request.POST.get('first_name')
-        last_name=request.POST.get('last_name')
-        email=request.POST.get('email')
-        
-        try:          
-            print('jjjjjjjjjjjjjjjjjjjj')
-            user = User.objects.get(email=request.user)
-            print(user,'hhhhhhhhhhhhhhhhhhhhhhhhhhh')
-        except:
-            return redirect('userprofile')
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
 
-            
         if first_name.strip() == '' or last_name.strip() == '':
             messages.error(request, 'First or Lastname is empty')
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
-        
-        if email.strip()=='':
-            messages.error(request,'email cannot be empty')
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
-        email_check=validateemail(email)
-        
+        if email.strip() == '':
+            messages.error(request, 'Email cannot be empty')
+        email_check = validateemail(email)  # Assuming validateemail is a function to check email validity
         if email_check is False:
-            messages.error(request,'email not valid!')
-            return render(request,'user/userprofile/editprofile.html',{'user':user})
-        
-        try:
-            user=User.objects.get(email=request.user)
-            print(user,'lhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
-            user.first_name=first_name
-            user.last_name=last_name
-            user.email=email
-            user.save()
-            messages.success(request,'userprofile updated successfull')
-            return redirect('userprofile')
-        except:
-            messages.error(request,'User does not exist')
-            
-    try:
-        
-        user = User.objects.get(email=request.user)
-        print(user,'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+            messages.error(request, 'Email not valid!')
 
-    except:
-         return redirect('userprofile')
-    return render(request,'user/userprofile/editprofile.html',{'user':user})
+        if not email_check or first_name.strip() == '' or last_name.strip() == '':
+            return render(request, 'userprofile/editprofile.html', {'user': request.user})
+
+        try:
+            user = request.user
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.save()
+            messages.success(request, 'User profile updated successfully')
+            return redirect('userprofile')
+
+        except:
+            messages.error(request, 'User does not exist')
+
+    return render(request, 'user/userprofile/editprofile.html', {'user': request.user})
+# def editprofile(request):    
+#     if request.method == 'POST':
+#         print('dsssssssssssssssdddddddddddddddddddddddddd')  
+        
+#         first_name=request.POST.get('first_name')
+#         last_name=request.POST.get('last_name')
+#         email=request.POST.get('email')
+        
+#         try:          
+#             print('jjjjjjjjjjjjjjjjjjjj')
+#             user = User.objects.get(email=request.user)
+#             print(user,'hhhhhhhhhhhhhhhhhhhhhhhhhhh')
+#         except:
+#             return redirect('userprofile')
+
+            
+#         if first_name.strip() == '' or last_name.strip() == '':
+#             messages.error(request, 'First or Lastname is empty')
+#             return render(request,'user/userprofile/editprofile.html',{'user':user})
+        
+#         if email.strip()=='':
+#             messages.error(request,'email cannot be empty')
+#             return render(request,'user/userprofile/editprofile.html',{'user':user})
+#         email_check=validateemail(email)
+        
+#         if email_check is False:
+#             messages.error(request,'email not valid!')
+#             return render(request,'user/userprofile/editprofile.html',{'user':user})
+        
+#         try:
+#             user=User.objects.get(email=request.user)
+#             print(user,'lhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+#             user.first_name=first_name
+#             user.last_name=last_name
+#             user.email=email
+#             user.save()
+#             messages.success(request,'userprofile updated successfull')
+#             return redirect('userprofile')
+#         except:
+#             messages.error(request,'User does not exist')
+            
+#     try:
+        
+#         user = User.objects.get(email=request.user)
+#         print(user,'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+
+#     except:
+#          return redirect('userprofile')
+#     return render(request,'user/userprofile/editprofile.html',{'user':user})
 
 
 
