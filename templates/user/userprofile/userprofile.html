@@ -142,11 +142,8 @@
 
 								<div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
 									aria-labelledby="tab-dashboard-link">
-									{% if user1 %}
-									<h5> HELLO </h5>
-									<h5 style="text-transform: uppercase;">{{ user1.first_name }}
-									</h5>
-
+									{% if user %}
+										<h5> HELLO <span style="text-transform: uppercase;">{{ user.first_name }}</span> </h5>
 									{% endif %}
 									<br>
 									<div class="container">
@@ -272,19 +269,16 @@
 														<table>
 															<tr>
 																<td><strong>First Name</strong></td>
-																<td>:{{user1.first_name}}</td>
+																<td>:{{user.first_name}}</td>
 															</tr>
 															<tr>
 																<td><strong>Last Name</strong></td>
-																<td>:{{user1.last_name}}</td>
+																<td>:{{user.last_name}}</td>
 															</tr>
-															 <tr>
-																<td><strong>Phone Number</strong></td>
-																<td>:{{user1.phone_number}}</td>
-															</tr> 
+															
 															<tr>
 																<td><strong>Email</strong></td>
-																<td>:{{user1.email}}</td>
+																<td>:{{user.email}}</td>
 															</tr>
 															 {% if wallet %}
 															<tr>
@@ -407,18 +401,18 @@
 														<table>
 															<tr>
 																<td><strong>First Name</strong></td>
-																<td>:{{user1.first_name}}</td>
+																<td>:{{user.first_name}}</td>
 															</tr>
 															<tr>
 																<td><strong>Last Name</strong></td>
-																<td>:{{user1.last_name}}</td>
+																<td>:{{user.last_name}}</td>
 															</tr>
 
 															
 
 															<tr>
 																<td><strong>Email</strong></td>
-																<td>:{{user1.email}}</td>
+																<td>:{{user.email}}</td>
 															</tr>
 															<tr>
 																<td><strong>Password</strong></td>

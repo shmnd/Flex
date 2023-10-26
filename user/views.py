@@ -33,7 +33,6 @@ def userprofile(request):
         return redirect('signin')
     else:
         user=User.objects.filter(email=request.user.email) 
-        print(user,'999999999999999999999999')
         address=Address.objects.filter(user=request.user,is_available=True)
         cart_count=Cart.objects.filter(user=request.user).count()
         wishlist_count=Wishlist.objects.filter(user=request.user).count()
@@ -55,8 +54,6 @@ def userprofile(request):
             'last_order':last_order,        
         }
         return render(request,'user/userprofile/userprofile.html',context)
-
-    
 
 
 def addaddress(request,add_id):
@@ -293,7 +290,7 @@ def viewaddress(request,view_id):
     
 
 def editprofile(request):    
-    if request.method =='POST':  
+    if request.method == 'POST':
         print('dsssssssssssssssdddddddddddddddddddddddddd')  
         
         first_name=request.POST.get('first_name')
