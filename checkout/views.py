@@ -15,6 +15,7 @@ from user.models import User
 from django.contrib import messages
 from offers.models import Offer
 from category.models import category
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -205,6 +206,21 @@ def placeorder(request):
             neworder.payment_id = generate_random_payment_id(10)
 
         neworder.save()
+        
+        # Create the invoice content
+        invoice_content = f"Order ID: {neworder.id}\n"
+        invoice_content += f"Tracking Number: {neworder.tracking_no}\n"
+        invoice_content += "Invoice Details:\n"
+        for item in neworder.orderitem_set.all():
+            invoice_content += f"{item.variant.product.name} x {item.quantity}: ${item.price * item.quantity}\n"
+        invoice_content += f"Total Price: ${neworder.total_price}\n"
+
+        # Send the invoice as an email attachment
+        subject = 'Invoice for Your Order'
+        message = 'Thank you for your order!'
+        from_email = 'hamzashamnad123@gmail.com'
+        recipient_list = [user.email]  # Assuming user has an email field
+        send_mail(subject, message, from_email, recipient_list, fail_silently=False, html_message=invoice_content)
 
         # Create OrderItem instances for each cart item
         for item in cart_items:
