@@ -14,7 +14,7 @@ import csv
 from datetime import date, datetime
 from itertools import groupby
 from fpdf import FPDF
-from django.db.models import Prefetch
+from django.db.models import Prefetch   
 from checkout.models import OrderItem
 
 from checkout.models import OrderItem

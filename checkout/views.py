@@ -1,21 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render,HttpResponse
 import random
 import string
 from django.shortcuts import redirect, render
 from coupon.models import Coupon
 from wishlist.models import Wishlist
 from .models import Order, OrderItem
-from product.models import Product,Size,Color
 from variant.models import Variant,VariantImage
 from cart.models import Cart
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from user.models import Address,Wallet
-from user.models import User
 from django.contrib import messages
-from offers.models import Offer
-from category.models import category
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
+from reportlab.pdfgen import canvas
+from io import BytesIO
+from datetime import time,datetime
+from fpdf import FPDF
+from django.db.models import Prefetch   
 
 # Create your views here.
 
@@ -142,16 +143,36 @@ def checkout(request):
     else:
            
         return render(request,'user/checkout.html',context)
+
+
+
+def generate_pdf_invoice(order):
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer)
     
+    # Create the PDF content
+    p.drawString(100, 750, f"Order ID: {order.id}")
+    p.drawString(100, 730, f"Tracking Number: {order.tracking_no}")
+    p.drawString(100, 710, "Invoice Details:")
+    y = 690  # Vertical position for line items
+    for item in order.orderitem_set.all():
+        p.drawString(100, y, f"{item.variant.product.name} x {item.quantity}: ${item.price * item.quantity}")
+        y -= 20
+    p.drawString(100, y, f"Total Price: ${order.total_price}")
+    
+    p.showPage()
+    p.save()
+    
+    buffer.seek(0)
+    return buffer
 
 def placeorder(request):
     if request.method == 'POST':
         # Retrieve the current user
-        
         user = request.user
+        
         # Retrieve the address ID from the form data
         coupon = request.POST.get('couponOrder')
-        print(coupon,'hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiihhhhh')
         address_id = request.POST.get('address')
         if address_id is None:
             messages.error(request, 'Address field is mandatory!')
@@ -206,22 +227,112 @@ def placeorder(request):
             neworder.payment_id = generate_random_payment_id(10)
 
         neworder.save()
-        
-        # Create the invoice content
-        invoice_content = f"Order ID: {neworder.id}\n"
-        invoice_content += f"Tracking Number: {neworder.tracking_no}\n"
-        invoice_content += "Invoice Details:\n"
-        for item in neworder.orderitem_set.all():
-            invoice_content += f"{item.variant.product.name} x {item.quantity}: ${item.price * item.quantity}\n"
-        invoice_content += f"Total Price: ${neworder.total_price}\n"
-
+       
+       # Generate the PDF invoice
+        pdf_buffer = generate_pdf_invoice(neworder)     
+       
         # Send the invoice as an email attachment
         subject = 'Invoice for Your Order'
         message = 'Thank you for your order!'
         from_email = 'hamzashamnad123@gmail.com'
         recipient_list = [user.email]  # Assuming user has an email field
-        send_mail(subject, message, from_email, recipient_list, fail_silently=False, html_message=invoice_content)
+        
+        # Create the HTML email message
+        html_message = """
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                }}
+                .invoice {{
+                    border: 1px solid #ccc;
+                    padding: 20px;
+                    max-width: 600px;
+                    margin: 0 auto;
+                }}
+                .header {{
+                    text-align: center;
+                }}
+                .company-name {{
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #333;
+                }}
+                .invoice-details {{
+                    margin-top: 20px;
+                }}
+                table {{
+                    width: 100%;
+                    border-collapse: collapse;
+                }}
+                table, th, td {{
+                    border: 1px solid #ccc;
+                }}
+                th, td {{
+                    padding: 10px;
+                    text-align: left;
+                }}
+                .total {{
+                    margin-top: 20px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="invoice">
+                <div class="header">
+                    <div class="company-name">Your Company Name</div>
+                    <div>Invoice</div>
+                </div>
+                <div class="invoice-details">
+                    <table>
+                        <tr>
+                            <th>Order ID</th>
+                            <td>{order_id}</td>
+                        </tr>
+                        <tr>
+                            <th>Tracking Number</th>
+                            <td>{tracking_number}</td>
+                        </tr>
+                        <tr>
+                            <th>Order Date</th>
+                            <td>{order_date}</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Method</th>
+                            <td>{payment_method}</td>
+                        </tr>
+                        <tr>
+                            <th>Total Price</th>
+                            <td>{total_price}</td>
+                        </tr>
+                        <tr>
+                            <th>Offer Price</th>
+                            <td>{offer_price}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="total">
+                    <p><strong>Total Price:</strong> ${total_price}</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """.format(
+            order_id=neworder.id,
+            tracking_number=neworder.tracking_no,
+            order_date=neworder.created_at.date(),
+            payment_method=neworder.payment_mode,
+            total_price=neworder.total_price,
+            offer_price=neworder.coupon.discount_amount if neworder.coupon else "N/A"
+        )
 
+        email = EmailMessage(subject, '', from_email, recipient_list)
+        email.attach('invoice.pdf', pdf_buffer.read(), 'application/pdf')
+        email.content_subtype = "html"
+        email.body = html_message
+        email.send()
+        
         # Create OrderItem instances for each cart item
         for item in cart_items:
             OrderItem.objects.create(
@@ -244,9 +355,11 @@ def placeorder(request):
             del request.session['coupon_session']
             del request.session['coupon_id']
             
-            return JsonResponse({'status': "Your order has been placed successfully"})
+            
+            return JsonResponse({'status': "Your order has been placed successfully check your Mail for Invoice"})
     
     return redirect('checkout')
+
 
 
 
