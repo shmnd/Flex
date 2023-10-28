@@ -79,7 +79,7 @@
 
                                 <div class="intro-price text-white">from $9.99</div><!-- End .intro-price -->
 
-                                <a href="category.html" class="btn btn-white-primary btn-round">
+                                <a href="{% url "shop" %}" class="btn btn-white-primary btn-round">
                                     <span>SHOP NOW</span>
                                     <i class="icon-long-arrow-right"></i>
                                 </a>
@@ -100,7 +100,7 @@
 
                                 <div class="intro-price text-white">from $49.99</div><!-- End .intro-price -->
 
-                                <a href="category.html" class="btn btn-white-primary btn-round">
+                                <a href="{% url "shop" %}" class="btn btn-white-primary btn-round">
                                     <span>SHOP NOW</span>
                                     <i class="icon-long-arrow-right"></i>
                                 </a>
@@ -121,7 +121,7 @@
 
                                 <div class="intro-price text-white">starting at 60% off</div><!-- End .intro-price -->
 
-                                <a href="category.html" class="btn btn-white-primary btn-round">
+                                <a href="{% url "shop" %}" class="btn btn-white-primary btn-round">
                                     <span>SHOP NOW</span>
                                     <i class="icon-long-arrow-right"></i>
                                 </a>
@@ -147,7 +147,7 @@
 
                                         <div class="banner-content banner-content-right">
                                             <h4 class="banner-subtitle"><a href="#">New Arrivals</a></h4><!-- End .banner-subtitle -->
-                                            <h3 class="banner-title text-white"><a href="#">Sneakers & <br>Athletic Shoes</a></h3><!-- End .banner-title -->
+                                            <h3 class="banner-title text-white"><a href="{% url "shop" %}">Sneakers & <br>Athletic Shoes</a></h3><!-- End .banner-title -->
                                             <a href="#" class="btn btn-outline-white banner-link btn-round">Discover Now</a>
                                         </div><!-- End .banner-content -->
                                     </div><!-- End .banner -->
@@ -155,14 +155,14 @@
 
                                 <div class="col-sm-6">
                                     <div class="banner banner-overlay banner-overlay-light">
-                                        <a href="#">
+                                        <a href="{% url "shop" %}">
                                             <img src="{% static 'template/assets/images/shoes/post-3.jpg' %}" alt="Banner">
                                         </a>
 
                                         <div class="banner-content">
                                             <h4 class="banner-subtitle bright-black"><a href="#">Clearance</a></h4><!-- End .banner-subtitle -->
-                                            <h3 class="banner-title"><a href="#">Sandals</a></h3><!-- End .banner-title -->
-                                            <div class="banner-text"><a href="#">up to 70% off</a></div><!-- End .banner-text -->
+                                            <h3 class="banner-title"><a href="{% url "shop" %}">Sandals</a></h3><!-- End .banner-title -->
+                                            <div class="banner-text"><a href="{% url "shop" %}">up to 70% off</a></div><!-- End .banner-text -->
                                             <a href="#" class="btn btn-outline-gray banner-link btn-round">Shop Now</a>
                                         </div><!-- End .banner-content -->
                                     </div><!-- End .banner -->
@@ -170,30 +170,30 @@
                             </div><!-- End .row -->
 
                             <div class="banner banner-large banner-overlay d-none d-sm-block">
-                                <a href="#">
+                                <a href="{% url "shop" %}">
                                     <img src="{% static 'template/assets/images/demos/demo-10/banners/banner-3.jpg' %}" alt="Banner">
                                 </a>
 
                                 <div class="banner-content">
-                                    <h4 class="banner-subtitle text-white"><a href="#">On Sale</a></h4><!-- End .banner-subtitle -->
-                                    <h3 class="banner-title text-white"><a href="#">Slip-On Loafers</a></h3><!-- End .banner-title -->
-                                    <div class="banner-text text-white"><a href="#">up to 30% off</a></div><!-- End .banner-text -->
-                                    <a href="#" class="btn btn-outline-white banner-link btn-round">Shop Now</a>
+                                    <h4 class="banner-subtitle text-white"><a href="{% url "shop" %}">On Sale</a></h4><!-- End .banner-subtitle -->
+                                    <h3 class="banner-title text-white"><a href="{% url "shop" %}">Slip-On Loafers</a></h3><!-- End .banner-title -->
+                                    <div class="banner-text text-white"><a href="{% url "shop" %}">up to 30% off</a></div><!-- End .banner-text -->
+                                    <a href="{% url "shop" %}" class="btn btn-outline-white banner-link btn-round">Shop Now</a>
                                 </div><!-- End .banner-content -->
                             </div><!-- End .banner -->
                         </div><!-- End .col-lg-8 -->
 
                         <div class="col-lg-4 d-sm-none d-lg-block">
                             <div class="banner banner-middle banner-overlay">
-                                <a href="#">
+                                <a href="{% url "shop" %}">
                                     <img src="{% static 'template/assets/images/demos/demo-10/banners/banner-4.jpg' %}" alt="Banner">
                                 </a>
 
                                 <div class="banner-content banner-content-bottom">
-                                    <h4 class="banner-subtitle text-white"><a href="#">On Sale</a></h4><!-- End .banner-subtitle -->
-                                    <h3 class="banner-title text-white"><a href="#">Amazing <br>Lace Up Boots</a></h3><!-- End .banner-title -->
-                                    <div class="banner-text text-white"><a href="#">from $39.00</a></div><!-- End .banner-text -->
-                                    <a href="#" class="btn btn-outline-white banner-link btn-round">Discover Now</a>
+                                    <h4 class="banner-subtitle text-white"><a href="{% url "shop" %}">On Sale</a></h4><!-- End .banner-subtitle -->
+                                    <h3 class="banner-title text-white"><a href="{% url "shop" %}">Amazing <br>Lace Up Boots</a></h3><!-- End .banner-title -->
+                                    <div class="banner-text text-white"><a href="{% url "shop" %}">from $39.00</a></div><!-- End .banner-text -->
+                                    <a href="{% url "shop" %}" class="btn btn-outline-white banner-link btn-round">Discover Now</a>
                                 </div><!-- End .banner-content -->
                             </div><!-- End .banner -->
                         </div><!-- End .col-lg-4 -->
@@ -356,99 +356,99 @@
                         }'>
                         <article class="entry">
                             <figure class="entry-media">
-                                <a href="{% url "home" %}">
+                                <a href="{% url "blog" %}">
                                     <img src="{% static 'template/assets/images/demos/demo-10/blog/post-1.jpg' %}" alt="image desc">
                                 </a>
                             </figure><!-- End .entry-media -->
 
                             <div class="entry-body text-center">
                                 <div class="entry-meta">
-                                    <a href="{% url "home" %}">Nov 22, 2018</a>, 0 Comments
+                                    <a href="{% url "blog" %}">Nov 22, 2018</a>, 
                                 </div><!-- End .entry-meta -->
 
                                 <h3 class="entry-title">
-                                    <a href="{% url "home" %}">Sed adipiscing ornare.</a>
+                                    <a href="{% url "blog" %}">Sed adipiscing ornare.</a>
                                 </h3><!-- End .entry-title -->
 
                                 <div class="entry-content">
                                     <p>Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel, dapibus id, mattis vel, nisi. </p> 
-                                    <a href="{% url "home" %}" class="read-more">READ MORE</a>
+                                    <a href="{% url "blog" %}" class="read-more">READ MORE</a>
                                 </div><!-- End .entry-content -->
                             </div><!-- End .entry-body -->
                         </article><!-- End .entry -->
                     
                         <article class="entry">
                             <figure class="entry-media">
-                                <a href="{% url "home" %}">
+                                <a href="{% url "blog" %}">
                                     <img src="{% static 'template/assets/images/demos/demo-10/blog/post-2.jpg' %}" alt="image desc">
                                 </a>
                             </figure><!-- End .entry-media -->
 
                             <div class="entry-body text-center">
                                 <div class="entry-meta">
-                                    <a href="#">Dec 12, 2018</a>, 0 Comments
+                                    <a href="{% url "blog" %}">Dec 12, 2018</a>,
                                 </div><!-- End .entry-meta -->
 
                                 <h3 class="entry-title">
-                                    <a href="{% url "home" %}">Fusce lacinia arcuet nulla.</a>
+                                    <a href="{% url "blog" %}">Fusce lacinia arcuet nulla.</a>
                                 </h3><!-- End .entry-title -->
 
                                 <div class="entry-content">
                                     <p>Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc tortor eu nibh. </p>
-                                    <a href="{% url "home" %}" class="read-more">READ MORE</a>
+                                    <a href="{% url "blog" %}" class="read-more">READ MORE</a>
                                 </div><!-- End .entry-content -->
                             </div><!-- End .entry-body -->
                         </article><!-- End .entry -->
 
                         <article class="entry">
                             <figure class="entry-media">
-                                <a href="{% url "home" %}">
+                                <a href="{% url "blog" %}">
                                     <img src="{% static 'template/assets/images/demos/demo-10/blog/post-3.jpg' %}" alt="image desc">
                                 </a>
                             </figure><!-- End .entry-media -->
 
                             <div class="entry-body text-center">
                                 <div class="entry-meta">
-                                    <a href="#">Dec 19, 2018</a>, 2 Comments
+                                    <a href="{% url "blog" %}">Dec 19, 2018</a>,
                                 </div><!-- End .entry-meta -->
 
                                 <h3 class="entry-title">
-                                    <a href="{% url "home" %}">Aliquam erat volutpat.</a>
+                                    <a href="{% url "blog" %}">Aliquam erat volutpat.</a>
                                 </h3><!-- End .entry-title -->
 
                                 <div class="entry-content">
                                     <p>Pellentesque aliquet nibh nec urna. In nisi neque, aliquet vel, dapibus id, mattis vel, nisi. </p>
-                                    <a href="{% url "home" %}" class="read-more">READ MORE</a>
+                                    <a href="{% url "blog" %}" class="read-more">READ MORE</a>
                                 </div><!-- End .entry-content -->
                             </div><!-- End .entry-body -->
                         </article><!-- End .entry -->
 
                         <article class="entry">
                             <figure class="entry-media">
-                                <a href="{% url "home" %}">
+                                <a href="{% url "blog" %}">
                                     <img src="{% static 'template/assets/images/demos/demo-10/blog/post-4.jpg' %}" alt="image desc">
                                 </a>
                             </figure><!-- End .entry-media -->
 
                             <div class="entry-body text-center">
                                 <div class="entry-meta">
-                                    <a href="#">Dec 19, 2018</a>, 2 Comments
+                                    <a href="{% url "blog" %}">Dec 19, 2018</a>,
                                 </div><!-- End .entry-meta -->
 
                                 <h3 class="entry-title">
-                                    <a href="{% url "home" %}">Quisque a lectus.</a>
+                                    <a href="{% url "blog" %}">Quisque a lectus.</a>
                                 </h3><!-- End .entry-title -->
 
                                 <div class="entry-content">
                                     <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue. </p>
-                                    <a href="{% url "home" %}" class="read-more">READ MORE</a>
+                                    <a href="{% url "blog" %}" class="read-more">READ MORE</a>
                                 </div><!-- End .entry-content -->
                             </div><!-- End .entry-body -->
                         </article><!-- End .entry -->
                     </div><!-- End .owl-carousel -->
 
                     <div class="more-container text-center mt-1">
-                        <a href="{% url "home" %}" class="btn btn-outline-lightgray btn-more btn-round"><span>View more articles</span><i class="icon-long-arrow-right"></i></a>
+                        <a href="{% url "blog" %}" class="btn btn-outline-lightgray btn-more btn-round"><span>View more articles</span><i class="icon-long-arrow-right"></i></a>
                     </div><!-- End .more-container -->
                 </div><!-- End .container -->
             </div><!-- End .blog-posts -->
