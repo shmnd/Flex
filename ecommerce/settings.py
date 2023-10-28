@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'offers',
     
     
+    
+    
 ]
 
 MIDDLEWARE = [

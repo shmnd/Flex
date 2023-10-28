@@ -178,7 +178,7 @@
                         </a>
                     </div><!-- End .header-left -->
 
-                    <div class="header-right">
+                    <div class="header-left">
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
                                 <li class="megamenu-container active">
@@ -188,42 +188,15 @@
                                 <li>
                                     <a href="{% url "shop" %}" class="sf-with-ul">Shop</a>
 
-                                    
                                 </li>
-                                <li>
+                                {% comment %} <li>
                                     <a href="product.html" class="sf-with-ul">Product</a>
 
                                     
-                                </li>
-                                <li>
-                                    <a href="#" class="sf-with-ul">Pages</a>
-
-                                    <ul>
-                                        <li>
-                                            <a href="about.html" class="sf-with-ul">About</a>
-
-                                            <ul>
-                                                <li><a href="about.html">About 01</a></li>
-                                                <li><a href="about-2.html">About 02</a></li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href="contact.html" class="sf-with-ul">Contact</a>
-
-                                            <ul>
-                                                <li><a href="contact.html">Contact 01</a></li>
-                                                <li><a href="contact-2.html">Contact 02</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="login.html">Login</a></li>
-                                        <li><a href="faq.html">FAQs</a></li>
-                                        <li><a href="404.html">Error 404</a></li>
-                                        <li><a href="coming-soon.html">Coming Soon</a></li>
-                                    </ul>
-                                </li>
+                                </li> {% endcomment %}
+                                
                                 <li>
                                     <a href="blog.html" class="sf-with-ul">Blog</a>
-
                                 </li>
                                
                             </ul><!-- End .menu -->
@@ -238,6 +211,9 @@
                                 </div><!-- End .header-search-wrapper -->
                             </form>
                         </div><!-- End .header-search --> {% endcomment %}
+                    </div><!-- End .header-left -->
+                    
+                    <div class="header-right">
 
                         <div class="dropdown cart-dropdown">
                             <a href="{% url 'cart' %}" class="dropdown-toggle" role="button">

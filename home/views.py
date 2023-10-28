@@ -88,4 +88,4 @@ def usercategoryshow(request,category_id):
 
 
 def blog(request):
-    return render(request,'blog/blog.html')
+    return render(request,'user/blog/blog.html')
