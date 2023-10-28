@@ -26,9 +26,11 @@ def checkout(request):
     
     if request.method == 'POST':
         coupon = request.POST.get('coupon')
+        
         if coupon is None:
             messages.error(request, 'coupon field is cannot empty!')
             return redirect('checkout')
+        
         try:
             check_coupons =Coupon.objects.filter(coupon_code=coupon).first()
             cartitems = Cart.objects.filter(user=request.user)
@@ -37,6 +39,7 @@ def checkout(request):
             offer_price = 0
             offer_price_total=0
             all_offer =0
+            
             for item in cartitems:
                 if item.variant.product.category.offer:
                     product_price = item.variant.product.product_price
@@ -50,23 +53,27 @@ def checkout(request):
                     total_price += product_price * item.product_qty
                     
             grand_total = total_price
+            
             if grand_total>=check_coupons.min_price:
-                
+                print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
                 coupon=check_coupons.coupon_discount_amount
                 coupon_id=check_coupons.id
                 
+                print(coupon,'chooooooooooooooooo')
                 request.session['coupon_session']= coupon
                 request.session['coupon_id']= coupon_id
                 
-                messages.success(request, 'This coupon added successfully!')
+                messages.success(request, 'This coupon added successfully')
             else:
                 coupon=False 
-                messages.error(request, ' purchase minimum price!')    
+                
+                messages.error(request, ' purchase minimum price')    
                 
             address = Address.objects.filter(user= request.user,is_available=True)
             cart_count =Cart.objects.filter(user =request.user).count()
             wishlist_count =Wishlist.objects.filter(user=request.user).count()
             coupon_checkout =Coupon.objects.filter(is_available=True)
+            
             if offer_price_total == 0:
                 offer_price_total =False
             else:
@@ -83,8 +90,8 @@ def checkout(request):
                 'wishlist_count':wishlist_count,
                 'cart_count' :cart_count,   
                 'coupon':coupon
-                
             }
+            
             if total_price==0:
                 return redirect('home')
             else:
@@ -100,6 +107,7 @@ def checkout(request):
     offer_price = 0
     offer_price_total=0
     all_offer= 0
+    
     for item in cartitems:
         if item.variant.product.category.offer:
             product_price = item.variant.product.product_price
@@ -108,10 +116,10 @@ def checkout(request):
             offer_price_total =offer_price*item.product_qty
             total_price= total_price - offer_price_total
             all_offer= all_offer+offer_price_total
+            print(all_offer,'yyyyyyyyyyyyyyyyyy')
         else:     
             product_price = item.variant.product.product_price
             total_price += product_price * item.product_qty
-    
     
     grand_total = total_price 
 
@@ -120,7 +128,8 @@ def checkout(request):
     wishlist_count =Wishlist.objects.filter(user=request.user).count()
     coupon_checkout =Coupon.objects.filter(is_available=True)
     coupon =False
-    if offer_price_total ==0:
+    
+    if offer_price_total == 0:
         offer_price_total =False
     else:
         offer_price_total
@@ -136,12 +145,11 @@ def checkout(request):
         'wishlist_count':wishlist_count,
         'cart_count' :cart_count,  
         'coupon':coupon
-        
     }
+    
     if total_price==0:
        return redirect('home')
     else:
-           
         return render(request,'user/checkout.html',context)
 
 
@@ -354,7 +362,6 @@ def placeorder(request):
         if payment_mode == 'cod' or payment_mode == 'razorpay' :
             del request.session['coupon_session']
             del request.session['coupon_id']
-            
             
             return JsonResponse({'status': "Your order has been placed successfully check your Mail for Invoice"})
     
