@@ -14,10 +14,7 @@ from django.contrib import messages
 from django.core.mail import EmailMessage
 from reportlab.pdfgen import canvas
 from io import BytesIO
-from datetime import time,datetime
-from fpdf import FPDF
-from django.db.models import Prefetch   
-
+from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 
 def checkout(request):
@@ -25,14 +22,17 @@ def checkout(request):
     request.session['coupon_id']= None
     
     if request.method == 'POST':
-        coupon = request.POST.get('coupon')
+        coupon_name = request.POST.get('coupon')
         
-        if coupon is None:
+        if not coupon_name:
             messages.error(request, 'coupon field is cannot empty!')
             return redirect('checkout')
         
         try:
-            check_coupons =Coupon.objects.filter(coupon_code=coupon).first()
+            check_coupons =Coupon.objects.filter(coupon_code=coupon_name).first()
+            
+            print(check_coupons,'xxxxxxxxxxxxxxxxx')
+            
             cartitems = Cart.objects.filter(user=request.user)
     
             total_price = 0
@@ -95,10 +95,11 @@ def checkout(request):
             if total_price==0:
                 return redirect('home')
             else:
-                return render(request,'checkout/checkout.html',context) 
+                return render(request,'user/checkout.html',context) 
             
-        except:
+        except ObjectDoesNotExist:
             messages.error(request, 'This coupon not valid!')
+            # change into checkout
             return redirect('checkout')
     
     cartitems = Cart.objects.filter(user=request.user)
