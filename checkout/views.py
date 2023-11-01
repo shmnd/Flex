@@ -55,7 +55,8 @@ def checkout(request):
             grand_total = total_price
             
             if grand_total>=check_coupons.min_price:
-                print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
+                print('555555555555555')
+                print(check_coupons.min_price,grand_total,'4444444444444444444444444')
                 coupon=check_coupons.coupon_discount_amount
                 coupon_id=check_coupons.id
                 
@@ -182,6 +183,7 @@ def placeorder(request):
         
         # Retrieve the address ID from the form data
         coupon = request.POST.get('couponOrder')
+        # print(coupon,'suiiiiiiiiiiiiiiiiii')
         address_id = request.POST.get('address')
         if address_id is None:
             messages.error(request, 'Address field is mandatory!')
@@ -333,7 +335,7 @@ def placeorder(request):
             order_date=neworder.created_at.date(),
             payment_method=neworder.payment_mode,
             total_price=neworder.total_price,
-            offer_price=neworder.coupon.discount_amount if neworder.coupon else "N/A"
+            offer_price=neworder.coupon.coupon_discount_amount if neworder.coupon else "N/A"
         )
 
         email = EmailMessage(subject, '', from_email, recipient_list)
