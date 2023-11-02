@@ -15,7 +15,6 @@ def coupon(request):
 
     return render(request,'admin/admincoupon.html',context)
 
-
 @login_required(login_url='adminsignin')
 def addcoupon(request):
     if request.method=='POST':
@@ -86,13 +85,8 @@ def editcoupon(request,coupon_id):
         start_date_str=request.POST.get('start_date')
         end_date_str=request.POST.get('end_date')
         
-        print(coupon_discount_amount,min_price,'lottaaaaaaaaaaaa')
-        
-        
-        
         if coupon_name is None or coupon_name.strip() == '':
             messages.error(request,'coupon field can not be empty ')
-            
             return redirect('coupon')
         
         if not re.search(r'\b[A-z0-9a-z]{2,}\b',coupon_code):
@@ -141,7 +135,6 @@ def editcoupon(request,coupon_id):
         coupon_edit.start_date=start_date
         coupon_edit.end_date=end_date
         coupon_edit.save()
-        print(coupon_edit,'qqqqqqqqqqqqqqqqqqqq')
         messages.success(request,'Coupon edited sucessfully')    
         return redirect('coupon')
     coupon :Coupon.objects.get(id=coupon_id)
@@ -168,8 +161,6 @@ def searchcoupon(request):
 def deletecoupon(request,coupon_id):
     try:
         coupon_delete=Coupon.objects.get(id=coupon_id)
-        print(coupon_delete,'deleteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
-        
         coupon_delete.is_available=False
         coupon_delete.save()
         messages.success(request,'coupon deleted')
