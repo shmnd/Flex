@@ -7,9 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages,auth
 # Create your views here.
 
+# to view cart on userside
 @login_required(login_url='signin')
 def cart(request):
-    # print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiilllllllllllllllllllllll')
     if request.user.is_authenticated:
         cart=Cart.objects.filter(user=request.user).order_by('id')
         variants=cart.values_list('variant',flat=True)
@@ -54,7 +54,7 @@ def cart(request):
         return render(request,'user/cart/cart.html')
     
     
-    
+# to remove product from cart on userside 
 @login_required(login_url='signin')
 def removecart(request,cart_id):
     try:
@@ -67,7 +67,7 @@ def removecart(request,cart_id):
     return redirect('cart')
         
   
-    
+# to add product into cart on userside
 def addcart(request):
     if request.method =='POST':
         if request.user.is_authenticated:
@@ -123,10 +123,9 @@ def addcart(request):
             
     
             
-
+# to update cart after removing or adding product including offer price 
 @login_required(login_url='user_login1')
 def updatecart(request):
-    print('hieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
     if request.method == 'POST':
         cart_id = request.POST.get('cart_id')
         if (Cart.objects.filter(user=request.user, id=cart_id)):
@@ -134,7 +133,6 @@ def updatecart(request):
            
             cart = Cart.objects.get(id=cart_id, user=request.user)
             cartes = cart.variant.quantity
-            # checkqty = Variant.objects.fi
             if int(cartes) >= int(prod_qty)  :
                 
                 cart.product_qty = prod_qty
@@ -147,7 +145,6 @@ def updatecart(request):
                     single = prod_qty * cart.variant.product.product_price
 
                 cart.single_total = single
-                            
            
                 cart.save()
 
@@ -164,10 +161,6 @@ def updatecart(request):
                     else:
                         total_price += product_price * product_qty
     
-                            
-                
-                
-                    
                 return JsonResponse({'status': 'Updated successfully','sub_total':total_price,'single':single, 'product_price':cart.variant.product.product_price,'quantity':prod_qty})
             else:
                 return JsonResponse({'status': 'Not allowed this Quantity'})

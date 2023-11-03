@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+# to view offer on adminpage
 @login_required(login_url='adminsignin')
 def offer(request):
     context ={
@@ -15,6 +16,7 @@ def offer(request):
     }
     return render(request,'admin/adminoffer.html',context)
 
+# to add offer in adminpage
 @login_required(login_url='adminsignin')
 def addoffer(request):
     if request.method=='POST':
@@ -57,7 +59,8 @@ def addoffer(request):
         messages.success(request,'product successfully saved successfully')
         return redirect('offer')
     
-    
+
+# to edit offer on adminpage
 @login_required(login_url='adminsignin')
 def editoffer(request,offer_id):
     if request.method=='POST':
@@ -102,6 +105,8 @@ def editoffer(request,offer_id):
     }
     return render(request,'admin/adminoffer.html',context)
 
+
+# to delete offer on adminpage
 @login_required(login_url='adminsignin')        
 def deleteoffer(request,delete_id):
     try:
@@ -112,7 +117,8 @@ def deleteoffer(request,delete_id):
     except:
         messages.error(request,'offer does not exist')
     return redirect('offer')
-    
+
+# to search offer on adminpage
 @login_required(login_url='adminsignin')
 def searchoffer(request,):
     search=request.POST.get('search')

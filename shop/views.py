@@ -6,11 +6,8 @@ from category.models import category
 from cart.models import Cart
 from wishlist.models import Wishlist
 
-
-
 # Create your views here.
-
-
+# show product on shop page in userside
 def shop(request):
     variant_images=(VariantImage.objects.filter(variant__product__is_available=True).order_by('variant__product').distinct('variant__product'))
     
@@ -33,13 +30,13 @@ def shop(request):
         'size_filter':size_filter,
         'color_filter':color_filter,
         'wishlist_count':wishlist_count,
-        
     }
-    for i in category_filter:
-        print(i.id,i.categories,'ddddddddddddddddddddddddddddddddd')
+    # for i in category_filter:
+    #     print(i.id,i.categories,'ddddddddddddddddddddddddddddddddd')
     
     return render(request,'user/shop/shop.html',context)
 
+# filter on shop page base on color,category,size
 def shopfilter(request):
     
     variant_images=[]
@@ -48,10 +45,6 @@ def shopfilter(request):
         color=request.POST.get('colorfilter')
         size=request.POST.get('sizefilter')
         categories=request.POST.get('categoryfilter')
-        print(categories,'yyyyyyyyyyyyyyyyyyyyyyyy')
-        
-        print(size,color,categories,'kkkkkkkkkkkkkk')
-        
         
         if color and size and categories:
             variant_images=(VariantImage.objects.filter
@@ -122,9 +115,8 @@ def shopfilter(request):
     
     return render(request,'user/shop/shop.html',context)
 
-
+# sorting on shop page userside
 def shopsort(request):
-    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     name = request.POST.get('sort_select')
     
     variant_images = VariantImage.objects.filter(variant__product__is_available=True)

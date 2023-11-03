@@ -8,6 +8,7 @@ from offers.models import Offer
 
 # Create your views here.
 
+#to view categories on admin side 
 @login_required(login_url='adminsignin')
 def categories(request):
     if not request.user.is_superuser:
@@ -18,8 +19,8 @@ def categories(request):
         'offer' : Offer.objects.filter(is_available =True).order_by('id')   
     }
     return render(request,'admin/admincategory.html',product_list)
-    # return render(request,'admin/admincategory.html',{'category':category_data})
 
+# to add category on adminside
 def createcategory(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -42,8 +43,7 @@ def createcategory(request):
         return redirect('categories')
     
     
-    # edit category
-    
+# edit category on adminside
 def editcategory(request,editcategory_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -79,8 +79,7 @@ def editcategory(request,editcategory_id):
         
         
         
-# delete category 
-
+# delete category on adminside
 def deletecategory(request, deletecategory_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -116,12 +115,10 @@ def deletecategory(request, deletecategory_id):
     return redirect('categories')
  
 
-# search category
-
+# search category on adminside
 def searchcategory(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
-    
     
     if 'keyword' in request.GET:
     
@@ -143,8 +140,3 @@ def searchcategory(request):
     else:
         return render(request,'404.html')
             
-
-
-
-                 
-        

@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 @cache_control(no_chace=True,must_revalidate=True,no_store=True)
+# to view brand on admin side
 def brand(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -15,7 +16,7 @@ def brand(request):
     return render(request,'admin/adminbrand.html',{'brand':brand_data})
 
 
-
+# create brand on admin side
 def createbrand(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -39,8 +40,7 @@ def createbrand(request):
     return redirect('brand')
 
 
-# edit brand
-
+# edit brand on admin side
 def editbrand(request,editbrand_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -70,8 +70,8 @@ def editbrand(request,editbrand_id):
         return redirect('brand')
 
 
-# delete brand
 
+# delete brand on admin side
 def deletebrand(request,deletebrand_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -81,7 +81,7 @@ def deletebrand(request,deletebrand_id):
     return redirect('brand')
 
 
-# search brand
+# search brand  on admin side
 def searchbrand(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')

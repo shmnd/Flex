@@ -8,6 +8,7 @@ import re
 from django.db.models import Q
 
 # Create your views here.
+# to view coupon in admin page
 def coupon(request):
     context = {
         'coupon':Coupon.objects.filter(is_available=True).order_by('id')
@@ -15,6 +16,7 @@ def coupon(request):
 
     return render(request,'admin/admincoupon.html',context)
 
+# for adding coupon 
 @login_required(login_url='adminsignin')
 def addcoupon(request):
     if request.method=='POST':
@@ -75,6 +77,7 @@ def addcoupon(request):
         messages.success(request,'Coupon added successfully ')
         return redirect('coupon')
     
+# for editing coupon 
 @login_required(login_url='adminsignin')
 def editcoupon(request,coupon_id):
     if request.method=='POST':
@@ -143,7 +146,7 @@ def editcoupon(request,coupon_id):
     }
     return render(request,'admin/admincoupon.html',context)
         
-
+# to search coupon 
 @login_required(login_url='adminsignin')
 def searchcoupon(request):
     search=request.POST.get('search')
@@ -156,7 +159,7 @@ def searchcoupon(request):
                               Q(start_date__icontains=search) |Q(end_date__icontains=search),is_available=True)
     )
 
-
+# to delete coupon
 @login_required(login_url='adminsignin')
 def deletecoupon(request,coupon_id):
     try:

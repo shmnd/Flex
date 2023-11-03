@@ -10,6 +10,7 @@ from category.models import category
 from cart.models import Cart
 from wishlist.models import Wishlist
 
+# main page of userside 
 def home(request):
     if  request.user.is_superuser:
         messages.error(request,'admin cannot acess the userside')
@@ -42,7 +43,7 @@ def home(request):
     return render(request,'user/home/index.html',context)
 
 
-# @login_required(login_url='signin')
+# to dispaly the product on userside
 def productshow(request,prod_id,img_id):
     variant=VariantImage.objects.filter(variant=img_id,is_available=True)
     variant_images=(VariantImage.objects.filter(variant__product__id=prod_id,is_available=True).distinct('varianat_product'))
@@ -76,16 +77,15 @@ def productshow(request,prod_id,img_id):
     }
     return render(request,'user/product/productshow.html',context)
 
-
+# to show the category on product page on userside
 def usercategoryshow(request,category_id):
     variant=VariantImage.objects.filter(variant__product__category=category_id,is_available=True).distinct('variant_color')
     rating=Product.objects.annotate(avg_rating=Avg('reviews__rating'))
     context={
         'variant':variant,
-
     }
     return render(request,'user/category/categoryuser.html',context)
 
-
+# to blog page on userside
 def blog(request):
     return render(request, 'user/blog/blog.html')

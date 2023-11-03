@@ -30,11 +30,11 @@ import random
 import re
 from django.core.exceptions import ValidationError
 
-
+# to singin for admin
 def adminsignin(request):
     if request.method == "POST":
         email = request.POST.get('email')
-        print(email,'hiiiiiiiiiiiiiiiiiiiiiiii')
+        print(email,'emaillllllllllllllllllll')
         password = request.POST.get('password')
         user = authenticate(request, username=email, password=password)
 
@@ -57,7 +57,7 @@ def adminsignin(request):
     return render(request, 'admin/adminsignin.html')
 
 
-# validations
+# validations to email  for admin
 def validateEmail(email):
     from django.core.validators import validate_email
     try:
@@ -66,6 +66,7 @@ def validateEmail(email):
     except ValidationError:
         return False
 
+# to validate password  for admin
 def ValidatePassword(password):
     from django.contrib.auth.password_validation import validate_password
     try:
@@ -73,7 +74,9 @@ def ValidatePassword(password):
         return True
     except ValidationError:
         return False
-    
+
+
+# to validate name  for admin
 def validate_name(value):
     if not re.match(r'^[a-zA-Z\s]*$', value):
         return 'Name should only contain alphabets and spaces'
@@ -85,9 +88,7 @@ def validate_name(value):
     else:
         return False
     
-    
-    
-    
+#adminsignup for admin 
 def adminsignup(request):
     # OTP VERIFICATION
     if request.method == 'POST':
@@ -189,10 +190,7 @@ def adminsignup(request):
         return render(request, 'admin/adminsignup.html')
     
     
-
-    
-    
-# user management
+# user management (block or unblock) adminside
 def user(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -214,7 +212,7 @@ def blockuser(request,user_id):
     return redirect('user')
 
 
-# Search User
+# Search User on adminside
 def searchuser(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -237,15 +235,12 @@ def searchuser(request):
         return render(request, 'error/index.html')
     
     
-    
+#admin logout 
 def adminlogout(request):
     logout(request)
     return redirect('adminsignin')
     
-# ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    
+# dashboard views like graph and chart
 @login_required(login_url='adminsignin')
 def dashboard(request):
     if not request.user.is_superuser:
@@ -255,7 +250,6 @@ def dashboard(request):
     # Prepare data for the chart
     categories = [item['order__created_at__date'].strftime('%d/%m') for item in sales_data]
     sales_values = [item['total_sales'] for item in sales_data]
-    
    
     return_data = OrderItem.objects.filter(orderitem_status__item_status__in=["Return", "Cancelled"]).values('order__created_at__date').annotate(total_returns=Sum('price')).order_by('-order__created_at__date')
     return_values = [item['total_returns'] for item in return_data]
@@ -299,14 +293,13 @@ def dashboard(request):
         'orders':orders,
         'categories': categories,
         'sales_values': sales_values,
-         'return_values': return_values,
+        'return_values': return_values,
     }
     
     return render(request,'admin/dashboard.html',context)
 
-# ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+# sale report for admin 
 @login_required(login_url='adminsignin')
 def sales_report(request):
     if not request.user.is_superuser:
@@ -359,6 +352,7 @@ def sales_report(request):
 
     return render(request, 'admin/salesreport.html', {'sales_report': sales_report})
 
+# generate csv on admin side for sale report 
 @login_required(login_url='adminsignin')
 def export_csv(request):
     if not request.user.is_superuser:
@@ -390,7 +384,7 @@ def export_csv(request):
 
     return response
 
-
+# generate pdf on admin side for sale report
 @login_required(login_url='adminsignin')
 def generate_pdf(request):
     if not request.user.is_superuser:

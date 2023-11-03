@@ -7,11 +7,10 @@ from category.models import category
 from brand.models import Brand
 from django.db.models import Q
 from variant.models import Variant
-# from variant.models import Varaint
 
 # Create your views here.
 
-
+# to sortproduct on adminside
 @login_required(login_url='adminsignin')
 def product(request):
     if not request.user.is_superuser:
@@ -38,10 +37,7 @@ def product(request):
 
     return render(request, 'admin/adminproduct.html', product_list)
 
-
-
-# //////////////////////////////////////////////////////////////
-
+# to add a product on adminside
 @login_required(login_url='adminsignin')
 def createproduct(request):
     if not request.user.is_superuser:
@@ -53,7 +49,6 @@ def createproduct(request):
         category_id=request.POST.get('category_name')
         brand_id=request.POST.get('brand_name')
         product_description=request.POST.get('product_description')
-        # sort=request.POST.get('sortby')
 
         # validation
         if Product.objects.filter(product_name=name).exists():
@@ -73,7 +68,6 @@ def createproduct(request):
         category_obj=category.objects.get(id=category_id)
         brand_obj=Brand.objects.get(id=brand_id)
 
-
         # save
         product=Product(
             product_name=name,
@@ -82,7 +76,6 @@ def createproduct(request):
             brand=brand_obj,
             slug=name,
             product_description=product_description,
-            
         )
 
         product.save()
@@ -91,6 +84,7 @@ def createproduct(request):
     
     return render(request,'admin/adminproduct.html')
 
+# to delete a product form adminside
 @login_required(login_url='adminsignin')
 def deleteproduct(request, product_id):  
     if not request.user.is_superuser:
@@ -106,6 +100,7 @@ def deleteproduct(request, product_id):
     messages.success(request,'product deleted successfully!')
     return redirect('product')
 
+# to edit a product from adminside
 @login_required(login_url='adminsignin')
 def editproduct(request,product_id):
     if not request.user.is_superuser:
@@ -114,8 +109,6 @@ def editproduct(request,product_id):
         name=request.POST.get('product_name')
         price=request.POST.get('product_price')
         category_id=request.POST.get('category')
-
-        # print(category_id,'pppppppppppppppppppp')
 
         brand_id=request.POST.get('brand')
         product_description=request.POST.get('product_description')
@@ -126,7 +119,6 @@ def editproduct(request,product_id):
         
         category_obj=category.objects.get(id=category_id)
         brand_obj=Brand.objects.get(id=brand_id)
-
 
         if Product.objects.filter(product_name=name).exists():
             check=Product.objects.get(id=product_id)
@@ -147,7 +139,7 @@ def editproduct(request,product_id):
         messages.success(request,'edited successfully')
         return redirect('product')
 
-
+# to search a product from adminside
 @login_required(login_url='adminsignin')
 def searchproduct(request):
     search = request.POST.get('search')
@@ -173,12 +165,8 @@ def searchproduct(request):
         product_list['product'] = False
         messages.error(request, 'Search not found')
         return redirect('product')
-    
 
-
-# /////////////////////////////////            PRODUCT VIEW                     // //////////////////////////////
-
-
+# product view on adminside
 @login_required(login_url='adminsignin')
 def productview(request,product_id):
 
@@ -195,13 +183,10 @@ def productview(request,product_id):
         'color_name':color_name,
         'product':product,
     }
-    for i in variant:
-        print(i.id,i.product,'gggggggggggggggggggggggg')
     return render(request,'admin/adminproductview.html',{'variant_list':variant_list})
 
-
+# add review on userside
 def addreview(request):
-
     if request.method == 'POST':
         
         if request.user.is_authenticated:
@@ -213,11 +198,8 @@ def addreview(request):
             img_id =request.POST.get('img_id')
             view_id =request.POST.get('view_id')
 
-            print(rating,review_text,name,email,product_id,'111111111111')
-
             # Get the product instance based on the product_id
             product = Product.objects.get(id=product_id)
-            print(product, rating,review_text,'lotttttttttttttttttttta22222222222222222')
 
             if rating == 0:
                 messages.error(request,'Please Select Stars!')
@@ -232,10 +214,8 @@ def addreview(request):
                 name=name,
                 email=email,
             )
-                print(review,'33333333333333333333333333')
                 messages.success(request,'Your Review added successfully!')
                 return redirect('orderviewuser',view_id)         
-            
             else:
                 messages.error(request,'Invalid email! Please log in with the correct email!')
                 return redirect('orderviewuser',view_id)

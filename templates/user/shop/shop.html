@@ -3,6 +3,7 @@
 {% block body %}
 {% load static %}
 {% load mathfilters %}
+
 <style>.page-header {
     background-image: url('{% static "template/assets/images/page-header-bg.jpg" %}');
 }
@@ -71,7 +72,7 @@
 
                                 <div class="product-action action-icon-top">
                                     <input readonly class='mtext-104 cl3 txt-center num-product' type='hidden' name='num-product' value='1' id='qty-input'>
-                                    <input type='hidden' value='{{ c.variant.size.id }} id='size-i'>
+                                    <input type='hidden' value='{{ c.variant.size.id }}'' id='size-i'>
                                     <a href="" data-product-id={{ c.variant.id }} class="btn-product add-to-cart-btn"><span>add to cart</span></a>
                                 </div><!-- End .product-action -->
                             </figure><!-- End .product-media -->
@@ -303,9 +304,9 @@
                         </div><!-- End .collapse -->
                     </div><!-- End .widget -->
 
-                    {% comment %} widgett 2 {% endcomment %}
+                    {% comment %} widgett 2 (size filter){% endcomment %}
 
-                    <div class="widget widget-collapsible">
+                    {% comment %} <div class="widget widget-collapsible">
                         <h3 class="widget-title">
                             <a data-toggle="collapse" href="#widget-2" role="button" aria-expanded="true" aria-controls="widget-2">
                                 Size
@@ -342,7 +343,7 @@
                                 </div><!-- End .filter-items -->
                             </div><!-- End .widget-body -->
                         </div><!-- End .collapse -->
-                    </div><!-- End .widget -->
+                    </div><!-- End .widget --> {% endcomment %}
 
 
                     {% comment %} widgett 3 {% endcomment %}

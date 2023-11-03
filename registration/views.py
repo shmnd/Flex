@@ -19,13 +19,12 @@ import re
 from django.core.exceptions import ValidationError
 
 
-# signin 
+# signin of user
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def signin(request):
     if request.user.is_authenticated:
         return redirect('home') 
     
-
     if request.method == "POST":
         uname = request.POST['username']
         pwd = request.POST['password']
@@ -46,6 +45,7 @@ def signin(request):
 
     return render(request, 'user/registrations/signin.html')
 
+# validating email of user
 def validateEmail(email):
     from django.core.validators import validate_email
     try :
@@ -54,7 +54,7 @@ def validateEmail(email):
     except ValidationError:
         return False
     
-    
+# validating password of user
 def ValidatePassword(password):
     from django.contrib.auth.password_validation import validate_password
     try:
@@ -63,7 +63,7 @@ def ValidatePassword(password):
     except ValidationError:
         return False
     
-    
+# validating name of user    
 def validate_name(value):
     if not re.match(r'^[a-zA-Z\s]*$', value):
         return 'Name should only contain alphabets and spaces'
@@ -76,7 +76,7 @@ def validate_name(value):
         return False
     
 
-# Signup
+# Signup for user
 def signup(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -108,9 +108,6 @@ def signup(request):
             password1 = request.POST['password1']
             password2 = request.POST['password2']
             # null values checking
-            
-            
-            print(email,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
             
             check = [name,email,password1,password2]
             for values in check:
@@ -182,7 +179,7 @@ def signup(request):
                     usr.save()
                     user_otp=random.randint(100000,999999)
                     UserOTP.objects.create(user=usr,otp=user_otp)
-                    print(user_otp,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
+                    print(user_otp,'otppppppppppppppppppppppppppppppp')
                     mess=f'Hello\t{usr.username},\nYour OTP to verify your account for Flex is {user_otp}\nThanks!'
                     send_mail(
                             "welcome to FLEX Verify your Email",
@@ -218,15 +215,14 @@ def signup(request):
         return render(request,'user/registrations/signup.html')               
 
 
-   
+# logout for user
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @login_required(login_url='signin')
 def logout(request):
     dj_logout(request)
     return redirect('home') 
     
-
-
+# forgot password for user
 def forgotpassword(request):
     if request.method=='POST':
         get_otp=request.POST.get('otp')

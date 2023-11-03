@@ -17,6 +17,7 @@ from io import BytesIO
 from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 
+# for checking out from cart
 def checkout(request):
     request.session['coupon_session']=0
     request.session['coupon_id']= None
@@ -30,9 +31,6 @@ def checkout(request):
         
         try:
             check_coupons =Coupon.objects.filter(coupon_code=coupon_name).first()
-            
-            print(check_coupons,'xxxxxxxxxxxxxxxxx')
-            
             cartitems = Cart.objects.filter(user=request.user)
     
             total_price = 0
@@ -41,6 +39,7 @@ def checkout(request):
             all_offer =0
             
             for item in cartitems:
+                
                 if item.variant.product.category.offer:
                     product_price = item.variant.product.product_price
                     total_price += product_price * item.product_qty
@@ -55,19 +54,13 @@ def checkout(request):
             grand_total = total_price
             
             if grand_total>=check_coupons.min_price:
-                print('555555555555555')
-                print(check_coupons.min_price,grand_total,'4444444444444444444444444')
                 coupon=check_coupons.coupon_discount_amount
                 coupon_id=check_coupons.id
-                
-                print(coupon,'chooooooooooooooooo')
                 request.session['coupon_session']= coupon
                 request.session['coupon_id']= coupon_id
-                
                 messages.success(request, 'This coupon added successfully')
             else:
                 coupon=False 
-                
                 messages.error(request, ' purchase minimum price')    
                 
             address = Address.objects.filter(user= request.user,is_available=True)
@@ -79,7 +72,6 @@ def checkout(request):
                 offer_price_total =False
             else:
                 offer_price_total
-
             context = {
                 'all_offer':all_offer,
                 'offer' :offer_price_total,
@@ -102,7 +94,7 @@ def checkout(request):
             messages.error(request, 'This coupon not valid!')
             # change into checkout
             return redirect('checkout')
-    
+        
     cartitems = Cart.objects.filter(user=request.user)
     
     total_price = 0
@@ -118,7 +110,6 @@ def checkout(request):
             offer_price_total =offer_price*item.product_qty
             total_price= total_price - offer_price_total
             all_offer= all_offer+offer_price_total
-            print(all_offer,'yyyyyyyyyyyyyyyyyy')
         else:     
             product_price = item.variant.product.product_price
             total_price += product_price * item.product_qty
@@ -155,7 +146,7 @@ def checkout(request):
         return render(request,'user/checkout.html',context)
 
 
-
+# to generate pdf invoice to user chat gpt
 def generate_pdf_invoice(order):
     buffer = BytesIO()
     p = canvas.Canvas(buffer)
@@ -176,6 +167,7 @@ def generate_pdf_invoice(order):
     buffer.seek(0)
     return buffer
 
+# placing order after checkout 
 def placeorder(request):
     if request.method == 'POST':
         # Retrieve the current user
@@ -183,7 +175,6 @@ def placeorder(request):
         
         # Retrieve the address ID from the form data
         coupon = request.POST.get('couponOrder')
-        # print(coupon,'suiiiiiiiiiiiiiiiiii')
         address_id = request.POST.get('address')
         if address_id is None:
             messages.error(request, 'Address field is mandatory!')
@@ -248,7 +239,7 @@ def placeorder(request):
         from_email = 'hamzashamnad123@gmail.com'
         recipient_list = [user.email]  # Assuming user has an email field
         
-        # Create the HTML email message
+        # Create the HTML email message(Not working chat gpt)
         html_message = """
         <html>
         <head>
@@ -338,7 +329,7 @@ def placeorder(request):
             offer_price=neworder.coupon.coupon_discount_amount if neworder.coupon else "N/A"
         )
 
-        email = EmailMessage(subject, '', from_email, recipient_list)
+        email = EmailMessage(subject, '', from_email, recipient_list,message)
         email.attach('invoice.pdf', pdf_buffer.read(), 'application/pdf')
         email.content_subtype = "html"
         email.body = html_message
@@ -372,12 +363,12 @@ def placeorder(request):
 
 
 
-
+# generating payment id 
 def generate_random_payment_id(length):
     characters = string.ascii_letters + string.digits
     return ''.join(random.choices(characters, k=length))
 
-
+# razarpay ui
 def razarypaycheck(request):
     cart = Cart.objects.filter(user=request.user)
     total_price = 0

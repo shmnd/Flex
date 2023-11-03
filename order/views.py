@@ -12,7 +12,7 @@ from django.contrib import messages
 
 # Create your views here.
 
-
+# to view orderlist in adminside
 def orderlist(request):
     order=Order.objects.all().order_by('id')
     
@@ -22,7 +22,7 @@ def orderlist(request):
     
     return render(request,'admin/order.html',context)
 
-
+# to show odered items in userside
 def orderview(request,view_id):
     
     try:
@@ -47,7 +47,8 @@ def orderview(request,view_id):
         print('addres does not exist')
     return redirect('orderlist')
     
-    
+
+# to change order status like delivered ,cancelled,shipped 
 def changestatus(request):
     
     if not request.user.is_superuser:
@@ -104,7 +105,7 @@ def changestatus(request):
     messages.success(request,'status updated')
     return redirect('orderview',view_id)
 
-
+# to return a product 
 def returnorder(request,return_id):
     try:
         orderitem_id=OrderItem.objects.get(id=return_id)
@@ -186,7 +187,6 @@ def returnorder(request,return_id):
                 total_prices = variant.product.product_price *qty
                 offer_price =variant.product.category.offer.discount_amount *qty
                 total_price = total_prices-offer_price
-                print(total_price,'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
         else:   
             total_price = variant.product.product_price * qty
             
@@ -210,7 +210,8 @@ def returnorder(request,return_id):
             return redirect('orderviewuser',view_id)
     return redirect('orderviewuser',view_id)
     
-    
+
+# to cancel a order in userside
 def ordercancel(request,cancel_id):
     try:
         orderitem_id=OrderItem.objects.get(id=cancel_id)
@@ -240,8 +241,7 @@ def ordercancel(request,cancel_id):
         qty=orderitem.quantity
         variant_id=orderitem.variant.id
         variant=Variant.objects.filter(id=variant_id).first()
-        # print(qty,order,variant,variant_id,'oooooooooooooooooooooooooooooooo')
-        
+
         cancelled=Order_cancelled.objects.create(user=request.user,order=order,options=options,reason=reason)
         
         if order.payment_mode=='razorpay' or order.payment_mode=='wallet':
@@ -251,7 +251,6 @@ def ordercancel(request,cancel_id):
                 total_price= variant.product.product_price*qty
                 offer_price=variant.product.category.offer.discount_amount*qty
                 total_price=total_price-offer_price
-                print(total_price,'444444444444444444444444')
             else:
                 total_price=variant.product.product_price*qty
        
@@ -324,7 +323,7 @@ def ordercancel(request,cancel_id):
         return redirect('orderviewuser',view_id)
     return redirect('userprofile')
             
-            
+# to search a order on adminside 
 def ordersearch(request):
     search=request.POST.get('search')
     if search is None or search.strip() == '':
@@ -341,7 +340,7 @@ def ordersearch(request):
     return render(request,'admin/order.html',context)
                 
                 
-                
+#to show order status on adminside like delivered shipped 
 def orderstatusshow(request):
     name=request.POST.get('name')
     if name=='Pending':
