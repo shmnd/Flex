@@ -51,6 +51,7 @@ def userprofile(request):
             'order':order,
             'last_order':last_order,        
         }
+        
         return render(request,'user/userprofile/userprofile.html',context)
 
 # to add address on userside
@@ -388,7 +389,7 @@ def orderviewuser(request,view_id):
             date=True
         else:
             date=False
-            
+        
         context={
             'date':date,
             'address':address,
@@ -399,6 +400,7 @@ def orderviewuser(request,view_id):
             'cart_count':cart_count,
             'orderview':orderview,
         }
+        
         return render(request,'user/userprofile/orderviewuser.html',context)
     
     

@@ -104,6 +104,7 @@
                 </div>
             </div>
             {% endif %}
+            
             {% if orderview %}
             <div class="col-md-6">
                 <h5 class="card-title fw-semibold mb-4"> ORDER DETAILS </h5>
@@ -165,6 +166,7 @@
 
             </div>
             {% endif %}
+
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover tableitems">
@@ -206,7 +208,6 @@
                                 <td><b>{{ i.variant.product.category.categories }}</td>
                                 <td><b>{{ i.variant.color }}</td>
                                 <td><b>{{ i.variant.size }}</td>
-                                    
                                 <td><b>
                                     {% if i.variant.product.category.offer %}
                                         {{ i.variant.product.product_price |sub:i.variant.product.category.offer.discount_amount }}
@@ -214,12 +215,9 @@
                                     {% else %}
                                         {{ i.variant.product.product_price}}
                                     {% endif %}
-
-
                                 <td><b>{{ i.quantity }}</td>
 
                                 <!-- Loop through the items -->
-
                                 <td>
                                     {% if i.orderitem_status.item_status == 'Pending' %}
                                     <span class="badge rounded-pill alert-secondary status-badge">
@@ -288,9 +286,6 @@
                                                                         </div><!-- End .form-footer -->
                                                                     </form>
                                                                     
-                                                                    
-                                                    
-                                                                   
                                                                 </div><!-- .End .tab-pane -->
                                                              
                                                                 </div><!-- .End .tab-pane -->
@@ -435,20 +430,11 @@
                                 {% endif %}
 
                                 {% endfor %}
-
-                               
-
-
-
                             </tr>
-
                         </tbody>
                     </table>
-
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>
