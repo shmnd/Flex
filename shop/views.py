@@ -7,6 +7,7 @@ from cart.models import Cart
 from wishlist.models import Wishlist
 
 # Create your views here.
+
 # show product on shop page in userside
 def shop(request):
     variant_images=(VariantImage.objects.filter(variant__product__is_available=True).order_by('variant__product').distinct('variant__product'))

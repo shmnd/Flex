@@ -9,10 +9,9 @@ from django.db.models import Q
 from .models import Product,Size,Color,Variant,VariantImage
 import webcolors
 
-
 # Create your views here.
 
-
+# show product in order of variants on adminpage (size,color)
 def productvariant(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -27,11 +26,10 @@ def productvariant(request):
         'size_range': size_range,
         'color_name':color_name,
         'product':product,
-        
     }
     return render(request,'variant/variant.html',{'variant_list':variant_list})
 
-
+# add product variants
 def addproductvariant(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -41,8 +39,6 @@ def addproductvariant(request):
         variant_size=request.POST.get('variant_size')
         variant_color=request.POST.get('variant_color')
         variant_quantity=request.POST.get('variant_quantity')
-
-        print(variant_color,variant_name,variant_size,variant_quantity,'oooooooooooooooooooooooooooooooooooo')
 
     # validation
         if variant_quantity.strip()=='':
@@ -54,14 +50,11 @@ def addproductvariant(request):
             size_obj=Size.objects.get(id=variant_size)
             color_obj=Color.objects.get(id=variant_color)
 
-            print(product_obj,size_obj,color_obj,'uuuuuuuuuuuuuuuuuuuuuuuuuuu')
-
             # check variant is already exists
 
             if Variant.objects.filter(product=product_obj,size=size_obj,color=color_obj).exists():
                 messages.error(request,'variant with the same product,size, and color already exists')
                 return redirect('productvariant')
-            
 
             # save new variant
             add_variant=Variant(
@@ -81,7 +74,7 @@ def addproductvariant(request):
         
     return render(request,'variant/variant.html')
 
-
+# edit variants adminside
 def editproductvariant(request,variant_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -120,6 +113,7 @@ def editproductvariant(request,variant_id):
         messages.success(request,'producted edited successfully')
         return redirect('productvariant')
     
+# delete variant 
 def productvariantdelete(request,variant_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -131,7 +125,7 @@ def productvariantdelete(request,variant_id):
     messages.success(request,'product variant deleted sucessfully')
     return redirect('productvariant')
 
-
+# view size on admin
 def productsize(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -139,6 +133,7 @@ def productsize(request):
     product_size=Size.objects.filter(is_available=True).order_by('id')
     return render(request,'admin/sizemanagement.html',{"product_size":product_size})
 
+# add size on adminside
 def addsize(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -161,6 +156,7 @@ def addsize(request):
     
     return render(request,'admin/sizemanagement.html')
 
+# delete size on adminside
 def deletesize(request,size_range_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -171,7 +167,7 @@ def deletesize(request,size_range_id):
     messages.success(request,'size deleted succesfully')
     return redirect('productsize')
 
-
+# show product color adminside
 def productcolor(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -179,6 +175,7 @@ def productcolor(request):
     product_color=Color.objects.filter(is_available=True).order_by('id')
     return render(request,'admin/colormanagement.html',{'product_color':product_color})
 
+# add color on adminside
 def addcolor(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -187,13 +184,10 @@ def addcolor(request):
         colorname=request.POST.get('color1')
         color=request.POST.get('color')
         color1=color
-        # print(color1,color,colorname,'hiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
 
         color=getcolorname(color)
         if  color=='Unknown':
             color=color1
-        # print(color,colorname,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-
 
         if colorname.strip()=='':
             messages.error(request,'Field cannot be empty')
@@ -215,6 +209,7 @@ def addcolor(request):
 
     return render(request,'admin/colormanagement.html')
 
+# delete color on adminside
 def deletecolor(request,color_name_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -224,8 +219,8 @@ def deletecolor(request,color_name_id):
     delete_color.save()
     messages.success(request,'color deleted succesfully')
     return redirect('productcolor')
-#colorpicker////////////////////////////////////////////////////////////////////
 
+#colorpicker////////////////////////////////////////////////////////////////////
 def getcolorname(color_code):
     try:
         color_name = webcolors.rgb_to_name(webcolors.hex_to_rgb(color_code))
@@ -233,7 +228,7 @@ def getcolorname(color_code):
     except ValueError:
         return "Unknown"
     
-
+# show added image of product on adminside
 def imagelist(request,variant_id):
     image=VariantImage.objects.filter(variant=variant_id,is_available=True)
     add_image=variant_id
@@ -257,6 +252,8 @@ def imageview(request,img_id):
     context = {'form': form,'img_id':img_id}
     return render(request, 'variant/imageadd.html', context)
 
+
+# image delete on adminside
 def imagedelete(request,image_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -272,7 +269,7 @@ def imagedelete(request,image_id):
     except:
         return redirect('imagelist',var_id)
     
-
+# to show variants on adminside
 def productvariantview(request,product_id):
     if not request.user.is_superuser:
         return redirect('adminsignin')
@@ -288,10 +285,9 @@ def productvariantview(request,product_id):
         'color_name':color_name,
         'product':product
     }
-    # variant id 
     return render(request,'view/variantview.html',{'variant_list':variant_list})
 
-
+# to search variant on adminside
 def searchvariant(request):
     search=request.POST.get('search')
     if search is None or search.strip()=='':

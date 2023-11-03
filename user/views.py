@@ -21,11 +21,9 @@ from django.contrib.auth import update_session_auth_hash
 from .models import Address,Wallet
 from registration.models import CustomUser
 
-
-# from checkout.models import Itemstatus, Order,OrderItem
-
-
 # Create your views here.
+
+# userprofile on userside
 @login_required(login_url='signin')
 @never_cache
 def userprofile(request):
@@ -55,7 +53,7 @@ def userprofile(request):
         }
         return render(request,'user/userprofile/userprofile.html',context)
 
-
+# to add address on userside
 def addaddress(request,add_id):
     if request.method=='POST':
         cart_count=Cart.objects.filter(user=request.user).count()
@@ -151,8 +149,6 @@ def addaddress(request,add_id):
             context['pre_state']=''
             return render(request,'user/userprofile/addaddress.html',context)
 
-        # ad =Address.objects.check()
-
         ads=Address()
         ads.user=request.user
         ads.first_name=first_name
@@ -184,6 +180,7 @@ def addaddress(request,add_id):
         check=2
     return render(request,'user/userprofile/addaddress.html',{'check':check,'wishlist_count':wishlist_count,'cart_count':cart_count})
         
+# edit address on userside
 def editaddress(request,edit_id):
     if request.method=='POST':
         cart_count=Cart.objects.filter(user=request.user).count()
@@ -277,7 +274,7 @@ def editaddress(request,edit_id):
     wishlist_count=Wishlist.objects.filter(user=request.user).count()
     return render(request,'user/userprofile/editaddress.html',{'editaddress':editaddress,'wishlist_count':wishlist_count,'cart_count':cart_count})
     
-    
+#to show addres on userside 
 def viewaddress(request,view_id):
     
     try:
@@ -285,9 +282,9 @@ def viewaddress(request,view_id):
     except:
         return redirect('userprofile')
             
-    
     return render(request,'user/userprofile/viewaddress.html',{'viewaddress':viewaddress})   
     
+# to edit profile on userside
 def editprofile(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -319,7 +316,7 @@ def editprofile(request):
 
     return render(request, 'user/userprofile/editprofile.html', {'user': request.user})
 
-
+# to delete address on userside
 def deleteaddress(request,delete_id):
     address=Address.objects.get(id=delete_id)
     address.is_available = False
@@ -327,7 +324,7 @@ def deleteaddress(request,delete_id):
     messages.success(request,'address deleted successfully')
     return redirect('userprofile')
 
-
+# to change password on userside
 def changepassword(request):
     if request.method=='POST':
         old_password=request.POST.get('old_password')
@@ -358,23 +355,23 @@ def changepassword(request):
             return render(request,'user/userprofile/password.html')
     return render(request,'user/userprofile/password.html')
     
-
+# to  vlidate check email is correct userside
 def validateemail(email):
     try:
         validate_email(email)
         return True
     except ValidationError: 
         return False
-    
+
+# to validate password on userside
 def validatepassword(new_password):
     try:
         validate_password(new_password)
         return True
     except  ValidationError:
         return  False
-    
 
-
+# orders that user ordered shows on userside
 def orderviewuser(request,view_id):
     try:
         orderview=Order.objects.get(id=view_id)
@@ -386,7 +383,6 @@ def orderviewuser(request,view_id):
         cart_count=Cart.objects.filter(user=request.user).count()
         wishlist_count=Wishlist.objects.filter(user=request.user).count()
         date=orderview.update_at + timedelta(days=3)
-        
         
         if date >=timezone.now():
             date=True
