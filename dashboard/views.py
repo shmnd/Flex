@@ -93,12 +93,11 @@ def adminsignup(request):
     # OTP VERIFICATION
     if request.method == 'POST':
         get_otp = request.POST.get("otp")
-        # print(get_otp,'bbbbbbbbbbbbbbbbbbbbbbbbb')
         if get_otp:
             get_email = request.POST.get("email")
             usr = User.objects.get(email=get_email)
             if int(get_otp) == UserOTP.objects.filter(user=usr).last().otp:
-                # print(get_otp,usr,'cccccccccccccccccccccccccccccccccc')
+                print(get_otp,usr,'otpppppppppppppppppppppppppp')
                 
                 usr.is_active = True
                 usr.is_superuser = True
