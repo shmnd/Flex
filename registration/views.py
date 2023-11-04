@@ -8,7 +8,8 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate
-
+from .models import ReferralCode
+import string
 # verification email
 from .models import UserOTP
 from django.contrib import auth
@@ -80,7 +81,7 @@ def validate_name(value):
 def signup(request):
     if request.user.is_authenticated:
         return redirect('home')
-        
+         
     """ OTP VERIFICATION """
 
     if request.method=='POST':
@@ -180,6 +181,19 @@ def signup(request):
                     user_otp=random.randint(100000,999999)
                     UserOTP.objects.create(user=usr,otp=user_otp)
                     print(user_otp,'otppppppppppppppppppppppppppppppp')
+                    
+                    
+                     # Generate a referral code for the user
+                    if not ReferralCode.objects.filter(user=usr).exists():
+                        while True:
+                            print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
+                            referral_code = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
+                            print(referral_code,'codeeeeeeeeeeeeeeeeeeeeeee')
+                            if not ReferralCode.objects.filter(code=referral_code).exists():
+                                referral_obj = ReferralCode(user=usr, code=referral_code)
+                                referral_obj.save()
+                                break
+                    
                     mess=f'Hello\t{usr.username},\nYour OTP to verify your account for Flex is {user_otp}\nThanks!'
                     send_mail(
                             "welcome to FLEX Verify your Email",
@@ -307,4 +321,3 @@ def forgotpassword(request):
                     messages.error(request,'email does not exist!')
                     return render(request,'user/registrations/forgotpassword.html')
     return render (request,'user/registrations/forgotpassword.html')  
-

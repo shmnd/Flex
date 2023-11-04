@@ -144,6 +144,7 @@
 									aria-labelledby="tab-dashboard-link">
 									{% if user %}
 										<h5> HELLO <span style="text-transform: uppercase;">{{ user.first_name }}</span> </h5>
+										<h5> Your Refferal code:  <span >{{ user.ReferralCode.code }}</span> </h5>
 									{% endif %}
 									<br>
 									<div class="container">
