@@ -144,7 +144,8 @@
 									aria-labelledby="tab-dashboard-link">
 									{% if user %}
 										<h5> HELLO <span style="text-transform: uppercase;">{{ user.first_name }}</span> </h5>
-										<h5> Your Refferal code:  <span >{{ user.ReferralCode.code }}</span> </h5>
+										<h5> Your Refferal code:  <span >{{ refferal_code.code }}</span> </h5>
+										<h5> Your Referral URL:<span >  <a href="{{ request.scheme }}://{{ request.get_host }}//">{{ request.scheme }}://{{ request.get_host }}//{{ refferal_code.code }}</a>  <i id="share-icon" class="fas fa-share-alt"></i></h5></span> 
 									{% endif %}
 									<br>
 									<div class="container">
@@ -440,5 +441,40 @@
 				</div><!-- End .page-content -->
 	</main><!-- End .main -->
 </body>
-
+<!-- Add this JavaScript code, typically at the end of your HTML document or in an external script file -->
+<script>
+	document.getElementById('share-icon').addEventListener('click', function() {
+		if (navigator.share) {
+			// Use the native sharing functionality if available
+			navigator.share({
+				title: 'Check out my referral link',
+				text: 'Join me on this amazing website!',
+				url: '{{ request.scheme }}://{{ request.get_host }}/referral/{{ refferal_code.code }}'
+			})
+			.then(() => console.log('Shared successfully'))
+			.catch((error) => console.error('Sharing failed', error));
+		} else {
+			// Provide alternative sharing options if the native share is not available
+			var referralUrl = '{{ request.scheme }}://{{ request.get_host }}/referral/{{ refferal_code.code }}';
+			var shareOptions = {
+				title: 'Share your referral link',
+				text: 'Join me on this amazing website!',
+				url: referralUrl
+			};
+			
+			var shareMessage = 'Share this referral link: ' + referralUrl;
+			
+			if (navigator.clipboard) {
+				// If clipboard is supported, allow users to copy the referral link
+				navigator.clipboard.writeText(referralUrl)
+				.then(() => alert('Referral link copied to clipboard!'))
+				.catch((error) => console.error('Copy failed', error));
+			} else {
+				// Provide a share message for users to manually copy and share
+				alert(shareMessage);
+			}
+		}
+	});
+</script>
+	
 {% endblock %}

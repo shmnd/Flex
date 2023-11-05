@@ -192,6 +192,9 @@ def signup(request):
                             if not ReferralCode.objects.filter(code=referral_code).exists():
                                 referral_obj = ReferralCode(user=usr, code=referral_code)
                                 referral_obj.save()
+                                
+                                referral_obj.referral_url = f"http://127.0.0.1:8000/{referral_obj.code}/"
+                                referral_obj.save()
                                 break
                     
                     mess=f'Hello\t{usr.username},\nYour OTP to verify your account for Flex is {user_otp}\nThanks!'
@@ -320,4 +323,5 @@ def forgotpassword(request):
                 else:
                     messages.error(request,'email does not exist!')
                     return render(request,'user/registrations/forgotpassword.html')
+                
     return render (request,'user/registrations/forgotpassword.html')  

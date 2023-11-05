@@ -19,6 +19,7 @@ from django.core.validators import validate_email
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
 from .models import Address,Wallet
+from registration.models import ReferralCode
 from registration.models import CustomUser
 
 # Create your views here.
@@ -35,7 +36,8 @@ def userprofile(request):
         cart_count=Cart.objects.filter(user=request.user).count()
         wishlist_count=Wishlist.objects.filter(user=request.user).count()
         last_order=Order.objects.filter(user=request.user).last()
-        order =Order.objects.filter(user=request.user) 
+        order =Order.objects.filter(user=request.user)
+        refferal_code=ReferralCode.objects.get(user=request.user)
         
         try:
             wallet=Wallet.objects.get(user=request.user)
@@ -49,7 +51,8 @@ def userprofile(request):
             'cart_count':cart_count,
             'wishlist_count':wishlist_count,
             'order':order,
-            'last_order':last_order,        
+            'last_order':last_order,  
+            'refferal_code':refferal_code      
         }
         
         return render(request,'user/userprofile/userprofile.html',context)
