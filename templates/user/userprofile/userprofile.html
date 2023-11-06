@@ -158,9 +158,15 @@
 									{% endif %}
 									
 									<div id="referralDiv">
-										<label for="referralCode"><h5>Enter Referral Code:</h5></label>
-										<input type="text" id="referralCode" placeholder="Enter your code">
-										<button id="submitReferral">Submit</button>
+										<form method="post" action="{% url 'validate_referral' %}">
+											{% csrf_token %}
+											<label for="referral_code"><h5>Enter Referral Code:</h5></label>
+											<input type="text" id="referral_code" name="referral_codes" placeholder="Enter your code">
+											<button type="submit">Submit</button>
+										</form>
+										{% if error_message %}
+											<p>{{ error_message }}</p>
+										{% endif %}
 									</div>
 
 									<div class="container">

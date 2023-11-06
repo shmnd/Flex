@@ -108,8 +108,8 @@ def signup(request):
             email = request.POST['email']
             password1 = request.POST['password1']
             password2 = request.POST['password2']
-            # null values checking
             
+            # null values checking
             check = [name,email,password1,password2]
             for values in check:
                 if values == '':
@@ -136,6 +136,7 @@ def signup(request):
                         'pre_password1':password1,
                         'pre_password2':password2,
                     }
+                print(email,name,password1,'deatailllllllllllllll')
                 messages.info(request,result)
                 return render(request,'user/registrations/signup.html',context)
             else:
@@ -274,6 +275,7 @@ def forgotpassword(request):
                     return render(request,'user/registrations/forgotpassword.html',{'otp':True,'user':user,'pre_otp':get_otp})
                 
                 user.set_password(password1)
+                print(user,password1,'passssssssssssssssss')
                 user.save()
                 del request.session['otp']
                 

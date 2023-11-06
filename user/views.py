@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.utils import timezone
 import re
 from django.forms import ValidationError
@@ -414,3 +414,88 @@ def orderviewuser(request,view_id):
     return redirect('userprofile')    
         
 
+# def validate_referral(request):
+    # print('hiiiiiiiiiiiiisssssssssssssssssssssss')
+    # if request.method == 'POST':
+    #     referral_code = request.POST.get('referral_code')
+    #     try:
+    #         code_obj = ReferralCode.objects.get(code=referral_code, used=False)
+    #     except ReferralCode.DoesNotExist:
+    #         code_obj = None
+
+    #     if code_obj:
+    #         # Valid code; mark it as used and redirect to a success page
+    #         code_obj.used = True
+    #         code_obj.save()
+    #         return redirect('success_page')  # Replace with your success page URL
+
+    #     # Invalid code; show an error message or render the form again
+    #     # with an error message
+    #     return render(request, 'referral_form.html', {'error_message': 'Invalid referral code'})
+
+    # return redirect( 'userprofile')
+
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url='signin')
+def validate_referral(request):
+    user = request.user
+
+    # Get the ReferralCode instance associated with the user
+    referral_obj = get_object_or_404(ReferralCode, user=user)
+    
+    if referral_obj.used:
+        messages.warning(request, 'You have already used a referral code.')
+        return redirect('userprofile')
+
+    if request.method == 'POST':
+        
+        user_input_code = request.POST.get('referral_codes')  # Update this to 'referral_codes'
+        
+
+        try:
+            # Try to get the ReferralCode object based on the provided code
+            referral_code = ReferralCode.objects.get(code=user_input_code)
+        except ReferralCode.DoesNotExist:
+            # Referral code does not exist
+            messages.warning(request, 'Invalid referral code.')
+        else:
+            # Check if the referral code is not related to the current user
+            if referral_code.user != user:
+                # Referral code is valid and not related to the current user
+
+                # Add money to the wallet of the user related to the referral code (50 units)
+                add_money_to_wallet(referral_code.user, 50)
+
+                # Add money to the wallet of the current user (referrer) (100 units)
+                add_money_to_wallet(user, 100)
+
+                # Mark the referral code as used
+                referral_code.used = True
+                referral_code.save()
+
+                # Mark the user as having used a referral code
+                referral_obj.used = True
+                referral_obj.save()
+
+                # You can perform additional actions if needed, like giving rewards, etc.
+
+            else:
+                # Referral code is related to the current user
+                messages.warning(request, 'Referral code is already associated with your account.')
+
+    return redirect('userprofile')
+
+
+
+def add_money_to_wallet(user, amount):
+    try:
+        wallet = Wallet.objects.get(user=user)
+    except Wallet.DoesNotExist:
+        # Create a new wallet if it doesn't exist for the user
+        wallet = Wallet.objects.create(user=user, wallet=amount)
+    else:
+        # Update the existing wallet balance
+        wallet.wallet += amount
+        wallet.save()
