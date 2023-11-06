@@ -6,6 +6,15 @@
 
 
 <style>
+
+	#referralDiv {
+		display: block; /* Initially visible */
+	}
+	
+	#referralDiv.hidden {
+		display: none; /* Hidden when the user enters a code */
+	}
+
 	.page-header {
 		background-image: url('{% static "template/assets/images/page-header-bg.jpg" %}');
 
@@ -147,7 +156,13 @@
 										<h5> Your Refferal code:  <span >{{ refferal_code.code }}</span> </h5>
 										<h5> Your Referral URL:<span >  <a href="{{ request.scheme }}://{{ request.get_host }}//">{{ request.scheme }}://{{ request.get_host }}//{{ refferal_code.code }}</a>  <i id="share-icon" class="fas fa-share-alt"></i></h5></span> 
 									{% endif %}
-									<br>
+									
+									<div id="referralDiv">
+										<label for="referralCode"><h5>Enter Referral Code:</h5></label>
+										<input type="text" id="referralCode" placeholder="Enter your code">
+										<button id="submitReferral">Submit</button>
+									</div>
+
 									<div class="container">
 										<div class="row">
 											<div class="col-lg-12">
@@ -441,40 +456,69 @@
 				</div><!-- End .page-content -->
 	</main><!-- End .main -->
 </body>
-<!-- Add this JavaScript code, typically at the end of your HTML document or in an external script file -->
+
+
+<!-- Add this JavaScript code, typically at the end of your HTML document or in an external script file (share icon ) -->
 <script>
 	document.getElementById('share-icon').addEventListener('click', function() {
 		if (navigator.share) {
-			// Use the native sharing functionality if available
-			navigator.share({
-				title: 'Check out my referral link',
-				text: 'Join me on this amazing website!',
-				url: '{{ request.scheme }}://{{ request.get_host }}/referral/{{ refferal_code.code }}'
-			})
-			.then(() => console.log('Shared successfully'))
-			.catch((error) => console.error('Sharing failed', error));
-		} else {
-			// Provide alternative sharing options if the native share is not available
-			var referralUrl = '{{ request.scheme }}://{{ request.get_host }}/referral/{{ refferal_code.code }}';
-			var shareOptions = {
-				title: 'Share your referral link',
-				text: 'Join me on this amazing website!',
-				url: referralUrl
-			};
-			
-			var shareMessage = 'Share this referral link: ' + referralUrl;
-			
-			if (navigator.clipboard) {
-				// If clipboard is supported, allow users to copy the referral link
-				navigator.clipboard.writeText(referralUrl)
-				.then(() => alert('Referral link copied to clipboard!'))
-				.catch((error) => console.error('Copy failed', error));
-			} else {
-				// Provide a share message for users to manually copy and share
-				alert(shareMessage);
-			}
-		}
+    // Use the native sharing functionality if available
+    navigator.share({
+        title: 'Check out my referral link',
+        text: 'Join me on this amazing website Flex! with my referral code: {{ refferal_code.code }} and get an offer.',
+        url: '{{ request.scheme }}://{{ request.get_host }}'
+    })
+    .then(() => console.log('Shared successfully'))
+    .catch((error) => console.error('Sharing failed', error));
+} else {
+    // Provide alternative sharing options if the native share is not available
+    var referralText = 'Join me on this amazing website Flex! with my referral code: {{ refferal_code.code }} and get an offer.';
+    var referralUrl = '{{ request.scheme }}://{{ request.get_host }}/h' + encodeURIComponent(referralText);
+    var shareOptions = {
+        title: 'Share your referral link',
+        text: referralText,
+        url: referralUrl
+    };
+
+    var shareMessage = 'Share this referral link: ' + referralUrl + ' with my referral code: {{ refferal_code.code }} and get an offer';
+    
+    if (navigator.clipboard) {
+        // If clipboard is supported, allow users to copy the referral link
+        navigator.clipboard.writeText(referralUrl)
+        .then(() => alert('Referral link copied to clipboard!'))
+        .catch((error) => console.error('Copy failed', error));
+    } else {
+        // Provide a share message for users to manually copy and share
+        alert(shareMessage);
+    }
+}
 	});
+
 </script>
+<script>
+// Add an event listener to the submit button
+document.getElementById('submitReferral').addEventListener('click', function() {
+    const referralCodeInput = document.getElementById('referralCode');
+    const referralCode = referralCodeInput.value;
+
+    // Check if the code meets the validation criteria (e.g., a valid format)
+    const isValidReferralCode = validateReferralCode(referralCode); // You should implement this function
+
+    if (isValidReferralCode) {
+        // If the code is valid, hide the div and set a flag in local storage
+        document.getElementById('referralDiv').classList.add('hidden');
+        localStorage.setItem('enteredReferral', 'true');
+    }
+});
+
+// Check if the user has entered a referral code before
+if (localStorage.getItem('enteredReferral') === 'true') {
+    // Hide the referral div if the user has entered a code
+    document.getElementById('referralDiv').classList.add('hidden');
+}
+
+</script>
+
+
 	
 {% endblock %}

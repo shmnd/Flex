@@ -186,7 +186,6 @@ def signup(request):
                      # Generate a referral code for the user
                     if not ReferralCode.objects.filter(user=usr).exists():
                         while True:
-                            print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
                             referral_code = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
                             print(referral_code,'codeeeeeeeeeeeeeeeeeeeeeee')
                             if not ReferralCode.objects.filter(code=referral_code).exists():
