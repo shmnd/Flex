@@ -16,6 +16,14 @@
 <style>.page-header {
     background-image: url('{% static "user/assets/images/page-header-bg.jpg" %}');
    
+
+.move-up-and-left {
+    position: relative;
+    top: -9in; /* Move the element up by 1 inch (adjust as needed) */
+    left: -1in; /* Move the element left by 1 inch (adjust as needed) */
+    }  
+
+    
 }</style>
 {% if cart %}
 <main class="main">
@@ -89,9 +97,6 @@
                                         {% endif %}
                                     </td>
 
-
-                                
-                                        
                                     <td class="quantity-col product_data">
                                         <div class="input-group quantity mx-auto " style="width: 100px;">
                                             <div class="input-group-btn changeQuantity " data-variantid="{{i.id}}">
@@ -107,7 +112,6 @@
                                             
                                         </div>
                                     </td> 
-
                                    
                                     <!-- Assuming the previous code is here and we focus on the "total-col" element -->
 
@@ -120,10 +124,6 @@
                                             {% endif %}
                                         </span>
                                     </td>
-
-
-                           
-
 
                                     <td class="remove-col"><a href="{% url 'removecart' i.id %}"><button
                                                 class="btn-remove"><i class="icon-close"></i></button></a></td>
@@ -149,6 +149,7 @@
 
                         </div><!-- End .cart-bottom -->
                     </div><!-- End .col-lg-9 -->
+
                     <aside class="col-lg-3">
                         <div class="summary summary-cart">
                             <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
@@ -156,17 +157,19 @@
                             <table class="table table-summary">
                                 <tbody>
                                     
-
-                                    <div class="container mt-4">
+                                    {% comment %} <div class="container mt-4">
                                         <h4>Shipping Options</h4>
                                         <hr>
                                     
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div class="custom-control custom-radio mb-3">
-                                                    <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-                                                    <label class="custom-control-label" for="free-shipping">Free Shipping</label>
+                                                <div class="move-up-and-left-container">
+                                                    <div class="custom-control custom-radio mb-3">
+                                                        <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
+                                                        <label class="custom-control-label" for="free-shipping">Free Shipping</label>
+                                                    </div>
                                                 </div>
+                                                
                                             </div>
                                             <div class="col-md-6">
                                                 <span class="float-md-right">$0.00</span>
@@ -196,7 +199,7 @@
                                                 <span class="float-md-right">$20.00</span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> {% endcomment %}
 
                                     <tr class="summary-total">
                                         <td>Total:</td>
@@ -215,10 +218,6 @@
                                         </td>
                                     </tr><!-- End .summary-total -->
                          
-                                    
-
-
-
                                 </tbody>
                             </table><!-- End .table table-summary -->
 
@@ -229,7 +228,8 @@
 
                         <a href="{% url 'shop' %}" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE
                                 SHOPPING</span><i class="icon-refresh"></i></a>
-                    </aside><!-- End .col-lg-3 -->
+                    </aside><!-- End .col-lg-3 -->  
+
                 </div><!-- End .row -->
             </div><!-- End .container -->
         </div><!-- End .cart -->

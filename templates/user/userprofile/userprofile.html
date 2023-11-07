@@ -158,14 +158,17 @@
 									{% endif %}
 									
 									<div id="referralDiv">
-										<form method="post" action="{% url 'validate_referral' %}">
-											{% csrf_token %}
-											<label for="referral_code"><h5>Enter Referral Code:</h5></label>
-											<input type="text" id="referral_code" name="referral_codes" placeholder="Enter your code">
-											<button type="submit">Submit</button>
-										</form>
-										{% if error_message %}
-											<p>{{ error_message }}</p>
+										{% if not is_referral_code_used %}
+											<form method="post" action="{% url 'validate_referral' %}">
+												{% csrf_token %}
+												
+													<label for="referral_code"><h5>Enter Referral Code:</h5></label>
+													<input type="text" id="referral_code" name="referral_codes" placeholder="Enter your code">
+													<button type="submit">Submit</button>
+											</form>
+											{% if error_message %}
+												<p>{{ error_message }}</p>
+											{% endif %}
 										{% endif %}
 									</div>
 
