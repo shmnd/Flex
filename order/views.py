@@ -8,6 +8,8 @@ from user.models import Address, Wallet
 from variant.models import Variant,VariantImage
 from cart.models import Cart
 from django.db.models import Q
+from django.template.loader import get_template
+from xhtml2pdf import pisa 
 from django.contrib import messages
 
 # Create your views here.
@@ -387,3 +389,32 @@ def orderpaymentsort(request):
     else:
         return redirect('orderlist')
                 
+                
+def generatepdf(request):
+    if not request.user.is_authenticated:
+        return redirect('signin')
+    
+    last_purchase=Order.objects.filter(user=request.user).order_by('created_at').first()
+    if last_purchase:
+        # Assuming you have an HTML template for the invoice
+        template = get_template('invoice/userside_invoice.html')
+
+        # Provide the context for the template (pass data about the last purchase)
+        context = {'last_purchase': last_purchase}
+
+        # Render the template with the context
+        rendered_template = template.render(context)
+
+        # Generate the PDF file from the rendered template
+        pdf_response = HttpResponse(content_type='application/pdf')
+        pdf_response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+
+        # Generate the PDF using xhtml2pdf library
+        pisa_status = pisa.CreatePDF(rendered_template, dest=pdf_response)
+
+        if pisa_status.err:
+            return HttpResponse('Error generating PDF')
+
+        return pdf_response
+
+    return HttpResponse('No purchases found for this user.')

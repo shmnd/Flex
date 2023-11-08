@@ -191,6 +191,7 @@
                                 
                             </tr>
                         </thead>
+
                         <tbody>
                             {% for i in products %}
                             <tr>
@@ -401,20 +402,15 @@
                                                                                 <option value="2">2 Stars</option>
                                                                                 <option value="1">1 Star</option>
                                                                             </select>
-                                                                        </div>
+                                                                        </div>                                                      
                                                         
-                                                        
-                                                                        <div class="form-group">
-                                                                           
+                                                                        <div class="form-group">                                                                      
                                                                             <textarea class="form-control" id="review-content" name="review" placeholder="review-content" required></textarea>
                                                                         </div>
                                                         
                                                                         <button type="submit" class="btn btn-primary">Submit Review</button>
                                                                     </form>
-                                                                    
-                                                                    
-                                                    
-                                                                   
+                                                                                                                                      
                                                                 </div><!-- .End .tab-pane -->
                                                              
                                                                 </div><!-- .End .tab-pane -->
@@ -433,14 +429,16 @@
                             </tr>
                         </tbody>
                     </table>
+                    
+                        <div style="text-align: center;">
+                            <a href="{% url 'generatepdf' %}" class="btn btn-outline-primary-2">
+                                <h5 style="margin: 0;">Download PDF <i class="mdi mdi-file-pdf" style="font-size: x-large;"></i></h5>
+                            </a>
+                        </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-
-
 
 {% endblock %}
