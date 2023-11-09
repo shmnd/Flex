@@ -406,16 +406,6 @@ def generatepdf(request,view_id):
     if not request.user.is_authenticated:
         return redirect('signin')
 
-    # # Retrieve the order details based on the 'view_id' parameter
-    # try:
-    #     order_id = int(request.GET['view_id'])
-    #     orderview = Order.objects.get(id=order_id)
-    # except (KeyError, ValueError):
-    #     return HttpResponse('Invalid order ID')
-
-    # # Check if the order belongs to the current user
-    # if orderview.user != request.user:
-    #     return HttpResponse('Unauthorized access to order')
     orderview=Order.objects.get(id=view_id)
     # Retrieve related address information
     address = Address.objects.get(id=orderview.address.id)

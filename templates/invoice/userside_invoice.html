@@ -1,277 +1,189 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-	<body>
-		<head>
-			<meta charset="utf-8" />
-			<title>A simple, clean, and responsive HTML invoice template</title>
-		</head>
 
-		<style>
+<head>
+    <meta charset="utf-8" />
+    <title>A simple, clean, and responsive HTML invoice template</title>
+</head>
 
-			.status {
-				display: flex;
-				flex-direction: row;
-				justify-content: space-between;
-		
-			}
+<style>
 
-			.invoice-box {
-				max-width: 800px;
-				margin: auto;
-				padding: 30px;
-				border: 1px solid #eee;
-				box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-				font-size: 16px;
-				line-height: 24px;
-				font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-				color: #555;
-			}
+    .tableitems th,
+    .tableitems td {
+        padding: 2px;
+        text-align: left;
+        border: 2px solid #ddd;
+    }
 
-			.invoice-box table {
-				width: 100%;
-				line-height: inherit;
-				text-align: left;
-			}
 
-			.invoice-box table td {
-				padding: 5px;
-				vertical-align: top;
-			}
+</style>
 
-			.invoice-box table tr td:nth-child(2) {
-				text-align: right;
-			}
+<body>
 
-			.invoice-box table tr.top table td {
-				padding-bottom: 20px;
-			}
+	<div class="company-logo" style="text-align: center;">
+		<img src="static/template/assets/images/icons/flex.png" alt="company Logo" style="width: 200 px; max-width: 2000px">
+	</div>
 
-			.invoice-box table tr.top table td.title {
-				font-size: 45px;
-				line-height: 45px;
-				color: #333;
-			}
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                {% if address %}
+                <div class="col-md-5">
+                    <h5 class="card-title fw-semibold mb-4"> ORDER ADDRESS</h5>
+                    <div class="card">
 
-			.invoice-box table tr.information table td {
-				padding-bottom: 40px;
-			}
+                        <div class="card-body">
+                            <table class="tableitems">
 
-			.invoice-box table tr.heading td {
-				background: #eee;
-				border-bottom: 1px solid #ddd;
-				font-weight: bold;
-			}
+                                <tr>
+                                    <td><strong>First Name</strong></td>
+                                    <td>:{{address.first_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Last Name</strong></td>
+                                    <td>:{{address.last_name}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Phone Number</strong></td>
+                                    <td>:{{address.phone}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email</strong></td>
+                                    <td>:{{address.email}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Address</strong></td>
+                                    <td>:{{address.address}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Country</strong></td>
+                                    <td>:{{address.country}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>City</strong></td>
+                                    <td>:{{address.city}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>State</strong></td>
+                                    <td>:{{address.state}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pincode</strong></td>
+                                    <td>:{{address.pincode}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Order note</strong></td>
+                                    <td>:{{address.order_note}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+				<br>
+                {% if orderview %}
+                <div class="col-md-5">
+                    <h5 class="card-title fw-semibold mb-4"> ORDER DETAILS </h5>
+                    <div class="card">
 
-			.invoice-box table tr.details td {
-				padding-bottom: 20px;
-			}
+                        <div class="card-body">
+                            <table class="tableitems">
+                                <tr>
+                                    <td><strong>Order id</strong></td>
+                                    <td>:{{orderview.id}}</td>
+                                </tr>
 
-			.invoice-box table tr.item td {
-				border-bottom: 1px solid #eee;
-			}
+                                <tr>
+                                    <td><strong>User Name</strong></td>
+                                    <td>{{orderview.user.first_name}}</td>
+                                </tr>
 
-			.invoice-box table tr.item.last td {
-				border-bottom: none;
-			}
+                                <tr>
+                                    <td><strong>Total price</strong></td>
+                                    <td>:${{orderview.total_price}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Payment method</strong></td>
+                                    <td>:{{orderview.payment_mode}}</td>
+                                </tr>
+                                {% if orderview.payment_mode == 'cod' %}
+                                <tr>
+                                    <td><strong>Payment id</strong></td>
+                                    <td>:None</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td><strong>Payment id</strong></td>
+                                    <td>:{{orderview.payment_id}}</td>
+                                </tr>
+                                {% endif %}
+                                <tr>
+                                    <td><strong>Tracking no</strong></td>
+                                    <td>:{{orderview.tracking_no}}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ordered date</strong></td>
+                                    <td>:{{orderview.created_at}}</td>
+                                </tr>
 
-			.invoice-box table tr.total td:nth-child(2) {
-				border-top: 2px solid #eee;
-				font-weight: bold;
-			}
+                                <tr>
+                                    <td><strong>Order status</strong></td>
+                                    <td>:{{orderview.order_status.order_status}}</td>
+                                </tr>
 
-			@media only screen and (max-width: 600px) {
-				.invoice-box table tr.top table td {
-					width: 100%;
-					display: block;
-					text-align: center;
-				}
+                            </table>
+                            <br>
+                        </div>
+                    </div>
 
-				.invoice-box table tr.information table td {
-					width: 100%;
-					display: block;
-					text-align: center;
-				}
-			}
+                </div>
+                {% endif %}
+                <h5 class="card-title fw-semibold mb-4" style="text-align: center;">Items</h5>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover tableitems">
+                            <thead>
+                                <tr class="text-uppercase">
 
-			/** RTL **/
-			.invoice-box.rtl {
-				direction: rtl;
-				font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-			}
+                                    <th scope="col">Product name</th>
+                                    <th scope="col">category</th>
+                                    <th scope="col">color</th>
+                                    <th scope="col">size</th>
+                                    <th scope="col">price</th>
+                                    <th scope="col">Quantity</th>
 
-			.invoice-box.rtl table {
-				text-align: right;
-			}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in products %}
+                                <tr class="text-uppercase">
+                                    <td><b>{{ i.variant.product.product_name }}</td>
+                                    <td><b>{{ i.variant.product.category.categories }}</td>
+                                    <td><b>{{ i.variant.color }}</td>
+                                    <td><b>{{ i.variant.size }}</td>
+                                    <td><b>{{ i.variant.product.product_price}}</td>
+                                    <td><b>{{ i.quantity }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
 
-			.invoice-box.rtl table tr td:nth-child(2) {
-				text-align: left;
-			}
-		</style>
-		
+						<tfoot>
+							<tr>
+							  <h1>
+							  <th>Total</th>
+							  <th style="text-align: right;">{{ orderview.total_price }}</h1></th>
+							</tr>
+						  </tfoot>
 
-		<div class="card">
-			<div class="card-body">
-				<div class="row">
-					{% if address %}
-					<div class="col-md-5">
-						<h5 class="card-title fw-semibold mb-4"> ORDER ADDRESS</h5>
-						<div class="card">
-		
-							<div class="card-body">
-								<table>
-		
-									<tr>
-										<td><strong>First Name</strong></td>
-										<td>:{{address.first_name}}</td>
-									</tr>
-									<tr>
-										<td><strong>Last Name</strong></td>
-										<td>:{{address.last_name}}</td>
-									</tr>
-									<tr>
-										<td><strong>Phone Number</strong></td>
-										<td>:{{address.phone}}</td>
-									</tr>
-									<tr>
-										<td><strong>Email</strong></td>
-										<td>:{{address.email}}</td>
-									</tr>
-									<tr>
-										<td><strong>Address</strong></td>
-										<td>:{{address.address}}</td>
-									</tr>
-									<tr>
-										<td><strong>Country</strong></td>
-										<td>:{{address.country}}</td>
-									</tr>
-									<tr>
-										<td><strong>City</strong></td>
-										<td>:{{address.city}}</td>
-									</tr>
-									<tr>
-										<td><strong>State</strong></td>
-										<td>:{{address.state}}</td>
-									</tr>
-									<tr>
-										<td><strong>Pincode</strong></td>
-										<td>:{{address.pincode}}</td>
-									</tr>
-									<tr>
-										<td><strong>Order note</strong></td>
-										<td>:{{address.order_note}}</td>
-									</tr>
-								</table>
-							</div>
-						</div>
-					</div>
-					{% endif %}
-					{% if orderview %}
-					<div class="col-md-5">
-						<h5 class="card-title fw-semibold mb-4"> ORDER DETAILS </h5>
-						<div class="card">
-		
-							<div class="card-body">
-								<table>
-		
-									<tr>
-										<td><strong>Order id</strong></td>
-										<td>:{{orderview.id}}</td>
-									</tr>
-		
-									<tr>
-										<td><strong>User Name</strong></td>
-										<td>{{orderview.user.first_name}}</td>
-									</tr>
-		
-									<tr>
-										<td><strong>Total price</strong></td>
-										<td>:${{orderview.total_price}}</td>
-									</tr>
-									<tr>
-										<td><strong>Payment method</strong></td>
-										<td>:{{orderview.payment_mode}}</td>
-									</tr>
-									{% if orderview.payment_mode == 'cod'  %}
-									<tr>
-										<td><strong>Payment id</strong></td>
-										<td>:None</td>
-									</tr>
-									{% else %}
-									<tr>
-										<td><strong>Payment id</strong></td>
-										<td>:{{orderview.payment_id}}</td>
-									</tr>
-									{% endif %}
-									<tr>
-										<td><strong>Tracking no</strong></td>
-										<td>:{{orderview.tracking_no}}</td>
-									</tr>
-									<tr>
-										<td><strong>Ordered date</strong></td>
-										<td>:{{orderview.created_at}}</td>
-									</tr>
-									<tr></tr>
-									<tr>
-										<td><strong>Order status</strong></td>
-										<td>:{{orderview.order_status.order_status}}</td>
-									</tr>
-									<br>
-									
-								</table>
-								<br>
-							</div>
-						</div>
-		
-					</div>
-					{% endif %}
-					<h5 class="card-title fw-semibold mb-4" style="text-align: center;">Items</h5>
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table table-hover">
-								<thead>
-									<tr class="text-uppercase">
-				
-										<th scope="col">Product name</th>
-										<th scope="col">category</th>
-										<th scope="col">color</th>
-										<th scope="col">size</th>
-										<th scope="col">price</th>
-										<th scope="col">Quantity</th>
-								
-									</tr>
-								</thead>
-								<tbody>
-									{% for i in products %}
-									<tr class="text-uppercase">
-										{% for j in image %}
-										{% if i.variant.id == j.variant.id %}
-										<td>
-											<div style="width: 30px;" class="overflow-hidden">
-												<img class="w-100" src=" {{ j.image.url}} " alt="product image">
-											</div>
-										</td>
-										{% else %}
-										{% endif %}
-									{% endfor %}
-										<td><b>{{ i.variant.product.product_name }}</td>
-										<td><b>{{ i.variant.product.category.categories }}</td>
-										<td><b>{{ i.variant.color }}</td>
-										<td><b>{{ i.variant.size }}</td>
-										<td><b>{{ i.variant.product.product_price}}</td>
-										<td><b>{{ i.quantity }}</td>
-{% endfor %}
-									</tr>
+                    </div>
+                </div>
 
-								</tbody>
-							</table>
-		
-						</div>
-					</div>
-		
-				</div>
-			</div>
-		</div>
-			
-	</body>
+            </div>
+        </div>
+    </div>
+
+</body>
+
 </html>
