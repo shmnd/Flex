@@ -8,9 +8,21 @@ from user.models import Address, Wallet
 from variant.models import Variant,VariantImage
 from cart.models import Cart
 from django.db.models import Q
+from django.contrib import messages
+
 from django.template.loader import get_template
 from xhtml2pdf import pisa 
-from django.contrib import messages
+from .models import Order
+
+
+# import ho.pisa as pisa
+# import spynner
+
+import logging
+class PisaNullHandler(logging.Handler):
+    def emit(self, record):
+        pass
+
 
 # Create your views here.
 
