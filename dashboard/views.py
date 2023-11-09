@@ -22,7 +22,7 @@ from order.models import Order
 from django.db.models import Sum
 
 import matplotlib.pyplot as plt
-
+import pandas as pd
 
 # verification email
 from registration.models import UserOTP
