@@ -19,6 +19,9 @@ class Itemstatus(models.Model):
         return self.item_status
     
 class Order(models.Model):
+    order_created_at_date = models.DateTimeField(blank=True, null=True)
+    order = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='parent_order')
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     total_price = models.FloatField(null=False)

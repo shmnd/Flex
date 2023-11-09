@@ -8,6 +8,11 @@ from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login ,logout
 from brand.models import Brand
+from checkout.models import Order,OrderItem,Itemstatus,Orderstatus
+from django.db.models import Q
+from django.core.exceptions import ValidationError
+
+
 
 
 import csv
@@ -241,13 +246,28 @@ def searchuser(request):
 def adminlogout(request):
     logout(request)
     return redirect('adminsignin')
+# //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+def validate_order_created_at_date(value):
+    if not value:
+        raise ValidationError('The order creation date is required.')
+
+    try:
+        datetime.datetime.strptime(value, '%Y-%m-%d')
+    except ValueError:
+        raise ValidationError('The order creation date must be in YYYY-MM-DD format.')
+
 
 
 def generate_yearly_report(sales_data):
     """Generates a yearly sales report."""
 
-    # Group the sales data by year
-    df_grouped_year = sales_data.groupby(sales_data['order__created_at__date'].dt.year)
+    # Convert the QuerySet to a Pandas DataFrame
+    df = pd.DataFrame(sales_data)
+
+    # Group the data by year
+    df_grouped_year = df.groupby(df['order__created_at__date'].dt.year)
 
     # Create a bar chart to show the total sales for each year
     plt.figure()
@@ -255,10 +275,13 @@ def generate_yearly_report(sales_data):
     plt.xlabel('Year')
     plt.ylabel('Total Sales')
     plt.title('Yearly Sales Report')
-    plt.show()
+
     # Close the plot
     plt.close()
 
+    # Show the plot
+    plt.show()
+    
 # dashboard views like graph and chart
 @login_required(login_url='adminsignin')
 # ////////////////////////
@@ -268,6 +291,9 @@ def dashboard(request):
 
     # Get the sales data from the database
     sales_data = OrderItem.objects.values('order__created_at__date').annotate(total_sales=Sum('price')).order_by('-order__created_at__date')
+    # Order.objects.filter(Q(order__created_at__date__isnull=True) | Q(order__created_at__date='')).update(order__created_at__date=None)
+
+    Order.objects.filter(Q(order__created_at__date__isnull=True) | Q(order__created_at__date='')).update(order__created_at__date=None)
 
     # Generate yearly, monthly, and weekly reports
     generate_yearly_report(sales_data)
