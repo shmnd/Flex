@@ -10,5 +10,5 @@ urlpatterns=[
     path('orderstatusshow/',views.orderstatusshow,name='orderstatusshow'),
     path('returnorder/<int:return_id>',views.returnorder,name='returnorder'),
     path('ordercancel/<int:cancel_id>',views.ordercancel,name='ordercancel'),
-    path('generatepdf/',views.generatepdf,name='generatepdf'),
+    path('generatepdf/<int:view_id>',views.generatepdf,name='generatepdf'),
 ]

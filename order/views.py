@@ -14,7 +14,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa 
 from .models import Order
 
-
+from django.template.loader import render_to_string
 # import ho.pisa as pisa
 # import spynner
 
@@ -402,31 +402,51 @@ def orderpaymentsort(request):
         return redirect('orderlist')
                 
                 
-def generatepdf(request):
+def generatepdf(request,view_id):
     if not request.user.is_authenticated:
         return redirect('signin')
-    
-    last_purchase=Order.objects.filter(user=request.user).order_by('created_at').first()
-    if last_purchase:
-        # Assuming you have an HTML template for the invoice
-        template = get_template('invoice/userside_invoice.html')
 
-        # Provide the context for the template (pass data about the last purchase)
-        context = {'last_purchase': last_purchase}
+    # # Retrieve the order details based on the 'view_id' parameter
+    # try:
+    #     order_id = int(request.GET['view_id'])
+    #     orderview = Order.objects.get(id=order_id)
+    # except (KeyError, ValueError):
+    #     return HttpResponse('Invalid order ID')
 
-        # Render the template with the context
-        rendered_template = template.render(context)
+    # # Check if the order belongs to the current user
+    # if orderview.user != request.user:
+    #     return HttpResponse('Unauthorized access to order')
+    orderview=Order.objects.get(id=view_id)
+    # Retrieve related address information
+    address = Address.objects.get(id=orderview.address.id)
 
-        # Generate the PDF file from the rendered template
-        pdf_response = HttpResponse(content_type='application/pdf')
-        pdf_response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+    # Retrieve order items and associated variant images
+    products = OrderItem.objects.filter(order=orderview)
+    variant_ids = [product.variant.id for product in products]
+    image = VariantImage.objects.filter(variant__id__in=variant_ids).distinct('variant__color')
 
-        # Generate the PDF using xhtml2pdf library
-        pisa_status = pisa.CreatePDF(rendered_template, dest=pdf_response)
+    # Retrieve all item status options
+    item_status_o = Itemstatus.objects.all()
 
-        if pisa_status.err:
-            return HttpResponse('Error generating PDF')
+    # Render the HTML template with the retrieved data
+    context = {
+        'orderview': orderview,
+        'address': address,
+        'products': products,
+        'image': image,
+        'item_status_o': item_status_o,
+    }
 
-        return pdf_response
+    rendered_template = render_to_string('invoice/userside_invoice.html', context)
 
-    return HttpResponse('No purchases found for this user.')
+    # Generate the PDF file from the rendered template
+    pdf_response = HttpResponse(content_type='application/pdf')
+    pdf_response['Content-Disposition'] = 'attachment; filename="invoice.pdf"'
+
+    # Generate the PDF using xhtml2pdf library
+    pisa_status = pisa.CreatePDF(rendered_template, dest=pdf_response)
+
+    if pisa_status.err:
+        return HttpResponse('Error generating PDF')
+
+    return pdf_response
