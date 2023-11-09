@@ -21,6 +21,9 @@ from checkout.models import OrderItem
 from order.models import Order
 from django.db.models import Sum
 
+import matplotlib.pyplot as plt
+
+
 # verification email
 from registration.models import UserOTP
 from django.contrib import auth
@@ -238,64 +241,148 @@ def searchuser(request):
 def adminlogout(request):
     logout(request)
     return redirect('adminsignin')
-    
+
+
+def generate_yearly_report(sales_data):
+    """Generates a yearly sales report."""
+
+    # Group the sales data by year
+    df_grouped_year = sales_data.groupby(sales_data['order__created_at__date'].dt.year)
+
+    # Create a bar chart to show the total sales for each year
+    plt.figure()
+    plt.bar(df_grouped_year.index, df_grouped_year['total_sales'].sum())
+    plt.xlabel('Year')
+    plt.ylabel('Total Sales')
+    plt.title('Yearly Sales Report')
+    plt.show()
+    # Close the plot
+    plt.close()
+
 # dashboard views like graph and chart
 @login_required(login_url='adminsignin')
+# ////////////////////////
 def dashboard(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
-    
+
+    # Get the sales data from the database
     sales_data = OrderItem.objects.values('order__created_at__date').annotate(total_sales=Sum('price')).order_by('-order__created_at__date')
+
+    # Generate yearly, monthly, and weekly reports
+    generate_yearly_report(sales_data)
+    generate_monthly_report(sales_data)
+    generate_weekly_report(sales_data)
+
     # Prepare data for the chart
     categories = [item['order__created_at__date'].strftime('%d/%m') for item in sales_data]
     sales_values = [item['total_sales'] for item in sales_data]
-   
+
     return_data = OrderItem.objects.filter(orderitem_status__item_status__in=["Return", "Cancelled"]).values('order__created_at__date').annotate(total_returns=Sum('price')).order_by('-order__created_at__date')
     return_values = [item['total_returns'] for item in return_data]
-    orders =Order.objects.order_by('-created_at')[:10]
+
+    orders = Order.objects.order_by('-created_at')[:10]
+
     try:
-        totalsale=0
-        total_sales =Order.objects.all()
+        totalsale = 0
+        total_sales = Order.objects.all()
         for i in total_sales:
-            i.total_price
-            totalsale+=i.total_price
+            totalsale += i.total_price
     except:
-         totalsale=0 
+        totalsale = 0
+
     try:
-        totalearnings=0
-        total_earn =Order.objects.filter(order_status__id=4)
+        totalearnings = 0
+        total_earn = Order.objects.filter(order_status__id=4)
         for i in total_earn:
-            i.total_price
-            totalearnings+=i.total_price
+            totalearnings += i.total_price
     except:
-         totalearnings=0       
-        
+        totalearnings = 0
+
     try:
-        status_delivery =Order.objects.filter(order_status__id=4).count()
-        status_cancel =Order.objects.filter(order_status__id=5).count()
-        status_return =Order.objects.filter(order_status__id=6).count()
-        Total = status_delivery + status_cancel + status_return 
+        status_delivery = Order.objects.filter(order_status__id=4).count()
+        status_cancel = Order.objects.filter(order_status__id=5).count()
+        status_return = Order.objects.filter(order_status__id=6).count()
+
+        Total = status_delivery + status_cancel + status_return
         status_delivery = (status_delivery / Total) * 100
         status_cancel = (status_cancel / Total) * 100
         status_return = (status_return / Total) * 100
     except:
-        status_delivery=0
-        status_cancel=0
-        status_return=0
-            
+        status_delivery = 0
+        status_cancel = 0
+        status_return = 0
+
     context = {
-        'totalsale':totalsale,
-        'totalearnings':totalearnings,
-        'status_delivery':status_delivery,
-        'status_cancel':status_cancel,
-        'status_return':status_return,
-        'orders':orders,
+        'totalsale': totalsale,
+        'totalearnings': totalearnings,
+        'status_delivery': status_delivery,
+        'status_cancel': status_cancel,
+        'status_return': status_return,
+        'orders': orders,
         'categories': categories,
         'sales_values': sales_values,
         'return_values': return_values,
     }
+
+    return render(request, 'admin/dashboard.html', context)
+
+# /////////////////////////////////
+# def dashboard(request):
+#     if not request.user.is_superuser:
+#         return redirect('adminsignin')
     
-    return render(request,'admin/dashboard.html',context)
+#     sales_data = OrderItem.objects.values('order__created_at__date').annotate(total_sales=Sum('price')).order_by('-order__created_at__date')
+#     # Prepare data for the chart
+#     categories = [item['order__created_at__date'].strftime('%d/%m') for item in sales_data]
+#     sales_values = [item['total_sales'] for item in sales_data]
+   
+#     return_data = OrderItem.objects.filter(orderitem_status__item_status__in=["Return", "Cancelled"]).values('order__created_at__date').annotate(total_returns=Sum('price')).order_by('-order__created_at__date')
+#     return_values = [item['total_returns'] for item in return_data]
+#     orders =Order.objects.order_by('-created_at')[:10]
+#     try:
+#         totalsale=0
+#         total_sales =Order.objects.all()
+#         for i in total_sales:
+#             i.total_price
+#             totalsale+=i.total_price
+#     except:
+#          totalsale=0 
+#     try:
+#         totalearnings=0
+#         total_earn =Order.objects.filter(order_status__id=4)
+#         for i in total_earn:
+#             i.total_price
+#             totalearnings+=i.total_price
+#     except:
+#          totalearnings=0       
+        
+#     try:
+#         status_delivery =Order.objects.filter(order_status__id=4).count()
+#         status_cancel =Order.objects.filter(order_status__id=5).count()
+#         status_return =Order.objects.filter(order_status__id=6).count()
+#         Total = status_delivery + status_cancel + status_return 
+#         status_delivery = (status_delivery / Total) * 100
+#         status_cancel = (status_cancel / Total) * 100
+#         status_return = (status_return / Total) * 100
+#     except:
+#         status_delivery=0
+#         status_cancel=0
+#         status_return=0
+            
+#     context = {
+#         'totalsale':totalsale,
+#         'totalearnings':totalearnings,
+#         'status_delivery':status_delivery,
+#         'status_cancel':status_cancel,
+#         'status_return':status_return,
+#         'orders':orders,
+#         'categories': categories,
+#         'sales_values': sales_values,
+#         'return_values': return_values,
+#     }
+    
+#     return render(request,'admin/dashboard.html',context)
 
 
 # sale report for admin 

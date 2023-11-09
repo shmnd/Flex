@@ -52,7 +52,11 @@
                       </div>
                     </div>
                   </div>
-                  
+                  <div>
+                    {% include 'reports/yearly_report.html' %}
+                    {% include 'reports/monthly_report.html' %}
+                    {% include 'reports/weekly_report.html' %}
+                  </div>
                   <div class="col-4">
                     <div class="d-flex justify-content-center">
                       <div id="breakup"></div>
@@ -219,7 +223,7 @@
   // Update the date and time every second
   setInterval(updateDateTime, 1000);
   
- </script>
+</script>
 <script>
   $(function () {
     console.log('reachred hereeeeeeeeeeeeeeee')
