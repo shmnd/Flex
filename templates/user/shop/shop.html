@@ -67,13 +67,14 @@
                                 </a>
 
                                 <div class="product-action-vertical">
-                                    <a href="" class="btn-product-icon btn-wishlist btn-expandable wish-list" data-product_id="{{ c.variant.id }}"><span>add to wishlist</span></a>
+                                    <a href="" class="btn-product-icon btn-wishlist btn-expandable wish-list wishlistshamnad"  data-product_id="{{c.variant.id}}"><span>add to wishlist</span></a> 
+
                                 </div><!-- End .product-action -->
 
                                 <div class="product-action action-icon-top">
-                                    <input readonly class='mtext-104 cl3 txt-center num-product' type='hidden' name='num-product' value='1' id='qty-input'>
-                                    <input type='hidden' value='{{ c.variant.size.id }}'' id='size-i'>
-                                    <a href="" data-product-id={{ c.variant.id }} class="btn-product add-to-cart-btn"><span>add to cart</span></a>
+                                    <input readonly class='mtext-104 cl3 txt-center num-product' type='hidden' name='num-product' value='1' id="qty-input">
+                                    <input type='hidden' value="{{ c.variant.size.id }}" id="size-input">
+                                    <a href="" data-product_id="{{ c.variant.id }}" class="btn-product btn-cart addcart title="Add to cart""><span>add to cart</span></a>
                                 </div><!-- End .product-action -->
                             </figure><!-- End .product-media -->
 
@@ -147,102 +148,108 @@
         </div><!-- End .container -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script>
-        $('.add-to-cart-btn').click(function (e) {
-            e.preventDefault();
-    
-            var product_id = $(this).data('product_id');
-            var add_qty = $('#qty-input').val();
-            var add_size = $('#size-input').val();
-    
-            // var cart_qty = $('#pro_qty' + product_id).val();  
-            console.log(product_id, add_qty,add_size, 'yyyyyyyyyyyyyyyyyyyyyyy1')
-            $.ajax({
-                method: "POST",
-                url: "{% url 'addcart' %}",
-                data: {
-    
-                    'variant_id': product_id,
-                    'add_size':add_size,
-                    'add_qty': add_qty,
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function (response) {
-    
-                    console.log(response);
-    
-    
-    
-                    if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in cart' ) {
-                        swal.fire("Error!", response.status, "error");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } else if (response.status === 'Product added successfully') { 
-                        swal.fire("", response.status, "success");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } else if (response.status === 'you are not login please Login to continue') {
-                        swal.fire("", response.status, "warning");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } 
-                    else if (response.status === 'Sorry! this variant not available') {
-                        swal.fire("", response.status, "warning");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    } 
-                    else {
-                        swal("Error!", response.status, "error");
-                        $('.cartdata').load(location.href + " .cartdata");
-                    }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script>
+    $('.addcart').click(function (e) {
+        e.preventDefault();
+
+        var product_id = $(this).data('product_id');
+        var add_qty = '1';
+        var add_size = $('#size-input').val();
+
+        // var cart_qty = $('#pro_qty' + product_id).val();  
+        console.log(product_id, add_qty,add_size, 'yyyyyyyyyyyyyyyyyyyyyyy1')
+        $.ajax({
+            method: "POST",
+            url: "{% url 'addcart' %}",
+            data: {
+
+                'variant_id': product_id,
+                'add_size':add_size,
+                'add_qty': add_qty,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+
+                console.log(response);
+
+                if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in cart' ) {
+                    swal.fire("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'Product added successfully') { 
+                    swal.fire("", response.status, "success");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'you are not login please Login to continue') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } 
+                else if (response.status === 'Sorry! this variant not available') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } 
+                else {
+                    swal("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
                 }
-            });
+            }
         });
-    </script> 
+    });
+</script>
 
 {% comment %} ajax wishlisssst {% endcomment %}
 
-        <script>
-            $('.wish-list').click(function (e){
-                e.preventDefault();
+<script>
+    $('.wishlistshamnad').click(function (e) {
+        e.preventDefault();
 
-                var product_id= $(this).data('product_id');
-                var add_size =$('#size-input').val();
+        var product_id = $(this).data('product_id');
+        var add_size = $('select[name="size"]').val();
 
-                console.log(product_id,add_size,'9999999999999999')
-                $.ajax({
-                    method:'POST',
-                    url:"{% url 'add_wishlist1' %}",
-                    data:{
-                        'variant_id':product_id,
-                        'add_size':add_size,
-                        csrfmiddlewaretoken:'{{ csrf_token }}'   
-                    },
-                    success:  function (response){
-                        console.log(response);
+        console.log(product_id,add_size, 'yyyyyyyyyyyyyyyyyyyyyyy1')
+        $.ajax({
+            method: "POST",
+            url: "{% url 'add_wishlist1' %}",
+            data: {
 
-                        if (response.status ==='No such product found' || response.status === 'Only few quantity available' || response.status === 'Product already in wishlist' ){
-                            swal.fire("Error", response.status,"error");
-                            $('.cartdata').load(location.href + ".cartdata");
-                        } 
-                        else if(response.status === 'Product added successfully in wishlist'){
-                            swal.fire("",response.status,"success");
-                            $('.cartdata').load(location.href + " .cartdata");
-                        }
-                        else if (response.status=== 'You are not login please Login to continue'){
-                            swal.fire("",response.status, "warning");
-                            $('.cartdata').load(location.href + " .cartdata");
-                        }
-                        else if (response.status === 'Sorry this variant is not available'){
-                            swal.fire("",response.status, "warning")
-                        }
-                        else{
-                            swal("Error",response.status,"error");
-                            $('.cartdata').load(location.href + " .cartdata")
-                        }
+                'variant_id': product_id,
+                'add_size':add_size,
+             
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
 
-                    }
-                })
-            })
-        </script>
+                console.log(response);
+
+                if (response.status === 'No such prodcut found' || response.status === 'Only few quantity available' || response.status === 'Product already in Wishlist' ) {
+                    swal.fire("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'Product added successfully in Wishlist') { 
+                    swal.fire("", response.status, "success");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } else if (response.status === 'you are not login please Login to continue') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } 
+                else if (response.status === 'Sorry! this variant not available') {
+                    swal.fire("", response.status, "warning");
+                    $('.cartdata').load(location.href + " .cartdata");
+                } 
+                else {
+                    swal("Error!", response.status, "error");
+                    $('.cartdata').load(location.href + " .cartdata");
+                }
+            }
+        });
+    });
+</script>
+<!-- Add this before the closing </body> tag of your HTML -->
+<script src="https://unpkg.com/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>
+
 
 
 
