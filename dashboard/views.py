@@ -11,19 +11,20 @@ from brand.models import Brand
 from checkout.models import Order,OrderItem,Itemstatus,Orderstatus
 from django.db.models import Q
 from django.core.exceptions import ValidationError
-# from checkout.modes import Order
 
 import csv
+from openpyxl import Workbook
+from io import BytesIO
+from openpyxl.utils import get_column_letter
+from openpyxl.writer.excel import save_workbook
+from django.utils import timezone
+
 from datetime import date, datetime
 from itertools import groupby
 from fpdf import FPDF
 from django.db.models import Prefetch   
-from checkout.models import OrderItem
 
-from checkout.models import OrderItem,Order
-# from order.models import Order
 from django.db.models import Sum
-
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -522,4 +523,53 @@ def generate_pdf(request):
             pdf.cell(col_width, row_height, str(item), border=1)
         pdf.ln()
     response.write(pdf.output(dest='S').encode('latin1'))  
+    return response
+
+@login_required(login_url='adminsignin')
+@login_required(login_url='adminsignin')
+def export_excel(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    filename = f'Expenses_{timestamp}.xlsx'
+    response['Content-Disposition'] = f'attachment; filename={filename}'
+
+    # Create the Excel file
+    workbook = Workbook()
+    worksheet = workbook.active
+
+    # Write header row
+    header = ['User', 'Total Price', 'Payment Mode', 'Tracking No', 'Ordered At', 'Product Name', 'Product Price', 'Product Quantity']
+    worksheet.append(header)
+
+    # Write data rows
+    orders = Order.objects.all()
+    for order in orders:
+        order_items = OrderItem.objects.filter(order=order).select_related('variant')
+        grouped_order_items = groupby(order_items, key=lambda x: x.order_id)
+        for order_id, items_group in grouped_order_items:
+            items_list = list(items_group)
+            for index, order_item in enumerate(items_list, start=2):
+                # Convert to a timezone-naive datetime
+                ordered_at = order.created_at.replace(tzinfo=None) if index == 2 else ""
+                
+                worksheet.append([
+                    order.user.first_name if index == 2 else "",
+                    order.total_price if index == 2 else "",
+                    order.payment_mode if index == 2 else "",
+                    order.tracking_no if index == 2 else "",
+                    ordered_at.strftime('%Y-%m-%d %H:%M:%S') if index == 2 else "",  # Format the date as needed
+                    order_item.variant.product.product_name,
+                    order_item.price,
+                    order_item.quantity,
+                ])
+
+    # Save the workbook to the response
+    output = BytesIO()
+    workbook.save(output)
+    output.seek(0)
+    response.write(output.getvalue())
+
     return response
