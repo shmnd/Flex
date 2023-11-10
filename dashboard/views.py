@@ -11,9 +11,7 @@ from brand.models import Brand
 from checkout.models import Order,OrderItem,Itemstatus,Orderstatus
 from django.db.models import Q
 from django.core.exceptions import ValidationError
-
-
-
+# from checkout.modes import Order
 
 import csv
 from datetime import date, datetime
@@ -22,8 +20,8 @@ from fpdf import FPDF
 from django.db.models import Prefetch   
 from checkout.models import OrderItem
 
-from checkout.models import OrderItem
-from order.models import Order
+from checkout.models import OrderItem,Order
+# from order.models import Order
 from django.db.models import Sum
 
 import matplotlib.pyplot as plt
@@ -246,90 +244,47 @@ def searchuser(request):
 def adminlogout(request):
     logout(request)
     return redirect('adminsignin')
+
+
+
 # //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+from django.utils import timezone
+from django.db.models import Sum
+from datetime import timedelta
 
-
-def validate_order_created_at_date(value):
-    if not value:
-        raise ValidationError('The order creation date is required.')
-
-    try:
-        datetime.datetime.strptime(value, '%Y-%m-%d')
-    except ValueError:
-        raise ValidationError('The order creation date must be in YYYY-MM-DD format.')
-
-
-
-def generate_yearly_report(sales_data):
-    """Generates a yearly sales report."""
-
-    # Convert the QuerySet to a Pandas DataFrame
-    df = pd.DataFrame(sales_data)
-
-    # Group the data by year
-    df_grouped_year = df.groupby(df['order__created_at__date'].dt.year)
-
-    # Create a bar chart to show the total sales for each year
-    plt.figure()
-    plt.bar(df_grouped_year.index, df_grouped_year['total_sales'].sum())
-    plt.xlabel('Year')
-    plt.ylabel('Total Sales')
-    plt.title('Yearly Sales Report')
-
-    # Close the plot
-    plt.close()
-
-    # Show the plot
-    plt.show()
-    
-# dashboard views like graph and chart
-@login_required(login_url='adminsignin')
-# ////////////////////////
-def dashboard(request):
+def dashboard(request, interval='monthly'):
     if not request.user.is_superuser:
         return redirect('adminsignin')
+    
+    
+    # Set default date range to one month
+    end_date = timezone.now()
+    start_date = end_date - timedelta(days=30)
 
-    # Get the sales data from the database
-    sales_data = OrderItem.objects.values('order__created_at__date').annotate(total_sales=Sum('price')).order_by('-order__created_at__date')
-    # Order.objects.filter(Q(order__created_at__date__isnull=True) | Q(order__created_at__date='')).update(order__created_at__date=None)
+    # Adjust date range based on the selected interval
+    if interval == 'yearly':
+        start_date = end_date - timedelta(days=365)
+    elif interval == 'weekly':
+        start_date = end_date - timedelta(days=7)
 
-    Order.objects.filter(Q(order__created_at__date__isnull=True) | Q(order__created_at__date='')).update(order__created_at__date=None)
-
-    # Generate yearly, monthly, and weekly reports
-    generate_yearly_report(sales_data)
-    generate_monthly_report(sales_data)
-    generate_weekly_report(sales_data)
-
+    # Sales data query
+    sales_data = OrderItem.objects.filter(order__created_at__date__range=[start_date, end_date]).values('order__created_at__date').annotate(total_sales=Sum('price')).order_by('-order__created_at__date')
+    
     # Prepare data for the chart
     categories = [item['order__created_at__date'].strftime('%d/%m') for item in sales_data]
     sales_values = [item['total_sales'] for item in sales_data]
-
-    return_data = OrderItem.objects.filter(orderitem_status__item_status__in=["Return", "Cancelled"]).values('order__created_at__date').annotate(total_returns=Sum('price')).order_by('-order__created_at__date')
+   
+    # Return data query
+    return_data = OrderItem.objects.filter(orderitem_status__item_status__in=["Return", "Cancelled"]).filter(order__created_at__date__range=[start_date, end_date]).values('order__created_at__date').annotate(total_returns=Sum('price')).order_by('-order__created_at__date')
     return_values = [item['total_returns'] for item in return_data]
 
     orders = Order.objects.order_by('-created_at')[:10]
 
-    try:
-        totalsale = 0
-        total_sales = Order.objects.all()
-        for i in total_sales:
-            totalsale += i.total_price
-    except:
-        totalsale = 0
-
-    try:
-        totalearnings = 0
-        total_earn = Order.objects.filter(order_status__id=4)
-        for i in total_earn:
-            totalearnings += i.total_price
-    except:
-        totalearnings = 0
 
     try:
         status_delivery = Order.objects.filter(order_status__id=4).count()
         status_cancel = Order.objects.filter(order_status__id=5).count()
         status_return = Order.objects.filter(order_status__id=6).count()
-
         Total = status_delivery + status_cancel + status_return
         status_delivery = (status_delivery / Total) * 100
         status_cancel = (status_cancel / Total) * 100
@@ -338,6 +293,28 @@ def dashboard(request):
         status_delivery = 0
         status_cancel = 0
         status_return = 0
+
+    try:
+        totalearnings = 0
+        total_earn = Order.objects.filter(order_status__id=4)
+        for i in total_earn:
+            i.total_price
+            totalearnings += i.total_price
+    except:
+        totalearnings = 0
+
+    
+    try:
+        totalsale=0
+        total_sales = Order.objects.all()
+        for i in total_sales:
+            i.total_price
+            totalsale+=i.total_price
+    except:
+        totalsale=0
+
+    
+    # Other statistics calculations (totalsale, totalearnings, status_delivery, status_cancel, status_return)
 
     context = {
         'totalsale': totalsale,
@@ -352,6 +329,7 @@ def dashboard(request):
     }
 
     return render(request, 'admin/dashboard.html', context)
+
 
 # /////////////////////////////////
 # def dashboard(request):

@@ -3150,9 +3150,9 @@
   		"Sat"
   	],
   	toolbar: {
-  		exportToSVG: "Download SVG",
-  		exportToPNG: "Download PNG",
-  		exportToCSV: "Download CSV",
+  		exportToSVG: "Yearly",
+  		exportToPNG: "Monthly",
+  		exportToCSV: "Weekly",
   		menu: "Menu",
   		selection: "Selection",
   		selectionZoom: "Selection Zoom",

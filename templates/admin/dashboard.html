@@ -13,6 +13,18 @@
               <div class="mb-3 mb-sm-0">
                 <h5 class="card-title fw-semibold">Sales Overview</h5>
               </div>
+
+              <div class="row">
+                <div class="col-lg-12 mb-3">
+                  <label for="interval-select" class="form-label">Select Interval:</label>
+                  <select class="form-select" id="interval-select">
+                    <option value="yearly">Yearly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                  </select>
+                </div>
+              </div>
+
               <div>
                 <div class="d-lg-flex">
                   <p id="current-date-time" class="text-dark font-weight-bold mb-0"></p>
@@ -51,11 +63,6 @@
                         <span class="fs-2">Return</span>
                       </div>
                     </div>
-                  </div>
-                  <div>
-                    {% include 'reports/yearly_report.html' %}
-                    {% include 'reports/monthly_report.html' %}
-                    {% include 'reports/weekly_report.html' %}
                   </div>
                   <div class="col-4">
                     <div class="d-flex justify-content-center">
@@ -190,8 +197,33 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.0/dist/apexcharts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.28.0/dist1/apexcharts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+  // Update chart based on the selected interval
+  function updateChart(interval) {
+    // Update chart data here based on the selected interval
+    // You may need to make an AJAX request to the server to get updated data
+    // For simplicity, let's assume you have a function `getChartData` that returns data based on the interval
+    var chartData = getChartData(interval);
+
+    // Update the chart with the new data
+    var chart = new ApexCharts(document.querySelector("#chart"), chartData);
+    chart.render();
+  }
+
+  // Event listener for interval selection change
+  document.getElementById('interval-select').addEventListener('change', function () {
+    var selectedInterval = this.value;
+    updateChart(selectedInterval);
+  });
+
+  // Initial chart rendering (you may need to call this with the default interval)
+  updateChart('monthly');
+</script>
+
 
 <script>
     
