@@ -377,8 +377,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
     <script>
       $(document).ready(function() {
@@ -391,6 +389,7 @@
               var couponOrder = $("[name='couponcheck']").val();
               var order_note = $("[name='ordernote']").val();
               var token = $("[name='csrfmiddlewaretoken']").val();
+              
               var selectedAddress = $("input[name='address']:checked").val();
               var paymentMethod = $("a[data-toggle='collapse'][aria-expanded='true']").data('payment-method');
     
