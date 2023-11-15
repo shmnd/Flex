@@ -6,11 +6,11 @@ from order.models import Orderreturn,Order_cancelled
 from product.models import Product
 from user.models import Address, Wallet
 from variant.models import Variant,VariantImage
-from cart.models import Cart
+# from cart.models import Cart
 from django.db.models import Q
 from django.contrib import messages
 
-from django.template.loader import get_template
+# from django.template.loader import get_template
 from xhtml2pdf import pisa 
 from .models import Order
 

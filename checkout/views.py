@@ -146,6 +146,8 @@ def checkout(request):
 
 # placing order after checkout 
 def placeorder(request):
+    
+    print('placeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
     if request.method == 'POST':
         # Retrieve the current user
         user = request.user
@@ -154,7 +156,7 @@ def placeorder(request):
         coupon = request.POST.get('couponOrder')
         print(coupon,'couponnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
         address_id = request.POST.get('address')
-        print(address,'addressssssssssssssssss')
+       
         if address_id is None:
             messages.error(request, 'Address field is mandatory!')
             return redirect('checkout')
@@ -162,9 +164,9 @@ def placeorder(request):
         # Retrieve the selected address from the database
         address = Address.objects.get(id=address_id)
         print(address,'addres2222222222222222222222')
-        # coupons=Coupon.objects.get(coupon_discount_amount=coupon)
+        
 
-        # Create a new Order instance and set its attributes
+        
         neworder = Order()
         neworder.address=address
         neworder.user = user
@@ -235,7 +237,6 @@ def placeorder(request):
         if payment_mode == 'cod' or payment_mode == 'razorpay' :
             del request.session['coupon_session']
             del request.session['coupon_id']
-            
             return JsonResponse({'status': "Your order has been placed successfully"})
         
     return redirect('checkout')

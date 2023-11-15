@@ -385,22 +385,14 @@
               e.preventDefault();
     
               var fname = $("[name='first_name']").val();
-                print(fname,'nameeeee')
               var phone = $("[name='phone']").val();
-                print(phone,'phoneeeeeeee')
               var email = $("[name='email']").val();
-                print(email,'emailllllllllll')
               var couponOrder = $("[name='couponcheck']").val();
-                print(couponOrder,'couponnnnnnnnnnn')
               var order_note = $("[name='ordernote']").val();
-                print(order_note,'ordernoteeeee')
               var token = $("[name='csrfmiddlewaretoken']").val();
-                print(token,'tokennnnnnnnnnn')
               
               var selectedAddress = $("input[name='address']:checked").val();
-                print(selectedAddress,'addressssssss')
               var paymentMethod = $("a[data-toggle='collapse'][aria-expanded='true']").data('payment-method');
-                print(paymentMethod,'paymentmethodeeeeeeee')
               if (!selectedAddress) {
                   Swal.fire("Alert!", "Address field is mandatory!", "error");
                   console.log('Address field is empty');
@@ -467,7 +459,7 @@
                         } else if (response.status === 'Your order has been placed successfully') {
                             Swal.fire("Congratulations!", response.status, "success");
                             $('.placeorder').load(location.href + " .placeorder");
-                            {% comment %} window.location.href = '/'; {% endcomment %}
+                             window.location.href = '/'; 
                         } else {
                             Swal.fire("Error!", response.status, "error");
                             $('.placeorder').load(location.href + " .placeorder");
