@@ -255,7 +255,7 @@ def placeorder(request):
             del request.session['coupon_id']
             
             return JsonResponse({'status': "Your order has been placed successfully"})
-        else:
+        
             
     
     return redirect('checkout')
