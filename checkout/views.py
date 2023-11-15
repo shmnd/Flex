@@ -11,9 +11,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from user.models import Address,Wallet
 from django.contrib import messages
-from django.core.mail import EmailMessage
-from reportlab.pdfgen import canvas
-from io import BytesIO
+
 from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
 
@@ -146,27 +144,6 @@ def checkout(request):
         return render(request,'user/checkout.html',context)
 
 
-# to generate pdf invoice to user chat gpt
-def generate_pdf_invoice(order):
-    buffer = BytesIO()
-    p = canvas.Canvas(buffer)
-    
-    # Create the PDF content
-    p.drawString(100, 750, f"Order ID: {order.id}")
-    p.drawString(100, 730, f"Tracking Number: {order.tracking_no}")
-    p.drawString(100, 710, "Invoice Details:")
-    y = 690  # Vertical position for line items
-    for item in order.orderitem_set.all():
-        p.drawString(100, y, f"{item.variant.product.name} x {item.quantity}: ${item.price * item.quantity}")
-        y -= 20
-    p.drawString(100, y, f"Total Price: ${order.total_price}")
-    
-    p.showPage()
-    p.save()
-    
-    buffer.seek(0)
-    return buffer
-
 # placing order after checkout 
 def placeorder(request):
     if request.method == 'POST':
@@ -261,8 +238,6 @@ def placeorder(request):
             
             return JsonResponse({'status': "Your order has been placed successfully"})
         
-            
-    
     return redirect('checkout')
 
 
