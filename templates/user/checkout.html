@@ -457,13 +457,14 @@
                         } else if (response.status === 'Your order has been placed successfully') {
                             Swal.fire("Congratulations!", response.status, "success");
                             $('.placeorder').load(location.href + " .placeorder");
+                            {% comment %} window.location.href = '/'; {% endcomment %}
                         } else {
                             Swal.fire("Error!", response.status, "error");
                             $('.placeorder').load(location.href + " .placeorder");
                         }
-                        window.location.href = '/';
+                       
                     }).fail(function(xhr, errmsg, err) {
-                        alert('Error: ' + errmsg);
+                        alert('Error: ytfftfi7tgfitf7t' + errmsg);
                         console.log(xhr.responseText);
                         console.log(err);
                     });

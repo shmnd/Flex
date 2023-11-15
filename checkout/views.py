@@ -175,6 +175,7 @@ def placeorder(request):
         
         # Retrieve the address ID from the form data
         coupon = request.POST.get('couponOrder')
+        print(coupon,'couponnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
         address_id = request.POST.get('address')
         if address_id is None:
             messages.error(request, 'Address field is mandatory!')
@@ -182,6 +183,7 @@ def placeorder(request):
 
         # Retrieve the selected address from the database
         address = Address.objects.get(id=address_id)
+        # coupons=Coupon.objects.get(coupon_discount_amount=coupon)
 
         # Create a new Order instance and set its attributes
         neworder = Order()
@@ -252,7 +254,9 @@ def placeorder(request):
             del request.session['coupon_session']
             del request.session['coupon_id']
             
-            return JsonResponse({'status': "Your order has been placed successfully check your Mail for Invoice"})
+            return JsonResponse({'status': "Your order has been placed successfully"})
+        else:
+            
     
     return redirect('checkout')
 
