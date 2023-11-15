@@ -272,7 +272,7 @@ def generate_random_payment_id(length):
     characters = string.ascii_letters + string.digits
     return ''.join(random.choices(characters, k=length))
 
-# razarpay ui
+# razarpay 
 def razarypaycheck(request):
     cart = Cart.objects.filter(user=request.user)
     total_price = 0
