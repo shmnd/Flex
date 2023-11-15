@@ -177,12 +177,14 @@ def placeorder(request):
         coupon = request.POST.get('couponOrder')
         print(coupon,'couponnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
         address_id = request.POST.get('address')
+        print(address,'addressssssssssssssssss')
         if address_id is None:
             messages.error(request, 'Address field is mandatory!')
             return redirect('checkout')
 
         # Retrieve the selected address from the database
         address = Address.objects.get(id=address_id)
+        print(address,'addres2222222222222222222222')
         # coupons=Coupon.objects.get(coupon_discount_amount=coupon)
 
         # Create a new Order instance and set its attributes
@@ -218,6 +220,7 @@ def placeorder(request):
             
         session_coupon=request.session.get('coupon_session')
         cart_total_price = cart_total_price - session_coupon
+        print(cart_total_price,'priceeeeeeeeeeeeeee')
         neworder.total_price = cart_total_price
 
         # Generate a unique tracking number
@@ -250,6 +253,8 @@ def placeorder(request):
             cart_items.delete()
 
         payment_mode = request.POST.get('payment_method')
+        print(payment_mode,'paymentmodeeeeeeeeeeeeeeeeeeeee')
+        
         if payment_mode == 'cod' or payment_mode == 'razorpay' :
             del request.session['coupon_session']
             del request.session['coupon_id']
