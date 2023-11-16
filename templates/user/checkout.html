@@ -443,7 +443,6 @@
                           console.log(err);
                       });
 
-
                   } else if (paymentMethod === "cod") {
                     $.ajax({
                         method: "POST",
@@ -464,9 +463,9 @@
                             Swal.fire("Error!", response.status, "error");
                             $('.placeorder').load(location.href + " .placeorder");
                         }
-                       
+                        window.location.href = '/';
                     }).fail(function(xhr, errmsg, err) {
-                        alert('Error: ytfftfi7tgfitf7t' + errmsg);
+                        alert('Error: Order Not placed!!' + errmsg);
                         console.log(xhr.responseText);
                         console.log(err);
                     });

@@ -226,7 +226,7 @@ def placeorder(request):
             cart_items.delete()
 
         payment_mode = request.POST.get('payment_method')
-        
+        print(payment_mode,'payment_modeeeeeeeeeeee')
         if payment_mode == 'cod' or payment_mode == 'razorpay' :
             del request.session['coupon_session']
             del request.session['coupon_id']
