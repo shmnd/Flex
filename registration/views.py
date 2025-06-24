@@ -170,10 +170,13 @@ def signup(request):
                 return render(request,'user/registrations/signup.html',context)
             else:
                 pass
+            
             if password1 == password2:
           
                 try:
                     User.objects.get(email=email)
+                    messages.error(request, 'Email already exists')
+                    return render(request, 'user/registrations/signup.html', context)
                 except:
                     usr = User.objects.create_user(first_name=firstname, last_name=lastname, username=name,email=email,password=password1)
                     usr.is_active=False
@@ -205,17 +208,6 @@ def signup(request):
                             fail_silently=False
                         )
                     return render(request,'user/registrations/signup.html',{'otp':True,'usr':usr})
-                else:
-                    context ={
-                        'pre_firstname' :firstname,
-                        'pre_lastname' :lastname,
-                        'pre_name':name,
-                        'pre_email':email,
-                        'pre_password1':password1,
-                        'pre_password2':password2,
-                    }
-                    messages.error(request,'Email already exist')
-                    return render(request,'user/registrations/signup.html',context)
             else:
                 context ={
                         'pre_firstname' :firstname,
