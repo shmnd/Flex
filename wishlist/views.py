@@ -15,7 +15,7 @@ def wishlist(request):
     if request.user.is_authenticated:
         wishlist=Wishlist.objects.filter(user=request.user).order_by('id')
         variants=wishlist.values_list('variant',flat=True)
-        img = VariantImage.objects.filter(variant__in=variants).distinct('variant')
+        img = VariantImage.objects.filter(variant__in=variants).distinct()
         cart_count =Cart.objects.filter(user=request.user).count()
         
         

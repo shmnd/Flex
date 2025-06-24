@@ -10,7 +10,7 @@ from wishlist.models import Wishlist
 
 # show product on shop page in userside
 def shop(request):
-    variant_images=(VariantImage.objects.filter(variant__product__is_available=True).order_by('variant__product').distinct('variant__product'))
+    variant_images=(VariantImage.objects.filter(variant__product__is_available=True).order_by('variant__product').distinct())
     
     ratings=Product.objects.annotate(avg_rating=Avg('reviews__rating'))
     category_filter=category.objects.filter(is_available=True)
@@ -32,8 +32,7 @@ def shop(request):
         'color_filter':color_filter,
         'wishlist_count':wishlist_count,
     }
-    # for i in category_filter:
-    #     print(i.id,i.categories,'ddddddddddddddddddddddddddddddddd')
+
     
     return render(request,'user/shop/shop.html',context)
 
@@ -52,45 +51,45 @@ def shopfilter(request):
                             (variant__color__id=color,variant__size__id=size,
                             variant__product__category__id=categories,
                             variant__product__is_available=True)
-                          .order_by('variant__product').distinct('variant__product'))
+                          .order_by('variant__product').distinct())
                 
         elif color and size:
                 variant_images=(VariantImage.objects.filter
                                 (variant__color__id=color,variant__size__id=size,
                                 variant__product__is_available=True)
-                            .order_by('variant__product').distinct('variant__product'))
+                            .order_by('variant__product').distinct())
                 
         elif color and categories :
                 variant_images=(VariantImage.objects.filter
                                 (variant__product__category__id=categories,
                                 variant__product__is_available=True,)
-                            .order_by('variant__product').distinct('variant__product'))
+                            .order_by('variant__product').distinct())
         elif size and categories:    
              variant_images=(VariantImage.objects.filter
                                 (variant__product__category__id=categories,
                                 variant__size__id=size,
                                 variant__product__is_available=True)
-                            .order_by('variant__product').distinct('variant__product'))
+                            .order_by('variant__product').distinct())
         
         elif size:
             variant_images = (VariantImage.objects.filter
                                 (variant__size__id =size,
                                 variant__product__is_available=True)
-                            .order_by('variant__product').distinct('variant__product'))
+                            .order_by('variant__product').distinct())
         elif color:
             variant_images = (VariantImage.objects.filter
                                 (variant__color__id=color,
                                 variant__product__is_available=True)
-                            .order_by('variant__product').distinct('variant__product'))     
+                            .order_by('variant__product').distinct())     
         elif categories:
             variant_images = (VariantImage.objects.filter
                                 (variant__product__category__id=categories,
                                 variant__product__is_available=True)
-                            .order_by('variant__product').distinct('variant__product'))
+                            .order_by('variant__product').distinct())
         else:
             variant_images = (VariantImage.objects.filter
                             (variant__product__is_available=True)
-                            .order_by('variant__product').distinct('variant__product'))   
+                            .order_by('variant__product').distinct())   
                   
     ratings=Product.objects.annotate(avg_rating=Avg('reviews__rating'))
     
@@ -133,9 +132,9 @@ def shopsort(request):
     else:
         variant_images = variant_images.order_by('variant__product')
     if name == 'aplus'or name == 'aminus':
-        variant_images = variant_images.distinct('variant__product__product_name')  
+        variant_images = variant_images.distinct()  
     if  name == 'priceplus' or name == 'priceminus':
-        variant_images = variant_images.distinct('variant__product__product_price') 
+        variant_images = variant_images.distinct() 
     
     ratings = Product.objects.annotate(avg_rating=Avg('reviews__rating'))
     category_filter = category.objects.filter(is_available=True)

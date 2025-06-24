@@ -382,7 +382,7 @@ def orderviewuser(request,view_id):
         address=Address.objects.get(id=orderview.address.id)
         products=OrderItem.objects.filter(order=view_id)
         variant_ids=[product.variant.id for product in products]
-        image=VariantImage.objects.filter(variant__id__in=variant_ids).distinct('variant__color')
+        image=VariantImage.objects.filter(variant__id__in=variant_ids).distinct()
         item_status_o=Itemstatus.objects.all()
         cart_count=Cart.objects.filter(user=request.user).count()
         wishlist_count=Wishlist.objects.filter(user=request.user).count()

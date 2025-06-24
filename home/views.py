@@ -28,7 +28,7 @@ def home(request):
         cart_count=False
         wishlist_count=False
 
-    variant_images=(VariantImage.objects.filter(variant__product__is_available=True).order_by('variant__product').distinct('variant__product'))
+    variant_images=(VariantImage.objects.filter(variant__product__is_available=True).order_by('variant__product').distinct())
     
     context={
         'categories':categories,
@@ -46,9 +46,9 @@ def home(request):
 # to dispaly the product on userside
 def productshow(request,prod_id,img_id):
     variant=VariantImage.objects.filter(variant=img_id,is_available=True)
-    variant_images=(VariantImage.objects.filter(variant__product__id=prod_id,is_available=True).distinct('varianat_product'))
+    variant_images=(VariantImage.objects.filter(variant__product__id=prod_id,is_available=True).distinct())
     size=Size.objects.all()
-    color=VariantImage.objects.filter(variant__product__id=prod_id,is_available=True).distinct('variant__color')
+    color=VariantImage.objects.filter(variant__product__id=prod_id,is_available=True).distinct()
     
     reviews = ProductReview.objects.filter(product=prod_id)
     average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
@@ -79,7 +79,7 @@ def productshow(request,prod_id,img_id):
 
 # to show the category on product page on userside
 def usercategoryshow(request,category_id):
-    variant=VariantImage.objects.filter(variant__product__category=category_id,is_available=True).distinct('variant_color')
+    variant=VariantImage.objects.filter(variant__product__category=category_id,is_available=True).distinct()
     rating=Product.objects.annotate(avg_rating=Avg('reviews__rating'))
     context={
         'variant':variant,

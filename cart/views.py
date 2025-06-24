@@ -14,7 +14,7 @@ def cart(request):
         cart=Cart.objects.filter(user=request.user).order_by('id')
         variants=cart.values_list('variant',flat=True)
         cart_count=Cart.objects.filter(user=request.user).count()
-        img =VariantImage.objects.filter(variant__in=variants).distinct('variant')
+        img =VariantImage.objects.filter(variant__in=variants).distinct()
         wishlist_count=Wishlist.objects.filter(user=request.user).count()
         
         total_price = 0

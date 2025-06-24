@@ -136,7 +136,6 @@ def signup(request):
                         'pre_password1':password1,
                         'pre_password2':password2,
                     }
-                print(email,name,password1,'deatailllllllllllllll')
                 messages.info(request,result)
                 return render(request,'user/registrations/signup.html',context)
             else:

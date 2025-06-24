@@ -20,4 +20,4 @@ class VariantImage(models.Model):
 
 
     def __str__(self) :
-        return f"image for {self.variant.product.product_name} - {self.variant.color.color_name} - {self.variant.size.size_range}"
+        return f"image for {self.variant.product.product_name} - {self.variant.color.color_name}"
